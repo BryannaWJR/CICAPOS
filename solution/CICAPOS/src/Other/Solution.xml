@@ -78,9 +78,48 @@
       </Addresses>
     </Publisher>
     <RootComponents>
+      <RootComponent type="1" schemaName="account" behavior="1" />
+      <RootComponent type="1" schemaName="cicapos_annualconfirmation" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_assignmentrule" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_bankfile" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_casequery" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_checklistanswer" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_committeeassessment" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_committeebatch" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_companyregistration" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_disbursementline" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_disbursementrequest" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_fundingapplication" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_fundingitem" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_fundingrule" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_fundingscheme" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_inspection" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_inspectionsamplingrate" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_letter" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_lettertemplate" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_noncompliancereport" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_palapplication" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_payment" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_preapprovedproduct" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_usagereport" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_vettingchecklistitem" behavior="0" />
+      <RootComponent type="1" schemaName="contact" behavior="1" />
+      <RootComponent type="1" schemaName="systemuser" behavior="1" />
       <RootComponent type="80" schemaName="cicapos_CICCRMAPP" behavior="0" />
     </RootComponents>
     <MissingDependencies>
+      <MissingDependency>
+        <Required type="1" schemaName="account" displayName="Account" parentSchemaName="" solution="msdyn_ChannelExperienceApp (1.0.26102.1006)" />
+        <Dependent type="1" schemaName="account" displayName="Account" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="1" schemaName="contact" displayName="Contact" parentSchemaName="" solution="OmnichannelTelephony (1.10.0.312)" />
+        <Dependent type="1" schemaName="contact" displayName="Contact" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="1" schemaName="systemuser" displayName="SystemUser" parentSchemaName="" solution="OmnichannelTelephony (1.10.0.312)" />
+        <Dependent type="1" schemaName="systemuser" displayName="SystemUser" />
+      </MissingDependency>
       <MissingDependency>
         <Required type="61" schemaName="msdyn_/Images/AppModule_Default_Icon.png" displayName="msdyn_/Images/AppModule_Default_Icon.png" solution="AppModuleWebResources (2.5)">
           <package appName="AppModule Web Resources Package" version="2.5">AppModuleWebResources (2.5)</package>
