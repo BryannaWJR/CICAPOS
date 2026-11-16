@@ -1,0 +1,17 @@
+<powerpagecomponent powerpagecomponentid="b6102c6a-a7d8-4118-b108-9992249a3479">
+  <content>{
+  "description": "这是默认的工作室模板。请不要修改。",
+  "type": 756150001,
+  "usewebsiteheaderandfooter": true,
+  "webtemplateid": "48adabb4-7a3f-4558-9514-a80f4a8f2004",
+  "isdefault": false
+}</content>
+  <iscustomizable>1</iscustomizable>
+  <name>AI Search PageTemplate</name>
+  <powerpagecomponenttype>6</powerpagecomponenttype>
+  <powerpagesiteid>
+    <powerpagesiteid>ea8078b2-2728-4878-9694-7992c3061c1b</powerpagesiteid>
+  </powerpagesiteid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</powerpagecomponent>

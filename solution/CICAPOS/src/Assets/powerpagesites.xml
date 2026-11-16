@@ -1,0 +1,12 @@
+<powerpagesites>
+  <powerpagesite powerpagesiteid="ea8078b2-2728-4878-9694-7992c3061c1b">
+    <content>{"defaultlanguage":"54124646-8ab8-40d3-bb55-bcdf19b50545","footerwebtemplateid":"d47c24fb-3b86-4f28-9cbc-b9eba88bed1c","headerwebtemplateid":"8dfd6458-7b97-472a-bf62-6be999edbc06","website_language":1033}</content>
+    <datamodelversion>2.0</datamodelversion>
+    <enhancedauthorization>0</enhancedauthorization>
+    <iscustomizable>1</iscustomizable>
+    <name>CIC Portal App - site-9m48j</name>
+    <primarydomainname>site-9m48j.powerappsportals.com</primarydomainname>
+    <statecode>0</statecode>
+    <statuscode>1</statuscode>
+  </powerpagesite>
+</powerpagesites>
