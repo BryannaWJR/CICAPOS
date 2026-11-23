@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{a5100001-e2e1-4111-8111-6045bd5910e7}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="false" showImage="false" maxWidth="1900">
+      <tabs>
+        <tab verticallayout="true" id="{a5100001-e2e1-4111-8111-6045bd591ae7}" IsUserDefined="1" name="General">
+          <labels><label description="General" languagecode="1033" /></labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{a5100001-e2e1-4111-8111-6045bd5911e7}" name="Details" columns="1">
+                  <labels><label description="Details" languagecode="1033" /></labels>
+                  <rows>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5912e7}">
+                        <labels><label description="Funding application" languagecode="1033" /></labels>
+                        <control id="cicapos_fundingapplicationid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_fundingapplicationid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5913e7}">
+                        <labels><label description="Funding item" languagecode="1033" /></labels>
+                        <control id="cicapos_fundingitemid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_fundingitemid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5914e7}">
+                        <labels><label description="Reporting period" languagecode="1033" /></labels>
+                        <control id="cicapos_period" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_period" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5915e7}">
+                        <labels><label description="Days in use" languagecode="1033" /></labels>
+                        <control id="cicapos_daysinuse" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="cicapos_daysinuse" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5916e7}">
+                        <labels><label description="Utilisation (%)" languagecode="1033" /></labels>
+                        <control id="cicapos_utilisation" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="cicapos_utilisation" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5917e7}">
+                        <labels><label description="Still owned and in use in Hong Kong?" languagecode="1033" /></labels>
+                        <control id="cicapos_inuse" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="cicapos_inuse" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5918e7}">
+                        <labels><label description="Projects / sites" languagecode="1033" /></labels>
+                        <control id="cicapos_sites" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_sites" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5919e7}">
+                        <labels><label description="Comments" languagecode="1033" /></labels>
+                        <control id="cicapos_notes" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_notes" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Portal" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Applicant usage report" languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

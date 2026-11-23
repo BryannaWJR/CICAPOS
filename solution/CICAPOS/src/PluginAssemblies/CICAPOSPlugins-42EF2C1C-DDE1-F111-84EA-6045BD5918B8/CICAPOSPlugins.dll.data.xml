@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="CICAPOS.Plugins, Version=1.0.1.0, Culture=neutral, PublicKeyToken=f907cd10d1e1e131" PluginAssemblyId="42ef2c1c-dde1-f111-84ea-6045bd5918b8" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Description>CIC APOS funding route, assignment, disbursement checks, and AI Assist.</Description>
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/CICAPOSPlugins-42EF2C1C-DDE1-F111-84EA-6045BD5918B8/CICAPOSPlugins.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="CICAPOS.Plugins.AssignmentPlugin, CICAPOS.Plugins, Version=1.0.1.0, Culture=neutral, PublicKeyToken=f907cd10d1e1e131" PluginTypeId="45ef2c1c-dde1-f111-84ea-6045bd5918b8" Name="CICAPOS.Plugins.AssignmentPlugin">
+      <FriendlyName>CICAPOS.Plugins.AssignmentPlugin</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="CICAPOS.Plugins.DisbursementRoutePlugin, CICAPOS.Plugins, Version=1.0.1.0, Culture=neutral, PublicKeyToken=f907cd10d1e1e131" PluginTypeId="46ef2c1c-dde1-f111-84ea-6045bd5918b8" Name="CICAPOS.Plugins.DisbursementRoutePlugin">
+      <FriendlyName>CICAPOS.Plugins.DisbursementRoutePlugin</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="CICAPOS.Plugins.FundingRoutePlugin, CICAPOS.Plugins, Version=1.0.1.0, Culture=neutral, PublicKeyToken=f907cd10d1e1e131" PluginTypeId="44ef2c1c-dde1-f111-84ea-6045bd5918b8" Name="CICAPOS.Plugins.FundingRoutePlugin">
+      <FriendlyName>CICAPOS.Plugins.FundingRoutePlugin</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="CICAPOS.Plugins.AiAssistPlugin, CICAPOS.Plugins, Version=1.0.1.0, Culture=neutral, PublicKeyToken=f907cd10d1e1e131" PluginTypeId="47ef2c1c-dde1-f111-84ea-6045bd5918b8" Name="CICAPOS.Plugins.AiAssistPlugin">
+      <FriendlyName>CICAPOS.Plugins.AiAssistPlugin</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

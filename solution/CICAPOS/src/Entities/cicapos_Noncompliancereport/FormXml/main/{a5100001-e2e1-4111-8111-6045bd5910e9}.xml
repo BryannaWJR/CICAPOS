@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{a5100001-e2e1-4111-8111-6045bd5910e9}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="false" showImage="false" maxWidth="1900">
+      <tabs>
+        <tab verticallayout="true" id="{a5100001-e2e1-4111-8111-6045bd591ae9}" IsUserDefined="1" name="General">
+          <labels><label description="General" languagecode="1033" /></labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{a5100001-e2e1-4111-8111-6045bd5911e9}" name="Details" columns="1">
+                  <labels><label description="Details" languagecode="1033" /></labels>
+                  <rows>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5912e9}">
+                        <labels><label description="Funding application" languagecode="1033" /></labels>
+                        <control id="cicapos_fundingapplicationid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_fundingapplicationid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5913e9}">
+                        <labels><label description="CITF Term or Condition affected" languagecode="1033" /></labels>
+                        <control id="cicapos_clause" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_clause" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5914e9}">
+                        <labels><label description="What happened" languagecode="1033" /></labels>
+                        <control id="cicapos_whathappened" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_whathappened" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5915e9}">
+                        <labels><label description="Reason and justification" languagecode="1033" /></labels>
+                        <control id="cicapos_why" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_why" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5916e9}">
+                        <labels><label description="Remedial action" languagecode="1033" /></labels>
+                        <control id="cicapos_remedy" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_remedy" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5917e9}">
+                        <labels><label description="Target date to put right" languagecode="1033" /></labels>
+                        <control id="cicapos_targeton" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="cicapos_targeton" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Portal" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Applicant non-compliance report" languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

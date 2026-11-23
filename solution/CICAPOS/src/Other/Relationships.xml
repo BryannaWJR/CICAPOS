@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="bpf_cicapos_disbursementrequest_cicapos_bpf_disbursement" />
+  <EntityRelationship Name="bpf_cicapos_fundingapplication_cicapos_bpf_npa" />
+  <EntityRelationship Name="bpf_cicapos_fundingapplication_cicapos_bpf_preapproved" />
+  <EntityRelationship Name="bpf_cicapos_palapplication_cicapos_bpf_pal" />
   <EntityRelationship Name="business_unit_cicapos_annualconfirmation" />
   <EntityRelationship Name="business_unit_cicapos_bankfile" />
   <EntityRelationship Name="business_unit_cicapos_casequery" />
@@ -75,6 +79,22 @@
   <EntityRelationship Name="lk_cicapos_assignmentrule_modifiedby" />
   <EntityRelationship Name="lk_cicapos_bankfile_createdby" />
   <EntityRelationship Name="lk_cicapos_bankfile_modifiedby" />
+  <EntityRelationship Name="lk_cicapos_bpf_disbursement_activestageid" />
+  <EntityRelationship Name="lk_cicapos_bpf_disbursement_createdby" />
+  <EntityRelationship Name="lk_cicapos_bpf_disbursement_modifiedby" />
+  <EntityRelationship Name="lk_cicapos_bpf_disbursement_processid" />
+  <EntityRelationship Name="lk_cicapos_bpf_npa_activestageid" />
+  <EntityRelationship Name="lk_cicapos_bpf_npa_createdby" />
+  <EntityRelationship Name="lk_cicapos_bpf_npa_modifiedby" />
+  <EntityRelationship Name="lk_cicapos_bpf_npa_processid" />
+  <EntityRelationship Name="lk_cicapos_bpf_pal_activestageid" />
+  <EntityRelationship Name="lk_cicapos_bpf_pal_createdby" />
+  <EntityRelationship Name="lk_cicapos_bpf_pal_modifiedby" />
+  <EntityRelationship Name="lk_cicapos_bpf_pal_processid" />
+  <EntityRelationship Name="lk_cicapos_bpf_preapproved_activestageid" />
+  <EntityRelationship Name="lk_cicapos_bpf_preapproved_createdby" />
+  <EntityRelationship Name="lk_cicapos_bpf_preapproved_modifiedby" />
+  <EntityRelationship Name="lk_cicapos_bpf_preapproved_processid" />
   <EntityRelationship Name="lk_cicapos_casequery_createdby" />
   <EntityRelationship Name="lk_cicapos_casequery_modifiedby" />
   <EntityRelationship Name="lk_cicapos_checklistanswer_createdby" />
@@ -118,6 +138,10 @@
   <EntityRelationship Name="lk_cicapos_vettingchecklistitem_createdby" />
   <EntityRelationship Name="lk_cicapos_vettingchecklistitem_modifiedby" />
   <EntityRelationship Name="organization_cicapos_assignmentrule" />
+  <EntityRelationship Name="organization_cicapos_bpf_disbursement" />
+  <EntityRelationship Name="organization_cicapos_bpf_npa" />
+  <EntityRelationship Name="organization_cicapos_bpf_pal" />
+  <EntityRelationship Name="organization_cicapos_bpf_preapproved" />
   <EntityRelationship Name="organization_cicapos_fundingrule" />
   <EntityRelationship Name="organization_cicapos_fundingscheme" />
   <EntityRelationship Name="organization_cicapos_inspectionsamplingrate" />

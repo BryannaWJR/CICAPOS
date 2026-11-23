@@ -1,0 +1,59 @@
+{% if request.params.id %}
+{% fetchxml one %}
+<fetch version="1.0" mapping="logical">
+  <entity name="cicapos_companyregistration">
+    <attribute name="cicapos_name" />
+    <attribute name="cicapos_legalname" />
+    <attribute name="cicapos_contactemail" />
+    <attribute name="cicapos_status" />
+    <attribute name="cicapos_submittedon" />
+    <filter>
+      <condition attribute="cicapos_companyregistrationid" operator="eq" value="{{ request.params.id }}" />
+    </filter>
+  </entity>
+</fetch>
+{% endfetchxml %}
+<main class="p-main narrow">
+  <div class="card">
+    <h1>Registration received</h1>
+    {% if one.results.entities.size > 0 %}
+      {% assign r = one.results.entities.first %}
+      <p class="sub">Thank you. <b>{{ r.cicapos_legalname | escape }}</b> is now in review. AI review checks the registration automatically, then an officer confirms the findings. We will use <b>{{ r.cicapos_contactemail | escape }}</b> for updates.</p>
+      <ol class="steps" style="grid-template-columns:repeat(4,1fr)">
+        <li class="done"><i></i>Submitted</li>
+        <li class="cur"><i></i>Review</li>
+        <li><i></i>CompanyID issued</li>
+        <li><i></i>Use CIC services</li>
+      </ol>
+      <div class="kpis">
+        <div class="kpi"><small>Registration reference</small><b style="font-size:22px">{{ r.cicapos_name | escape }}</b><small>Keep it. You need it to track progress.</small></div>
+      </div>
+      <div class="note info">Your account is activated after CIC approves the company. Until then, use Track my registration with this reference and the contact email.</div>
+    {% else %}
+      <p class="sub">Registration received. Keep the reference from the confirmation if it was shown.</p>
+    {% endif %}
+    <div class="row">
+      <a class="btn pri" href="/track/">Track my registration</a>
+      <a class="btn ghost" href="/">Back to sign in</a>
+    </div>
+  </div>
+</main>
+{% else %}
+<main class="p-main">
+  <div>
+    <h1>Register your company</h1>
+    <p class="sub">One account per applicant. CIC vets these particulars before the company can use CITF.</p>
+  </div>
+  <div class="note info">Sign-in after approval uses the identity provider configured for this site. Okta is not connected yet, so approved contacts sign in with Microsoft Entra ID. A password is not collected here.</div>
+  <div class="card">
+    <h2>1. Business Registration and company</h2>
+    <p class="sub">Company type, BR number and legal name are required. Attach the Business Registration certificate (PDF or JPEG).</p>
+    <h2>2. Contact person</h2>
+    <p class="sub">This person is the company contact. The email is used to track the registration.</p>
+    <h2>3. Bank account</h2>
+    <p class="sub">Grants are paid to this account. The account holder should be the applicant.</p>
+    {% entityform id:a5100001-e2e1-4111-8111-6045bd591070 %}
+    <p class="sub">Already registered? <a href="/track/">Track my registration</a></p>
+  </div>
+</main>
+{% endif %}

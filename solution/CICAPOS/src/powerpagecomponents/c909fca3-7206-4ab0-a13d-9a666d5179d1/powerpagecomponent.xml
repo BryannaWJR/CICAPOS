@@ -1,9 +1,14 @@
 <powerpagecomponent powerpagecomponentid="c909fca3-7206-4ab0-a13d-9a666d5179d1">
   <content>{
-  "filecontent": null,
   "display_name": "Mobile Header",
   "type": 756150001,
-  "value": "&lt;a href=\"~/\"&gt;{% if snippets['Logo URL'] %}&lt;img src=\"{{ snippets['Logo URL'] }}\" alt=\"{{ snippets['Logo alt text'] }}\" style=\"width: auto; height: 32px; margin: 0 10px;\"&gt;{% endif %}\n  {% if snippets['Site name'] %}&lt;h1 class=\"siteTitle custom-sitetitle\"&gt;{{ snippets['Site name'] }}&lt;/h1&gt;{% endif %}\n&lt;/a&gt;"
+  "value": "&lt;a href=\"~/\"&gt;
+  &lt;span class=\"citf-mark\"&gt;CITF&lt;/span&gt;
+  &lt;span&gt;
+    {% if snippets['Site name'] %}&lt;h1 class=\"siteTitle custom-sitetitle\"&gt;{{ snippets['Site name'] }}&lt;/h1&gt;{% endif %}
+    &lt;span class=\"brand-sub\"&gt;CITF Application Portal &amp;amp; Pre-approved List&lt;/span&gt;
+  &lt;/span&gt;
+&lt;/a&gt;"
 }</content>
   <iscustomizable>1</iscustomizable>
   <name>Mobile Header</name>

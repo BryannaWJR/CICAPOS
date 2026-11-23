@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{a5100001-e2e1-4111-8111-6045bd591052}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="false" showImage="false" maxWidth="1900">
+      <tabs>
+        <tab verticallayout="true" id="{a5100001-e2e1-4111-8111-6045bd5910a2}" IsUserDefined="1" name="General">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{a5100001-e2e1-4111-8111-6045bd5910b2}" name="Details" columns="11">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591067}" colspan="2">
+                        <labels>
+                          <label description="Funding application" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_fundingapplicationid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_fundingapplicationid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591068}" colspan="2">
+                        <labels>
+                          <label description="Item type" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_itemtype" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cicapos_itemtype" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591069}" colspan="2">
+                        <labels>
+                          <label description="Funding scheme" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_schemeid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_schemeid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd59106a}" colspan="2">
+                        <labels>
+                          <label description="Quantity" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_quantity" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="cicapos_quantity" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd59106b}" colspan="2">
+                        <labels>
+                          <label description="Unit price (HK$)" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_unitprice" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="cicapos_unitprice" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd59106c}" colspan="2">
+                        <labels>
+                          <label description="Lowest quotation" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_islowestquote" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="cicapos_islowestquote" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd59106d}" colspan="2">
+                        <labels>
+                          <label description="Justification" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_justification" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_justification" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{a5100001-e2e1-4111-8111-6045bd5910c2}" celllabelposition="Left" columns="111">
+        <rows>
+          <row />
+        </rows>
+      </header>
+      <footer id="{a5100001-e2e1-4111-8111-6045bd5910d2}" celllabelposition="Left" columns="111">
+        <rows>
+          <row />
+        </rows>
+      </footer>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Portal" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Applicant fields on CIC Portal App" languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

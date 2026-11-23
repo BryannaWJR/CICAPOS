@@ -1,4 +1,5 @@
 <powerpagecomponent powerpagecomponentid="15fb2a32-2c8a-4183-b99b-12e46a932d46">
+  <content>{}</content>
   <iscustomizable>1</iscustomizable>
   <name>Authentication/Registration/LoginButtonAuthenticationType</name>
   <powerpagecomponenttype>9</powerpagecomponenttype>

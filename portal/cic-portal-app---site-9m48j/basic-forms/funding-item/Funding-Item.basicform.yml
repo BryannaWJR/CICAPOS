@@ -1,0 +1,31 @@
+adx_attachfile: false
+adx_captcharequired: false
+adx_entityformid: a5100001-e2e1-4111-8111-6045bd591013
+adx_entityname: cicapos_fundingitem
+adx_entitypermissionsenabled: true
+adx_formname: Portal
+adx_geolocation_enabled: false
+adx_mode: 100000000
+adx_name: Funding Item
+adx_onsuccess: 756150000
+adx_referenceentitylogicalname: cicapos_fundingapplication
+adx_referenceentityrelationshipname: cicapos_item_application
+adx_referenceentitysourcetype: 756150000
+adx_referencequerystringisprimarykey: true
+adx_referencequerystringname: id
+adx_setentityreference: true
+adx_submitbuttontext: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Save"
+    }
+  ]
+adx_successmessage: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Funding item saved."
+    }
+  ]
+adx_tabname: General

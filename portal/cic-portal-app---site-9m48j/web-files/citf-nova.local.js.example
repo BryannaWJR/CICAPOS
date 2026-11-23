@@ -1,0 +1,15 @@
+/**
+ * Copy to citf-nova.local.js (gitignored) OR paste into browser console:
+ *   CitfAi.saveNovaConfig({ apiKey: "ak-…", ocrApiKey: "sk-…" })
+ *
+ * Chat key = DeepSeek-V4-Flash (ak-)
+ * OCR key  = OCR service (sk-)
+ */
+window.CITF_NOVA = {
+  baseUrl: "https://nova.deloitte.com.cn/v1",
+  apiKey: "ak-YOUR_DEEPSEEK_V4_FLASH_KEY",
+  model: "DeepSeek-V4-Flash",
+  ocrBaseUrl: "https://nova.deloitte.com.cn/nova-cloud/ocr/ocr/v1",
+  ocrApiKey: "sk-YOUR_OCR_SERVICE_KEY"
+};
+window.CITF_AI_LIVE = true;

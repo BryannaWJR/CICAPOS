@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{a5100001-e2e1-4111-8111-6045bd591050}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="false" showImage="false" maxWidth="1900">
+      <tabs>
+        <tab verticallayout="true" id="{a5100001-e2e1-4111-8111-6045bd5910a0}" IsUserDefined="1" name="General">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{a5100001-e2e1-4111-8111-6045bd5910b0}" name="Details" columns="11">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591060}" colspan="2">
+                        <labels>
+                          <label description="Project name" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_projectname" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_projectname" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591061}" colspan="2">
+                        <labels>
+                          <label description="Objective" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_objective" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_objective" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591062}" colspan="2">
+                        <labels>
+                          <label description="Pledged result date" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_pledgedate" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="cicapos_pledgedate" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591063}" colspan="2">
+                        <labels>
+                          <label description="Amount applied (HK$)" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_amountapplied" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="cicapos_amountapplied" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591064}" colspan="2">
+                        <labels>
+                          <label description="Applicant" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_applicantid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_applicantid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591065}" colspan="2">
+                        <labels>
+                          <label description="Contact" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_contactid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_contactid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591077}" colspan="2" rowspan="6">
+                        <labels>
+                          <label description="Funding Items" languagecode="1033" />
+                        </labels>
+                        <control id="items" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true">
+                          <parameters>
+                            <ViewId>{41337f08-2bb6-4298-ada1-e51492d383aa}</ViewId>
+                            <IsUserView>false</IsUserView>
+                            <RelationshipName>cicapos_item_application</RelationshipName>
+                            <TargetEntityType>cicapos_fundingitem</TargetEntityType>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>Grid</ChartGridMode>
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>false</EnableChartPicker>
+                            <RecordsPerPage>4</RecordsPerPage>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{a5100001-e2e1-4111-8111-6045bd5910c0}" celllabelposition="Left" columns="111">
+        <rows>
+          <row />
+        </rows>
+      </header>
+      <footer id="{a5100001-e2e1-4111-8111-6045bd5910d0}" celllabelposition="Left" columns="111">
+        <rows>
+          <row />
+        </rows>
+      </footer>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Portal" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Applicant fields on CIC Portal App" languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

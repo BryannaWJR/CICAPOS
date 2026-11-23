@@ -1,0 +1,252 @@
+{% assign co = user.parentcustomerid.name | default: user.fullname | default: "your company" %}
+{% fetchxml apps %}
+<fetch>
+  <entity name="cicapos_fundingapplication">
+    <attribute name="cicapos_name" />
+    <attribute name="cicapos_projectname" />
+    <attribute name="cicapos_amountapplied" />
+    <attribute name="cicapos_approvedgrant" />
+    <attribute name="cicapos_status" />
+    <attribute name="cicapos_pledgedate" />
+    <order attribute="createdon" descending="true" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% fetchxml items %}
+<fetch>
+  <entity name="cicapos_fundingitem">
+    <attribute name="cicapos_fundingapplicationid" />
+    <attribute name="cicapos_schemeid" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% fetchxml drs %}
+<fetch>
+  <entity name="cicapos_disbursementrequest">
+    <attribute name="cicapos_name" />
+    <attribute name="cicapos_fundingapplicationid" />
+    <attribute name="cicapos_instalmenttype" />
+    <attribute name="cicapos_claimedamount" />
+    <attribute name="cicapos_status" />
+    <order attribute="createdon" descending="true" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% fetchxml payments %}
+<fetch>
+  <entity name="cicapos_payment">
+    <attribute name="cicapos_disbursementrequestid" />
+    <attribute name="cicapos_status" />
+    <attribute name="cicapos_amount" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% fetchxml queries %}
+<fetch>
+  <entity name="cicapos_casequery">
+    <attribute name="cicapos_fundingapplicationid" />
+    <attribute name="cicapos_status" />
+    <attribute name="cicapos_answer" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% assign live = 0 %}
+{% assign claims = 0 %}
+{% assign actions = 0 %}
+{% assign approved_sum = 0 %}
+{% for app in apps.results.entities %}
+  {% assign st = app.cicapos_status.label %}
+  {% unless st == "Draft" or st == "Rejected" or st == "Withdrawn" %}{% assign live = live | plus: 1 %}{% endunless %}
+  {% if st == "Draft" or st == "Pending endorsement" or st == "Pending information" %}{% assign actions = actions | plus: 1 %}{% endif %}
+  {% if st == "Approved" %}
+    {% assign approved_sum = approved_sum | plus: app.cicapos_approvedgrant %}
+    {% assign aid = app.id | remove: "{" | remove: "}" | downcase %}
+    {% assign hasdr = false %}
+    {% for d in drs.results.entities %}
+      {% assign did = d.cicapos_fundingapplicationid.id | remove: "{" | remove: "}" | downcase %}
+      {% if did == aid %}{% assign hasdr = true %}{% endif %}
+    {% endfor %}
+    {% unless hasdr %}{% assign actions = actions | plus: 1 %}{% endunless %}
+  {% endif %}
+{% endfor %}
+{% for d in drs.results.entities %}
+  {% assign dst = d.cicapos_status.label %}
+  {% unless dst == "Approved" or dst == "Rejected" or dst == "Draft" %}{% assign claims = claims | plus: 1 %}{% endunless %}
+{% endfor %}
+{% for q in queries.results.entities %}
+  {% if q.cicapos_answer == blank and q.cicapos_status.label != "Closed" and q.cicapos_fundingapplicationid.id %}{% assign actions = actions | plus: 1 %}{% endif %}
+{% endfor %}
+{% assign remaining = 7500000 | minus: approved_sum %}
+{% if remaining < 0 %}{% assign remaining = 0 %}{% endif %}
+{% assign apct = approved_sum | times: 100.0 | divided_by: 7500000 | round: 0 %}
+{% if apct > 100 %}{% assign apct = 100 %}{% endif %}
+<main class="p-main">
+  <div class="row between">
+    <div>
+      <h1>Welcome back, {{ co | escape }}</h1>
+      <p class="sub">Here is where your CITF applications stand today.</p>
+    </div>
+    <a class="btn pri" href="/funding-application/">+ New funding application</a>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><small>Active applications</small><b>{{ live }}</b></div>
+    <div class="kpi"><small>Claims in progress</small><b>{{ claims }}</b></div>
+    <div class="kpi"><small>Need your action</small><b{% if actions > 0 %} style="color:var(--warn)"{% endif %}>{{ actions }}</b></div>
+    <div class="kpi"><small>Remaining ACT + BIM cap</small><b style="font-size:20px" data-hk="{{ remaining | round: 0 }}">HK${{ remaining | round: 0 }}</b></div>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <h2>Your funding journey</h2>
+      {% assign jn = 0 %}
+      {% for app in apps.results.entities %}
+        {% assign st = app.cicapos_status.label %}
+        {% unless st == "Draft" or st == "Rejected" or st == "Withdrawn" %}
+          {% if jn < 4 %}
+            {% assign jn = jn | plus: 1 %}
+            {% assign pos = 0 %}
+            {% assign aid = app.id | remove: "{" | remove: "}" | downcase %}
+            {% if st == "Approved" %}
+              {% assign pos = 1 %}
+              {% assign any_paid = false %}
+              {% assign final_paid = false %}
+              {% for d in drs.results.entities %}
+                {% assign did = d.cicapos_fundingapplicationid.id | remove: "{" | remove: "}" | downcase %}
+                {% if did == aid %}
+                  {% assign drid = d.id | remove: "{" | remove: "}" | downcase %}
+                  {% for p in payments.results.entities %}
+                    {% assign pd = p.cicapos_disbursementrequestid.id | remove: "{" | remove: "}" | downcase %}
+                    {% if pd == drid and p.cicapos_status.label == "Paid" %}
+                      {% assign any_paid = true %}
+                      {% if d.cicapos_instalmenttype.label == "Final instalment" %}{% assign final_paid = true %}{% endif %}
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
+              {% if any_paid %}{% assign pos = 2 %}{% endif %}
+              {% if final_paid %}{% assign pos = 3 %}{% endif %}
+            {% endif %}
+            <a class="journey" href="/funding-application/?id={{ app.id }}">
+              <div class="row between"><b>{{ app.cicapos_name | escape }}</b><span class="pill {% if st == 'Approved' %}ok{% elsif st == 'Pending information' or st == 'Pending endorsement' %}warn{% else %}info{% endif %}">{{ st | escape }}</span></div>
+              <div class="jbars">
+                <div><i class="{% if pos > 0 %}on{% else %}cur{% endif %}"></i><small class="{% if pos == 0 %}now{% endif %}">Pre-award</small><small class="hint">Apply and review</small></div>
+                <div><i class="{% if pos > 1 %}on{% elsif pos == 1 %}cur{% endif %}"></i><small class="{% if pos == 1 %}now{% endif %}">Award</small><small class="hint">Approved, letter issued</small></div>
+                <div><i class="{% if pos > 2 %}on{% elsif pos == 2 %}cur{% endif %}"></i><small class="{% if pos == 2 %}now{% endif %}">Post-award</small><small class="hint">Claims and compliance</small></div>
+              </div>
+            </a>
+          {% endif %}
+        {% endunless %}
+      {% endfor %}
+      {% if jn == 0 %}<span>No active applications yet.</span>{% endif %}
+    </div>
+    <div class="card">
+      <h2>Needs your action</h2>
+      {% assign shown = 0 %}
+      {% for app in apps.results.entities %}
+        {% assign st = app.cicapos_status.label %}
+        {% if st == "Draft" %}
+          {% assign shown = shown | plus: 1 %}
+          <a class="todo" href="/funding-application/?id={{ app.id }}"><span>Finish draft {{ app.cicapos_name | escape }}</span><small class="hint">Add items, then submit</small></a>
+        {% endif %}
+        {% if st == "Pending endorsement" %}
+          {% assign shown = shown | plus: 1 %}
+          <a class="todo" href="/funding-application/?id={{ app.id }}"><span>Endorse {{ app.cicapos_name | escape }}</span><small class="hint">A company user sent this for endorsement</small></a>
+        {% endif %}
+        {% if st == "Pending information" %}
+          {% assign shown = shown | plus: 1 %}
+          <a class="todo" href="/funding-application/?id={{ app.id }}&amp;tab=qa"><span>Answer CIC’s query on {{ app.cicapos_name | escape }}</span><small class="hint">Reply on the application</small></a>
+        {% endif %}
+        {% if st == "Approved" %}
+          {% assign aid = app.id | remove: "{" | remove: "}" | downcase %}
+          {% assign hasdr = false %}
+          {% for d in drs.results.entities %}
+            {% assign did = d.cicapos_fundingapplicationid.id | remove: "{" | remove: "}" | downcase %}
+            {% if did == aid %}{% assign hasdr = true %}{% endif %}
+          {% endfor %}
+          {% unless hasdr %}
+            {% assign shown = shown | plus: 1 %}
+            <a class="todo" href="/funding-application/?id={{ app.id }}&amp;tab=dr"><span>Request the first disbursement for {{ app.cicapos_name | escape }}</span><small class="hint">Up to 80% of the approved grant</small></a>
+          {% endunless %}
+        {% endif %}
+      {% endfor %}
+      {% if shown == 0 %}<span>Nothing to do right now.</span>{% endif %}
+    </div>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <div class="row between"><h2>ACT + BIM funding cap</h2><span class="hint">Per applicant · CITF Application Framework</span></div>
+      <div class="bar"><i style="width:{{ apct }}%"></i></div>
+      <div class="row legend">
+        <span>■ Approved <span data-hk="{{ approved_sum | round: 0 }}">HK${{ approved_sum | round: 0 }}</span></span>
+        <b>Remaining <span data-hk="{{ remaining | round: 0 }}">HK${{ remaining | round: 0 }}</span> of HK$7,500,000</b>
+      </div>
+    </div>
+    <div class="card">
+      <h2>CITF profile</h2>
+      <div class="kv">
+        <span>Company</span><span>{{ co | escape }}</span>
+        <span>Signed in as</span><span>{{ user.fullname | escape }}</span>
+        <span>Applications</span><span>{{ apps.results.entities.size }}</span>
+        <span>Disbursement requests</span><span>{{ drs.results.entities.size }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="row between">
+      <h2>My applications</h2>
+      <a class="btn sm" href="/funding-application/">+ New</a>
+    </div>
+    <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>Application</th><th>Schemes</th><th>Project</th><th>Amount applied</th><th>Status</th><th>Pledged result</th></tr></thead>
+        <tbody>
+        {% for app in apps.results.entities %}
+          {% assign st = app.cicapos_status.label %}
+          {% assign aid = app.id | remove: "{" | remove: "}" | downcase %}
+          {% capture sch %}{% endcapture %}
+          {% for item in items.results.entities %}
+            {% assign iid = item.cicapos_fundingapplicationid.id | remove: "{" | remove: "}" | downcase %}
+            {% if iid == aid and item.cicapos_schemeid.name %}
+              {% unless sch contains item.cicapos_schemeid.name %}
+                {% capture sch %}{{ sch }}{% if sch != blank %}, {% endif %}{{ item.cicapos_schemeid.name }}{% endcapture %}
+              {% endunless %}
+            {% endif %}
+          {% endfor %}
+          <tr>
+            <td><a href="/funding-application/?id={{ app.id }}">{{ app.cicapos_name | escape }}</a></td>
+            <td>{{ sch | strip | escape }}</td>
+            <td>{{ app.cicapos_projectname | escape }}</td>
+            <td>{% if app.cicapos_amountapplied %}<span data-hk="{{ app.cicapos_amountapplied | round: 0 }}">HK${{ app.cicapos_amountapplied | round: 0 }}</span>{% else %}–{% endif %}</td>
+            <td><span class="pill {% if st == 'Approved' %}ok{% elsif st == 'Rejected' %}err{% elsif st == 'Pending information' %}warn{% elsif st == 'Draft' %}{% else %}info{% endif %}">{{ st | escape }}</span></td>
+            <td>{% if st == "Draft" or app.cicapos_pledgedate == blank %}–{% else %}{{ app.cicapos_pledgedate | date: "%d %b %Y" }}{% endif %}</td>
+          </tr>
+        {% endfor %}
+        {% if apps.results.entities.size == 0 %}<tr><td colspan="6">No applications yet.</td></tr>{% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="row between">
+      <h2>Disbursement requests</h2>
+      <a class="btn sm" href="/disbursement-request/">+ New disbursement request</a>
+    </div>
+    <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>DR</th><th>Application</th><th>Type</th><th>Claimed</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for d in drs.results.entities %}
+          {% assign dst = d.cicapos_status.label %}
+          <tr>
+            <td>{{ d.cicapos_name | escape }}</td>
+            <td>{% if d.cicapos_fundingapplicationid.id %}<a href="/funding-application/?id={{ d.cicapos_fundingapplicationid.id }}">{{ d.cicapos_fundingapplicationid.name | escape }}</a>{% endif %}</td>
+            <td>{{ d.cicapos_instalmenttype.label | escape }}</td>
+            <td>{% if d.cicapos_claimedamount %}<span data-hk="{{ d.cicapos_claimedamount | round: 0 }}">HK${{ d.cicapos_claimedamount | round: 0 }}</span>{% else %}–{% endif %}</td>
+            <td><span class="pill {% if dst == 'Approved' %}ok{% elsif dst == 'Rejected' %}err{% elsif dst == 'Draft' %}{% else %}info{% endif %}">{{ dst | escape }}</span></td>
+          </tr>
+        {% endfor %}
+        {% if drs.results.entities.size == 0 %}<tr><td colspan="5">No disbursement requests yet.</td></tr>{% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>

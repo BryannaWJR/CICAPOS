@@ -8,10 +8,10 @@
     <isdefault>1</isdefault>
     <savedqueryid>{c43cc95b-1e1b-427e-b32a-a6d4e9f4a1a7}</savedqueryid>
     <layoutxml>
-      <grid name="cicapos_vettingchecklistitems" jump="cicapos_name" select="1" icon="1" preview="1">
-        <row name="cicapos_vettingchecklistitem" id="cicapos_vettingchecklistitemid">
-          <cell name="cicapos_name" width="300" />
-          <cell name="createdon" width="125" />
+      <grid name="resultset" jump="cicapos_name" select="1" icon="1" preview="1">
+        <row name="result" id="cicapos_vettingchecklistitemid">
+          <cell name="cicapos_name" width="150" />
+          <cell name="createdon" width="150" />
         </row>
       </grid>
     </layoutxml>
@@ -31,7 +31,7 @@
     </fetchxml>
     <IntroducedVersion>1.0</IntroducedVersion>
     <LocalizedNames>
-      <LocalizedName description="Vetting Checklist Associated View" languagecode="1033" />
+      <LocalizedName description="Review checklist Associated View" languagecode="1033" />
     </LocalizedNames>
   </savedquery>
 </savedqueries>

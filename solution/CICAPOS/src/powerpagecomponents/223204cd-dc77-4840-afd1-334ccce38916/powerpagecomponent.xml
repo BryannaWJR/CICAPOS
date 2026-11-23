@@ -1,5 +1,18 @@
 <powerpagecomponent powerpagecomponentid="223204cd-dc77-4840-afd1-334ccce38916">
-  <content>{"displayorder":1,"enablerating":false,"enabletracking":false,"excludefromsearch":false,"feedbackpolicy":756150005,"hiddenfromsitemap":false,"isroot":true,"pagetemplateid":"0005c373-72eb-4494-8096-b7887c1d7c54","partialurl":"/","publishingstateid":"11327ec1-d362-4ca8-b603-20f7ed715821","sharedpageconfiguration":false,"title":"Home"}</content>
+  <content>{
+  "displayorder": 1,
+  "enablerating": false,
+  "enabletracking": false,
+  "excludefromsearch": false,
+  "feedbackpolicy": 756150005,
+  "hiddenfromsitemap": false,
+  "isroot": true,
+  "pagetemplateid": "0005c373-72eb-4494-8096-b7887c1d7c54",
+  "partialurl": "/",
+  "publishingstateid": "11327ec1-d362-4ca8-b603-20f7ed715821",
+  "sharedpageconfiguration": false,
+  "title": "My Company"
+}</content>
   <iscustomizable>1</iscustomizable>
   <name>Home</name>
   <powerpagecomponenttype>2</powerpagecomponenttype>

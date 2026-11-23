@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>CITF</title></head>
+<body style="font:14px/1.4 Segoe UI,sans-serif;padding:24px;color:#323130">
+<p>Opening CITF Operation Platform…</p>
+<script>
+(function () {
+  var APP = 'd66dfdcd-a2e1-f111-84ea-7ced8dff73d3';
+  function goHome() {
+    try { window.top.location.replace('/main.aspx?appid=' + APP); } catch (e) {}
+  }
+  function dismiss() {
+    try {
+      var d = window.top.document;
+      d.querySelectorAll('input[type="checkbox"]').forEach(function (c) {
+        var t = ((c.closest('label') || c.parentElement || {}).textContent || '');
+        if (/Do not show this Welcome Screen/i.test(t)) { c.checked = true; c.dispatchEvent(new Event('change', { bubbles: true })); }
+      });
+      var btns = d.querySelectorAll('button, a[role="button"]');
+      for (var i = 0; i < btns.length; i++) {
+        if (/^\s*Continue\s*$/i.test(btns[i].textContent || '')) { btns[i].click(); return true; }
+      }
+    } catch (e) {}
+    return false;
+  }
+  if (!dismiss()) setTimeout(function () { if (!dismiss()) goHome(); }, 200);
+  setTimeout(goHome, 1200);
+})();
+</script>
+</body></html>

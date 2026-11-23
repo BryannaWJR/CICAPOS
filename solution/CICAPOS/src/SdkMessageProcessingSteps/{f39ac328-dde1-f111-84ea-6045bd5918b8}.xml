@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="CICAPOS.Plugins.AssignmentPlugin: Create of cicapos_disbursementrequest (20)" SdkMessageProcessingStepId="{f39ac328-dde1-f111-84ea-6045bd5918b8}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SdkMessageId>9ebdbb1b-ea3e-db11-86a7-000a3a5473e8</SdkMessageId>
+  <PluginTypeName>CICAPOS.Plugins.AssignmentPlugin, CICAPOS.Plugins, Version=1.0.1.0, Culture=neutral, PublicKeyToken=f907cd10d1e1e131</PluginTypeName>
+  <PluginTypeId>45ef2c1c-dde1-f111-84ea-6045bd5918b8</PluginTypeId>
+  <PrimaryEntity>cicapos_disbursementrequest</PrimaryEntity>
+  <AsyncAutoDelete>0</AsyncAutoDelete>
+  <Description>CIC APOS</Description>
+  <FilteringAttributes></FilteringAttributes>
+  <ImpersonatingUserIdName>System Administrator</ImpersonatingUserIdName>
+  <InvocationSource>1</InvocationSource>
+  <Mode>0</Mode>
+  <Rank>20</Rank>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>20</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <SdkMessageProcessingStepImages />
+</SdkMessageProcessingStep>

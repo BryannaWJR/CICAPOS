@@ -1,0 +1,90 @@
+{% assign co = user.parentcustomerid.name | default: user.fullname | default: "your company" %}
+{% fetchxml reqs %}
+<fetch>
+  <entity name="cicapos_palapplication">
+    <attribute name="cicapos_name" />
+    <attribute name="cicapos_kind" />
+    <attribute name="cicapos_productname" />
+    <attribute name="cicapos_schemeid" />
+    <attribute name="cicapos_status" />
+    <attribute name="cicapos_submittedon" />
+    <attribute name="cicapos_proposedprice" />
+    <order attribute="createdon" descending="true" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% if user.parentcustomerid %}
+{% assign vendor = user.parentcustomerid.id | remove: "{" | remove: "}" %}
+{% fetchxml listed %}
+<fetch>
+  <entity name="cicapos_preapprovedproduct">
+    <attribute name="cicapos_code" />
+    <attribute name="cicapos_name" />
+    <attribute name="cicapos_schemeid" />
+    <attribute name="cicapos_unitprice" />
+    <attribute name="cicapos_status" />
+    <filter>
+      <condition attribute="cicapos_vendorid" operator="eq" value="{{ vendor }}" />
+    </filter>
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% endif %}
+<main class="p-main">
+  <div class="row between">
+    <div>
+      <h1>Pre-approved List</h1>
+      <p class="sub">{{ co | escape }} · products and courses listed for CITF</p>
+    </div>
+    <a class="btn pri" href="#apply">+ Apply to list a product</a>
+  </div>
+  <div class="card">
+    <h2>My listed items</h2>
+    <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>PA code</th><th>Item</th><th>Scheme</th><th>Approved price</th><th>Status</th></tr></thead>
+        <tbody>
+        {% if listed.results.entities.size > 0 %}
+          {% for p in listed.results.entities %}
+          <tr>
+            <td>{{ p.cicapos_code | escape }}</td>
+            <td>{{ p.cicapos_name | escape }}</td>
+            <td>{{ p.cicapos_schemeid.name | escape }}</td>
+            <td>{% if p.cicapos_unitprice %}<span data-hk="{{ p.cicapos_unitprice | round: 0 }}">HK${{ p.cicapos_unitprice | round: 0 }}</span>{% else %}–{% endif %}</td>
+            <td><span class="pill ok">{{ p.cicapos_status.label | escape }}</span></td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr><td colspan="5">No listed items yet.</td></tr>
+        {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <h2>My requests</h2>
+    <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>Ref</th><th>Type</th><th>Item</th><th>Submitted</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for p in reqs.results.entities %}
+          {% assign st = p.cicapos_status.label %}
+          <tr>
+            <td>{{ p.cicapos_name | escape }}</td>
+            <td>{{ p.cicapos_kind.label | escape }}{% if p.cicapos_schemeid.name %} · {{ p.cicapos_schemeid.name | escape }}{% endif %}</td>
+            <td>{{ p.cicapos_productname | escape }}</td>
+            <td>{% if st == "Draft" or p.cicapos_submittedon == blank %}Not submitted{% else %}{{ p.cicapos_submittedon | date: "%d %b %Y" }}{% endif %}</td>
+            <td><span class="pill {% if st == 'Listed' or st == 'Approved' %}ok{% elsif st == 'Rejected' %}err{% elsif st == 'Draft' %}{% else %}info{% endif %}">{{ st | escape }}</span></td>
+          </tr>
+        {% endfor %}
+        {% if reqs.results.entities.size == 0 %}<tr><td colspan="5">None</td></tr>{% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card" id="apply">
+    <h2>Apply to list a product</h2>
+    <p class="sub">Ask for a product to be listed, or request a change to a listed product.</p>
+    {% entityform id:a5100001-e2e1-4111-8111-6045bd591015 %}
+  </div>
+</main>

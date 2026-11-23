@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{5b01569f-7da5-49eb-bf66-66b0df288dc2}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{1b65eb53-96ac-4469-b746-9710502c4b3d}" name="StageStep2" locklevel="0" expanded="true" visible="false" labelid="{45b5cde4-e228-46f3-8dbe-6369f76c0bf9}">
+          <labels>
+            <label description="Submit" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{44df4ef1-c948-ea3b-f755-8b349ff9a639}" name="StageStep2_section1" labelid="{c5a754d1-c8fa-407f-8459-e1548ae760c4}">
+                  <labels>
+                    <label description="Submit" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{1de65276-5f5d-4627-a928-e16755911b5a}" showlabel="true" visible="true" labelid="{23c5eea6-d4bd-4343-9f11-5f537874fbd8}">
+                        <labels>
+                          <label description="Project name" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_fundingapplication_cicapos_bpf_npa:cicapos_projectname" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_projectname" relationship="bpf_cicapos_fundingapplication_cicapos_bpf_npa" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{6fe43a21-2e20-4f4d-a42d-98706da65e4c}" name="StageStep5" locklevel="0" expanded="true" visible="false" labelid="{c6cf7151-2abb-4981-87fb-33d8b2506bcb}">
+          <labels>
+            <label description="Assign" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{c8870d2b-8473-dd86-9519-e338374c1417}" name="StageStep5_section1" labelid="{ca603589-20fb-4918-bde8-3e780f47504c}">
+                  <labels>
+                    <label description="Assign" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{cc9be4e7-8b9b-4b06-af2f-65d51354b6a3}" showlabel="true" visible="true" labelid="{a05e4518-2444-44e8-bffa-0070114c6e76}">
+                        <labels>
+                          <label description="Case handler" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_fundingapplication_cicapos_bpf_npa:cicapos_casehandlerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_casehandlerid" relationship="bpf_cicapos_fundingapplication_cicapos_bpf_npa" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{ba4649df-1c32-4977-be1c-0611df732989}" name="StageStep8" locklevel="0" expanded="true" visible="false" labelid="{0252e991-abf7-4602-8ab8-cbed7cd53b99}">
+          <labels>
+            <label description="Review" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{d233aa0e-cb35-2949-ae6f-c9bf1ad1c78b}" name="StageStep8_section1" labelid="{e0e0c1f7-37f7-46c7-8532-3b2c60fe3773}">
+                  <labels>
+                    <label description="Review" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{f9bdba0f-f6ff-4159-b537-ae0a09dc4d0e}" showlabel="true" visible="true" labelid="{26a29705-1b8f-470e-93d2-b6660b55fc89}">
+                        <labels>
+                          <label description="Objective" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_fundingapplication_cicapos_bpf_npa:cicapos_objective" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_objective" relationship="bpf_cicapos_fundingapplication_cicapos_bpf_npa" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  <row>
+                      <cell id="{cae45b48-1f17-43c7-b0b7-c849b01104c0}" showlabel="true" visible="true" labelid="{06b86525-5760-4938-b6e9-2d8ed5fd003d}">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_fundingapplication_cicapos_bpf_npa:cicapos_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cicapos_status" relationship="bpf_cicapos_fundingapplication_cicapos_bpf_npa" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+<row>
+                      <cell id="{568769f4-37bd-4fe4-ac1f-55ebdeb74907}" showlabel="true" visible="true" labelid="{5d34897d-2dea-424b-a566-84a2fa722cd4}">
+                        <labels>
+                          <label description="Reviewer" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_fundingapplication_cicapos_bpf_npa:cicapos_reviewerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_reviewerid" relationship="bpf_cicapos_fundingapplication_cicapos_bpf_npa" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+</rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{05684846-066f-47fa-80b3-54e0685978b4}" name="StageStep17" locklevel="0" expanded="true" visible="false" labelid="{3a41fdea-b0b1-425a-9daf-eeb2af178ce1}">
+          <labels>
+            <label description="Approve" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{57e5e793-fced-b419-a0f3-6e87dd3ead05}" name="StageStep17_section1" labelid="{c2fd9792-76b0-448a-b319-ca7d48afe1a7}">
+                  <labels>
+                    <label description="Approve" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{9e85add4-e5fe-47ea-ba43-3e48aa93b7bb}" showlabel="true" visible="true" labelid="{f52d274b-22d4-4ecd-95e0-56b4d8ecfc68}">
+                        <labels>
+                          <label description="Approver" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_fundingapplication_cicapos_bpf_npa:cicapos_approverid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_approverid" relationship="bpf_cicapos_fundingapplication_cicapos_bpf_npa" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

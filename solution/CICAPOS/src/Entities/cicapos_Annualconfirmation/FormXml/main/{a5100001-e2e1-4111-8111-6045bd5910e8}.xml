@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{a5100001-e2e1-4111-8111-6045bd5910e8}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="false" showImage="false" maxWidth="1900">
+      <tabs>
+        <tab verticallayout="true" id="{a5100001-e2e1-4111-8111-6045bd5914e8}" IsUserDefined="1" name="General">
+          <labels><label description="General" languagecode="1033" /></labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{a5100001-e2e1-4111-8111-6045bd5911e8}" name="Details" columns="1">
+                  <labels><label description="Details" languagecode="1033" /></labels>
+                  <rows>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5912e8}">
+                        <labels><label description="Year" languagecode="1033" /></labels>
+                        <control id="cicapos_year" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="cicapos_year" disabled="true" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Portal" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Applicant annual confirmation" languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

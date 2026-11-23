@@ -45,3 +45,10 @@
     }
   };
  </script>
+<script>
+  document.querySelectorAll("[data-hk]").forEach(function (el) {
+    var n = Number(el.getAttribute("data-hk"));
+    if (!isFinite(n)) return;
+    el.textContent = "HK$" + n.toLocaleString("en-HK", { maximumFractionDigits: 0 });
+  });
+</script>

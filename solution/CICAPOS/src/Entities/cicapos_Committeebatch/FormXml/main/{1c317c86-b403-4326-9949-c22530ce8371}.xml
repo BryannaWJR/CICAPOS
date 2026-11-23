@@ -5,34 +5,151 @@
     <IntroducedVersion>1.0.0.0</IntroducedVersion>
     <FormPresentation>1</FormPresentation>
     <FormActivationState>1</FormActivationState>
-    <form>
+    <form shownavigationbar="true" showImage="false" maxWidth="1900">
       <tabs>
-        <tab verticallayout="true" id="{5648b85d-d757-44a8-b71a-43f7e79f6db7}" IsUserDefined="1">
+        <tab verticallayout="true" id="{1E00A519-A81D-410A-97C2-FB82AD2863C6}" IsUserDefined="1" name="General">
           <labels>
             <label description="General" languagecode="1033" />
           </labels>
           <columns>
             <column width="100%">
               <sections>
-                <section showlabel="false" showbar="false" IsUserDefined="0" id="{8fdee26b-19b2-4ea2-a274-d698b3b4651c}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{1B70E87A-A356-4C34-8F74-4D84F8B8D901}" name="Details" columns="11">
                   <labels>
-                    <label description="General" languagecode="1033" />
+                    <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{ab833a1e-0c14-4010-9740-044be6019efe}">
+                      <cell id="{272DB749-E8B7-41FE-945A-C59FE672B86D}">
                         <labels>
                           <label description="Reference" languagecode="1033" />
                         </labels>
-                        <control id="cicapos_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_name" />
+                        <control id="cicapos_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_name" disabled="true" />
+                      </cell>
+                      <cell id="{D7E08F84-5175-41AA-9D87-3384AD858E2B}">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cicapos_status" />
                       </cell>
                     </row>
                     <row>
-                      <cell id="{7d63a50a-e282-4787-a704-b6a7b108b003}">
+                      <cell id="{4705E8B3-8436-4F54-809D-ABACAA86935A}">
+                        <labels>
+                          <label description="Status Reason" languagecode="1033" />
+                        </labels>
+                        <control id="statuscode" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="statuscode" />
+                      </cell>
+                      <cell id="{B5D525AE-B6E0-4A5B-B879-0B8AB7FBFD6D}">
+                        <labels>
+                          <label description="Committee" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_committeetype" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cicapos_committeetype" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{E1F8D55D-7DAF-4C87-A63E-156AE3EEF3B5}">
+                        <labels>
+                          <label description="Created By" languagecode="1033" />
+                        </labels>
+                        <control id="createdby" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="createdby" />
+                      </cell>
+                      <cell id="{8B6BB9BB-A6BC-4C8E-B6E2-2E5EFE0FC7A6}">
+                        <labels>
+                          <label description="Created By (Delegate)" languagecode="1033" />
+                        </labels>
+                        <control id="createdonbehalfby" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="createdonbehalfby" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{A5DFDC58-7BBD-4173-ABB7-22FA3A0A95AC}">
+                        <labels>
+                          <label description="Created On" languagecode="1033" />
+                        </labels>
+                        <control id="createdon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="createdon" />
+                      </cell>
+                      <cell id="{68F2E1C8-6D5E-4A8A-9070-F42E5B281C8D}">
+                        <labels>
+                          <label description="Meeting on" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_meetingon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="cicapos_meetingon" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{EB359D9E-C8E9-4607-B7D7-D52520288AFF}">
+                        <labels>
+                          <label description="Modified By" languagecode="1033" />
+                        </labels>
+                        <control id="modifiedby" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="modifiedby" />
+                      </cell>
+                      <cell id="{ACAEF346-9FA7-4A75-9ECE-C27DDA573E2D}">
+                        <labels>
+                          <label description="Modified By (Delegate)" languagecode="1033" />
+                        </labels>
+                        <control id="modifiedonbehalfby" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="modifiedonbehalfby" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{89611AAD-6B3C-44B9-AF85-654DF46B5122}">
+                        <labels>
+                          <label description="Modified On" languagecode="1033" />
+                        </labels>
+                        <control id="modifiedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="modifiedon" />
+                      </cell>
+                      <cell id="{9F12A11D-BBB8-4379-A658-472EFE0A0523}">
                         <labels>
                           <label description="Owner" languagecode="1033" />
                         </labels>
                         <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{2154372A-B33E-4603-A945-BA8A1F6879AE}">
+                        <labels>
+                          <label description="Owning Business Unit" languagecode="1033" />
+                        </labels>
+                        <control id="owningbusinessunit" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="owningbusinessunit" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{9D778399-1CF6-4EA4-BB66-B49FB9D1267E}" IsUserDefined="1" name="Related">
+          <labels>
+            <label description="Related" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{86E62FAC-74DB-4B25-935F-96DF8CCFD4E2}" name="Relatedrecords" columns="11">
+                  <labels>
+                    <label description="Related records" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{99E16642-7B4C-4999-9A25-95D800D72534}" colspan="2" rowspan="6" auto="false">
+                        <labels>
+                          <label description="cicapos_committeebatchid" languagecode="1033" />
+                        </labels>
+                        <control id="grid_cicapos_assessment_batch" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true">
+                          <parameters>
+                            <ViewId>{A51EC7D8-644B-4A31-8ECC-804F8CEB0D14}</ViewId>
+                            <IsUserView>false</IsUserView>
+                            <RelationshipName>cicapos_assessment_batch</RelationshipName>
+                            <TargetEntityType>cicapos_committeeassessment</TargetEntityType>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>Grid</ChartGridMode>
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>false</EnableChartPicker>
+                            <RecordsPerPage>4</RecordsPerPage>
+                          </parameters>
+                        </control>
                       </cell>
                     </row>
                   </rows>
@@ -42,6 +159,23 @@
           </columns>
         </tab>
       </tabs>
+      <header id="{AB28F64D-27F6-4F3E-A60D-0F0D06686644}" celllabelposition="Left" columns="111">
+        <rows>
+          <row>
+            <cell id="{467D1D0F-250A-45A4-8616-9E272D074256}">
+              <labels>
+                <label description="Status" languagecode="1033" />
+              </labels>
+              <control id="cicapos_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cicapos_status" />
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <footer id="{3C1C2199-C91B-4636-8067-4EA5913453A0}" celllabelposition="Left" columns="111">
+        <rows>
+          <row />
+        </rows>
+      </footer>
     </form>
     <IsCustomizable>1</IsCustomizable>
     <CanBeDeleted>1</CanBeDeleted>

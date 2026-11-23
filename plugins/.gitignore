@@ -1,0 +1,14 @@
+bin/
+obj/
+TestResults/
+*.user
+
+citf-nova.local.js
+**/citf-nova.local.js
+
+citf-nova.local.js
+**/citf-nova.local.js
+
+# Local D.Nova keys (never commit)
+citf-nova.local.js
+**/citf-nova.local.js

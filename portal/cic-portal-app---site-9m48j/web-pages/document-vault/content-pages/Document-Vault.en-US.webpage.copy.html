@@ -1,0 +1,81 @@
+{% assign co = user.parentcustomerid.name | default: user.fullname | default: "your company" %}
+{% assign mail = user.emailaddress1 | default: "" %}
+{% assign acct = user.parentcustomerid.id | remove: "{" | remove: "}" %}
+{% fetchxml regs %}
+<fetch version="1.0" mapping="logical">
+  <entity name="cicapos_companyregistration">
+    <attribute name="cicapos_name" />
+    <attribute name="cicapos_legalname" />
+    <filter type="or">
+      {% if mail != "" %}<condition attribute="cicapos_contactemail" operator="eq" value="{{ mail }}" />{% endif %}
+      {% if acct != "" %}<condition attribute="cicapos_accountid" operator="eq" value="{{ acct }}" />{% endif %}
+      {% if mail == "" and acct == "" %}<condition attribute="cicapos_companyregistrationid" operator="null" />{% endif %}
+    </filter>
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% fetchxml notes %}
+<fetch version="1.0" mapping="logical">
+  <entity name="annotation">
+    <attribute name="subject" />
+    <attribute name="filename" />
+    <attribute name="createdon" />
+    <attribute name="filesize" />
+    <attribute name="objectid" />
+    <filter>
+      <condition attribute="isdocument" operator="eq" value="1" />
+    </filter>
+    <order attribute="createdon" descending="true" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+<main class="p-main">
+  <div class="row between">
+    <div>
+      <h1>{{ co | escape }}</h1>
+      <p class="sub">Document vault</p>
+    </div>
+  </div>
+  <nav class="tabs">
+    <a href="/">Company profile</a>
+    <a class="on" href="/documents/">Document vault</a>
+  </nav>
+  <div class="card">
+    <div class="row between">
+      <h2>Documents</h2>
+      {% if regs.results.entities.size > 0 %}
+        <a class="btn sm pri" href="/documents/?id={{ regs.results.entities.first.id }}">Upload</a>
+      {% else %}
+        <a class="btn sm" href="/company-registration/">Register to upload</a>
+      {% endif %}
+    </div>
+    <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>Document</th><th>File</th><th>Uploaded</th><th>Size</th></tr></thead>
+        <tbody>
+        {% assign n = 0 %}
+        {% for note in notes.results.entities %}
+          {% if note.filename %}
+            {% assign n = n | plus: 1 %}
+            <tr>
+              <td>{{ note.subject | default: note.filename | escape }}</td>
+              <td>{{ note.filename | escape }}</td>
+              <td>{{ note.createdon | date: "%d %b %Y" }}</td>
+              <td>{% if note.filesize %}{{ note.filesize }} bytes{% else %}–{% endif %}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+        {% if n == 0 %}<tr><td colspan="4">No documents yet. Upload a BR certificate with the company registration, or add a file below.</td></tr>{% endif %}
+        </tbody>
+      </table>
+    </div>
+    <span class="hint">Files are stored as notes on the company registration. SharePoint is not connected.</span>
+  </div>
+  {% if request.params.id %}
+  <div class="card">
+    <h2>Upload a document</h2>
+    <p class="sub">PDF or JPEG, added to registration {{ request.params.id }}.</p>
+    {% entityform id:a5100001-e2e1-4111-8111-6045bd591071 %}
+  </div>
+  {% endif %}
+</main>

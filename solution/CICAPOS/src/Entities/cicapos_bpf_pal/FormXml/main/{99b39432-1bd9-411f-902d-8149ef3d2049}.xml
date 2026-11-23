@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{99b39432-1bd9-411f-902d-8149ef3d2049}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{41da7184-666b-4f0e-a9bd-6be4d2c9e41b}" name="StageStep2" locklevel="0" expanded="true" visible="false" labelid="{7de520f0-70c5-4b58-b1c8-227a60f0612a}">
+          <labels>
+            <label description="Submit" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{711dabf0-572b-9d2d-da32-2e81f588ed6f}" name="StageStep2_section1" labelid="{987ff214-96ec-4c7e-8b75-4c0eb384b740}">
+                  <labels>
+                    <label description="Submit" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{90dac7b6-411c-4ac4-990a-9b173c33a953}" showlabel="true" visible="true" labelid="{f097972c-d7a4-48bb-92e7-09829e1c6d20}">
+                        <labels>
+                          <label description="Product name" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_palapplication_cicapos_bpf_pal:cicapos_productname" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_productname" relationship="bpf_cicapos_palapplication_cicapos_bpf_pal" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{b229ee3e-4ace-434c-8321-7d86c43edf86}" name="StageStep5" locklevel="0" expanded="true" visible="false" labelid="{afd84ce4-1346-4b18-b5f0-94eaf7dd6b41}">
+          <labels>
+            <label description="Assign" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{775a8db8-e7de-0c91-4fd9-2b56a5b701a9}" name="StageStep5_section1" labelid="{40fb14f5-d4d1-4424-bc84-fc606bfc95a1}">
+                  <labels>
+                    <label description="Assign" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{d04cb59c-52bd-4a5d-acf1-855b947bafcf}" showlabel="true" visible="true" labelid="{d8019b42-ae07-4771-a8db-da1881e97464}">
+                        <labels>
+                          <label description="Case handler" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_palapplication_cicapos_bpf_pal:cicapos_casehandlerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_casehandlerid" relationship="bpf_cicapos_palapplication_cicapos_bpf_pal" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{e4a0678d-6d63-45b4-8390-8485126366ea}" name="StageStep8" locklevel="0" expanded="true" visible="false" labelid="{20948a2c-cf2e-4585-83fe-aa742830aea9}">
+          <labels>
+            <label description="Review" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{73217fa7-5263-1869-fb46-759164f27d61}" name="StageStep8_section1" labelid="{23082c89-ed74-4d1d-8366-61e96341bc73}">
+                  <labels>
+                    <label description="Review" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{1ca043ba-456f-4e16-8e52-c58fb652abd5}" showlabel="true" visible="true" labelid="{70e42f21-0804-4e3c-aa66-e6567cb148ba}">
+                        <labels>
+                          <label description="Note" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_palapplication_cicapos_bpf_pal:cicapos_note" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_note" relationship="bpf_cicapos_palapplication_cicapos_bpf_pal" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  <row>
+                      <cell id="{0d667321-11d3-4c7c-b20c-38464f782bf6}" showlabel="true" visible="true" labelid="{9e19a07e-2a5e-42b9-a322-b2af0e7e79ff}">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_palapplication_cicapos_bpf_pal:cicapos_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cicapos_status" relationship="bpf_cicapos_palapplication_cicapos_bpf_pal" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+<row>
+                      <cell id="{acee375e-05b8-4013-a0f4-7dfa43f4e076}" showlabel="true" visible="true" labelid="{c7e55c69-a4c2-42ce-8b2e-d3dbae2247b6}">
+                        <labels>
+                          <label description="Request kind" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_palapplication_cicapos_bpf_pal:cicapos_kind" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cicapos_kind" relationship="bpf_cicapos_palapplication_cicapos_bpf_pal" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+<row>
+                      <cell id="{7d1211a7-09a6-47e6-9842-334aa12a188a}" showlabel="true" visible="true" labelid="{86941317-d3e3-4e27-b2a8-849dcdef5b5f}">
+                        <labels>
+                          <label description="Proposed price (HK$)" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_palapplication_cicapos_bpf_pal:cicapos_proposedprice" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="cicapos_proposedprice" relationship="bpf_cicapos_palapplication_cicapos_bpf_pal" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+</rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{919b24ac-622f-4150-b81f-f9f10091d35d}" name="StageStep20" locklevel="0" expanded="true" visible="false" labelid="{e8b80ba6-8e08-4d52-8936-72493f861704}">
+          <labels>
+            <label description="Approve" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{5a614397-8378-3bf3-0637-d5fa89e3eb46}" name="StageStep20_section1" labelid="{d456d216-18c8-44bb-a9c0-9d5dc3692bd0}">
+                  <labels>
+                    <label description="Approve" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{b1e12a96-5151-4208-9ca0-3f73d956f328}" showlabel="true" visible="true" labelid="{7f357062-d74f-43f3-9967-0cd9bf8ea3d6}">
+                        <labels>
+                          <label description="Submitted on" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_palapplication_cicapos_bpf_pal:cicapos_submittedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="cicapos_submittedon" relationship="bpf_cicapos_palapplication_cicapos_bpf_pal" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

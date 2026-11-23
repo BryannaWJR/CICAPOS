@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AppModuleSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SiteMapUniqueName>cicapos_CICCRMAPP</SiteMapUniqueName>
+  <EnableCollapsibleGroups>True</EnableCollapsibleGroups>
+  <ShowHome>False</ShowHome>
+  <ShowPinned>False</ShowPinned>
+  <ShowRecents>True</ShowRecents>
+  <SiteMap IntroducedVersion="1.0.0.0">
+    <Area Id="Area_CITFOperations" ResourceId="SitemapDesigner.NewTitle" DescriptionResourceId="SitemapDesigner.NewTitle" ShowGroups="true">
+      <Titles>
+        <Title LCID="1033" Title="CITF Operations" />
+      </Titles>
+
+      <Group Id="Group_Home" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Home" />
+        </Titles>
+        <SubArea Id="nav_dash" Url="$webresource:cicapos_d365ops.html?data=dash&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Dashboards" /></Titles>
+        </SubArea>
+      </Group>
+
+      <Group Id="Group_Operations" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Operations" />
+        </Titles>
+        <SubArea Id="nav_team" Url="$webresource:cicapos_d365ops.html?data=team&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Team and Workload" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_calc" Url="$webresource:cicapos_d365ops.html?data=calc&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Calculation Engine (optional)" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_reports" Url="$webresource:cicapos_d365ops.html?data=reports&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Reports" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_search" Url="$webresource:cicapos_d365ops.html?data=search&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Search Records" /></Titles>
+        </SubArea>
+      </Group>
+
+      <Group Id="Group_Company" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Company Portal" />
+        </Titles>
+        <SubArea Id="nav_companies" Url="$webresource:cicapos_d365ops.html?data=companies&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Company Registrations" /></Titles>
+        </SubArea>
+      </Group>
+
+      <Group Id="Group_Funding" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Funding" />
+        </Titles>
+        <SubArea Id="nav_apps" Url="$webresource:cicapos_d365ops.html?data=apps&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Funding Applications" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_tickets" Url="$webresource:cicapos_d365ops.html?data=tickets&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Q&amp;A Tickets" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_batches" Url="$webresource:cicapos_d365ops.html?data=batches&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Committee Batches" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_drs" Url="$webresource:cicapos_d365ops.html?data=drs&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Disbursement Requests" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_payments" Url="$webresource:cicapos_d365ops.html?data=payments&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Payments (Finance)" /></Titles>
+        </SubArea>
+      </Group>
+
+      <Group Id="Group_PAL" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Pre-approved List" />
+        </Titles>
+        <SubArea Id="nav_pal" Url="$webresource:cicapos_d365ops.html?data=pal&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="PAL Items" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_palreq" Url="$webresource:cicapos_d365ops.html?data=palreq&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="PAL Requests" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_review" Url="$webresource:cicapos_d365ops.html?data=review&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Annual Review" /></Titles>
+        </SubArea>
+      </Group>
+
+      <Group Id="Group_Compliance" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Compliance" />
+        </Titles>
+        <SubArea Id="nav_inspections" Url="$webresource:cicapos_d365ops.html?data=inspections&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Inspections" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_compliance" Url="$webresource:cicapos_d365ops.html?data=compliance&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Post-award Compliance" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_emails" Url="$webresource:cicapos_d365ops.html?data=emails&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Email Log" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_audit" Url="$webresource:cicapos_d365ops.html?data=audit&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="System Audit Trail" /></Titles>
+        </SubArea>
+      </Group>
+
+      <Group Id="Group_Setup" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="CITF Setup" />
+        </Titles>
+        <SubArea Id="nav_m_rules" Url="$webresource:cicapos_d365ops.html?data=master_rules&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Funding Rules" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_m_schemes" Url="$webresource:cicapos_d365ops.html?data=master_schemes&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Schemes &amp; Ceilings" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_m_checklists" Url="$webresource:cicapos_d365ops.html?data=master_checklists&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Review checklists" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_m_risk" Url="$webresource:cicapos_d365ops.html?data=master_risk&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Risk Factors" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_m_sampling" Url="$webresource:cicapos_d365ops.html?data=master_sampling&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Inspection Sampling" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_m_letters" Url="$webresource:cicapos_d365ops.html?data=master_letters&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Letter Templates" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_m_templates" Url="$webresource:cicapos_d365ops.html?data=master_templates&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Email Templates" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_m_naming" Url="$webresource:cicapos_d365ops.html?data=master_naming&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="File Naming Rules" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_m_casefields" Url="$webresource:cicapos_d365ops.html?data=master_casefields&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Case Fields" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_m_retention" Url="$webresource:cicapos_d365ops.html?data=master_retention&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Retention Policy" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_m_formulas" Url="$webresource:cicapos_d365ops.html?data=master_formulas&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Calculation Formulas" /></Titles>
+        </SubArea>
+        <SubArea Id="nav_security" Url="$webresource:cicapos_d365ops.html?data=security&amp;v=24" AvailableOffline="false" PassParams="false" Client="All,Web" Sku="All,OnPremise,Live,SPLA">
+          <Titles><Title LCID="1033" Title="Security and Governance" /></Titles>
+        </SubArea>
+      </Group>
+    </Area>
+  </SiteMap>
+  <LocalizedNames>
+    <LocalizedName description="CITF Operation Platform" languagecode="1033" />
+  </LocalizedNames>
+</AppModuleSiteMap>

@@ -1,0 +1,30 @@
+adx_calendar_enabled: false
+adx_detailsbuttonlabel: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Open"
+    }
+  ]
+adx_emptylisttext: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "No pre-approved list applications yet."
+    }
+  ]
+adx_entitylistid: a5100001-e2e1-4111-8111-6045bd591022
+adx_entityname: cicapos_palapplication
+adx_entitypermissionsenabled: true
+adx_filter_enabled: false
+adx_idquerystringparametername: id
+adx_map_enabled: false
+adx_name: My Pre-approved List Applications
+adx_odata_enabled: false
+adx_pagesize: 15
+adx_searchenabled: true
+adx_view: cd0f3d6b-bd79-470e-8321-6b13505208c5
+adx_views: >-
+  {
+    "cd0f3d6b-bd79-470e-8321-6b13505208c5": []
+  }

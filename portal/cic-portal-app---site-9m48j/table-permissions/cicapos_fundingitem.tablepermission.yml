@@ -1,0 +1,15 @@
+adx_append: true
+adx_appendto: true
+adx_create: true
+adx_delete: false
+adx_entitylogicalname: cicapos_fundingitem
+adx_entityname: cicapos_fundingitem
+adx_entitypermission_webrole:
+- b4cdd773-d6e1-f111-84ea-6045bd5918b8
+- ccc02cfa-5698-4d2e-a0dd-c213f9847d93
+adx_entitypermissionid: 43c3027a-d6e1-f111-84ea-6045bd5918b8
+adx_parententitypermission: 3ec3027a-d6e1-f111-84ea-6045bd5918b8
+adx_parentrelationship: cicapos_item_application
+adx_read: true
+adx_scope: 756150003
+adx_write: true

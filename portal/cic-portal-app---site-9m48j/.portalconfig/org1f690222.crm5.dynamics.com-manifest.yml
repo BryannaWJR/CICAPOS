@@ -43,6 +43,166 @@ adx_contentsnippet:
   DisplayName: Site name
   CheckSum: d3b1faeaa7eec1d5c1c7d1cbbbcba6dbe2a3937f88e154f7d611538690cba3d6
   IsDeleted: false
+adx_entityform:
+- RecordId: a5100001-e2e1-4111-8111-6045bd591010
+  DisplayName: New Funding Application
+  CheckSum: c9e4958e31a275ba783c4edaa667c2c1771b0455811e9f122eb63e5fdc4b8c7b
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591011
+  DisplayName: Funding Application
+  CheckSum: deaca80c5293e09f74fb1bfa4d63bb677c0be58f10178c7b933c6c58fac000eb
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591012
+  DisplayName: Submit Funding Application
+  CheckSum: db6e6bb9ec1bd1fb565cc5a7ebd14f7c4496c6e64ad8ed6a73c3caea25038563
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591013
+  DisplayName: Funding Item
+  CheckSum: 2d5fcd41017ac21e1f76916d9501ff574471b04ef59946e7eab7ab89462d7dde
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591014
+  DisplayName: New Disbursement Request
+  CheckSum: 4eb25d26b398bd3e0f2d82ca45051b1674966b8ce5ba85253c497c88cc02b96e
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591015
+  DisplayName: New Pre-approved List Application
+  CheckSum: fbd02d78321758e2a75375bde1a88163a0d456c07c7029bde2c068c0745a0060
+  IsDeleted: false
+adx_entitylist:
+- RecordId: a5100001-e2e1-4111-8111-6045bd591020
+  DisplayName: My Funding Applications
+  CheckSum: 27aaac35c689538ebe87b37cbf2fdfb22b9de92e8251622429822a63439c0b27
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591021
+  DisplayName: My Disbursement Requests
+  CheckSum: 737334936a009119127c8afd5a80b2f9bac5e9f7bb8f40c490be505de33135c9
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591022
+  DisplayName: My Pre-approved List Applications
+  CheckSum: 06db411ce9aecb58cae78644bdecf95389e10da51eb493900ad9f6e9e684a800
+  IsDeleted: false
+adx_entitypermission:
+- RecordId: 3ec3027a-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_fundingapplication
+  CheckSum: ac3a6e7efbd46d9e1e0a4255f540fc741496de504675b035aec3b6c2d7298ae4
+  IsDeleted: false
+- RecordId: 43c3027a-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_fundingitem
+  CheckSum: 3ba8c7bb1b321bb4a5a1e722304e1c8a0f191632b7b113ae6453ec948e37f386
+  IsDeleted: false
+- RecordId: 48c3027a-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_disbursementrequest
+  CheckSum: bd4958dc74285822e31d40d3862f2e69aa556a870bcfdd4f18d099c745542575
+  IsDeleted: false
+- RecordId: 54c3027a-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_disbursementline
+  CheckSum: 11e01aae5e5fa3897b522bcbe890c07230b06c2dd4ae588f956caebf2c1ef55c
+  IsDeleted: false
+- RecordId: 7d6b0280-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_palapplication
+  CheckSum: 9f17201130358a6100d11ee613439a1bcf852fbef31c0da19484803bff9a5af8
+  IsDeleted: false
+- RecordId: 906b0280-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_casequery
+  CheckSum: 24e6726bc1ac8fd3f653590890ebf0e088758077e8e02f6e520ceb859886d3a4
+  IsDeleted: false
+- RecordId: 9e21fb85-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_checklistanswer
+  CheckSum: 79124bb814c8e7b3f55e3ec5a45e32d8da11c723c96e2561dc83489dfa573af0
+  IsDeleted: false
+- RecordId: a36b0280-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_casequery
+  CheckSum: 468ff5827733c7e96b4a3eb69b520b5585e60d58af7da81b0c30936ab8142b07
+  IsDeleted: false
+- RecordId: b821fb85-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_checklistanswer
+  CheckSum: 56b43aa40f0d325ec8488292ddc766a4b0beec64850049757db14205489e0d7c
+  IsDeleted: false
+- RecordId: b9cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: account
+  CheckSum: 7af2b3fa905d32f5ef2f6d78ca01f8b0dd95b9882971bda09d317058b607e371
+  IsDeleted: false
+- RecordId: be6b0280-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_casequery
+  CheckSum: 1e4091b0dfaa5f998b9f42bcc4108d55f7f68c41b31c2c813c80fa68582b703c
+  IsDeleted: false
+- RecordId: becdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: contact
+  CheckSum: 1cf0687df4574a9ff8e105804e329b27385b8ed9df0708f1a556a0ed99ff7134
+  IsDeleted: false
+- RecordId: c3cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_fundingscheme
+  CheckSum: d5977f17df72227728423731f521bcc374d233b7af0c3bb4a29e388eaf9435cc
+  IsDeleted: false
+- RecordId: c8cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_preapprovedproduct
+  CheckSum: 4a97c712da57b0e3a11e5299e2fe34613f15e4835ec6099ed9cfda02cd8ead5f
+  IsDeleted: false
+- RecordId: d96b0280-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: cicapos_checklistanswer
+  CheckSum: 6727052a49eaa46a8ea8c966b28a9ad413d1876b17f64bbd2c9fc6efca1d6a27
+  IsDeleted: false
+adx_entitypermission_webrole:
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:3ec3027a-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: 17a40bdba666b525587bd54c0117c7173baa4cbaec37e8c0a368931f8ebd5047
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:43c3027a-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: 49d59ff0a7abd55c8d7862e0059aaf365d5a092383a525c5a61977b90ed899c1
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:48c3027a-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: 7cffb62f048c4b0e21480d097d0f6b40a708acc80d72b03555f27cb4db33c647
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:54c3027a-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: 955f6675e18e6dd8de9d5d1616910e6953a78dc9d8a3962284cd522ca6510d84
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:7d6b0280-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: 5abee646c402fb65b9a9d41dd791219734a180bbe4164abed278a72c69f2b219
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:906b0280-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: 26c0dc069ac1ca31811ba5ad03b386dfc57d6a2c57d580903df3fd6a23a5e919
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:9e21fb85-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: 99570d172e96d5395b5df2158d1c4474e558261fdaf94c515760ce9d699777d5
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:a36b0280-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: 1c99a14e61028486f3d77ca67166115a89f18a9273518b1c0cdc8eb4851abc7b
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:b821fb85-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: 4db48c2b989c7ca7074bd6978eb7bbd6aba6739da50eece9731d9784f6982678
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:b9cdd773-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: f9fa92becac2c93e199d73937dfe2b2e5886ca6ffd4afe08927240892b9322a1
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:be6b0280-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: 3f551d03c8c59378927e4ff2631ce8495284880450c976bbd6c6c6e740b7c43a
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:becdd773-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: f97fbb268d86ea697c03abb1b1432c72e74aafa701d87a855d2595fa5c8f5ef9
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:c3cdd773-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: 0ace1c0adf31d994735afb011af33cb66be09ef92f3dc3397357a364bcfb83e7
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:c8cdd773-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: b901ee4d5316bf6cdae4cd3030bc9df36e16d117f00400abb1554396715631ee
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: $RELATIONSHIP$adx_entitypermission:d96b0280-d6e1-f111-84ea-6045bd5918b8:adx_webrole
+  CheckSum: 51fcd676b8a39c38f5cc3fc0a7d7fdcf5a7ddb64465ca68621cd2107ca696a9e
+  IsDeleted: false
 adx_pagetemplate:
 - RecordId: 0005c373-72eb-4494-8096-b7887c1d7c54
   DisplayName: Default studio template
@@ -50,7 +210,7 @@ adx_pagetemplate:
   IsDeleted: false
 - RecordId: b6102c6a-a7d8-4118-b108-9992249a3479
   DisplayName: AI Search PageTemplate
-  CheckSum: 85088b3a82e2b9083c18306fef7e611f1ec21b538c9150e2a2b1bf8fa40a3cce
+  CheckSum: 3ef96df4e8c9913f0c3740b498edeb3b53d3a7a5110410757721150b0a4e762c
   IsDeleted: false
 - RecordId: b8c48e5a-9ae8-427e-a6a7-4f428b68945b
   DisplayName: Search
@@ -338,6 +498,22 @@ adx_weblink:
   DisplayName: Profile
   CheckSum: e344423639dcba83c139331cc312c48624f156718e24b34889fab8b204b61d19
   IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591040
+  DisplayName: My Applications
+  CheckSum: 923f9a7b4b3ae2e09e2fc50677a830c173507da2f0e4b7e8acee2709ab83ffbd
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591041
+  DisplayName: Funding Application
+  CheckSum: 0f243ce67559608e02498e0993a4065606475ab3cec12a076b8d0afb5bd27cd0
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591042
+  DisplayName: Disbursement Request
+  CheckSum: 82f01f62ab3a63aa3bb82068bfc3158d1c71410d5b575ae2c16a928c2fb974ff
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591043
+  DisplayName: Pre-approved List Application
+  CheckSum: 313e9374ee425a44cc5e773ceae78ad6f33c9a73d078729df87446e8a82ac40e
+  IsDeleted: false
 adx_weblinkset:
 - RecordId: f36f02b0-c970-48e7-a5a1-84527f84ae50
   DisplayName: Default
@@ -367,6 +543,38 @@ adx_webpage:
 - RecordId: 89062841-b0ba-451d-a25f-fb1229ad930c
   DisplayName: Page Not Found
   CheckSum: c2b4c331be128037f9f679c23c574ba1328500d078005df55cd8b2c088932df1
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591001
+  DisplayName: My Applications
+  CheckSum: 46b7a1fe2deccae716c345aaabf82039dd1a139c71fae3c9cec07891765495bf
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591002
+  DisplayName: My Applications
+  CheckSum: a7ee478d321b8c2c3b629ac10310e48dcdc94cacd2d3b40ffa8b0d2fe44b2f98
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591003
+  DisplayName: Funding Application
+  CheckSum: be05e1794fb17ff3d062544c7e30be441a33ba99a855f392a05c2e1b4a64b7e7
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591004
+  DisplayName: Funding Application
+  CheckSum: 2876f798949541263be02f55cb2d944903b391b29a9648434d4f8db1b440ca8c
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591005
+  DisplayName: Disbursement Request
+  CheckSum: c256989acfdc134354260071505d944d7b57193cc683b2fc5999a03978a50b41
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591006
+  DisplayName: Disbursement Request
+  CheckSum: 104fc31cfda3d82674eccd21970f3d6c90a309736095e497a1c0b6d0d77561d3
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591007
+  DisplayName: Pre-approved List Application
+  CheckSum: b20501868bf731db6b36326dc1511857f93c23e8e2728fc1e9ed13165cf911cc
+  IsDeleted: false
+- RecordId: a5100001-e2e1-4111-8111-6045bd591008
+  DisplayName: Pre-approved List Application
+  CheckSum: 7bc8066d51aeb3b6480f22ef7276732db9e3cbd2855f203535f7b2530a079215
   IsDeleted: false
 - RecordId: a5adf0d2-44e6-46b7-aa6a-34b26efa7149
   DisplayName: Page Not Found
@@ -406,6 +614,10 @@ adx_webrole:
 - RecordId: 5eb0973d-1e19-40b0-8a0b-e9b07cd67dfc
   DisplayName: Anonymous Users
   CheckSum: 03f1dcccd20c735fc68062cbe6d55263eba6dfb80a9e56d8f5732550f7dbc8f0
+  IsDeleted: false
+- RecordId: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+  DisplayName: Applicant
+  CheckSum: 5417ad3660d367b67ea5b70b0b9d636bfaf82b13db42df4aa8c2fc739eca1cad
   IsDeleted: false
 - RecordId: cba98d1d-be5f-4bb2-894e-1a05f9d97015
   DisplayName: Administrators
@@ -493,27 +705,27 @@ adx_webtemplate:
   CheckSum: 895060ef9793c33ce6b1c7ba7b79513c312729ee929112d5244514ea3b2d90d9
   IsDeleted: false
 annotation:
-- RecordId: 36d75f06-a4e1-f111-84ea-7ced8dff73d3
-  DisplayName: Cat-PC.png
-  CheckSum: 69207122febcd25035438a08a1bc0c223850365692317fb3b4f560ff6216ff57
-  IsDeleted: false
-- RecordId: 3bd75f06-a4e1-f111-84ea-7ced8dff73d3
-  DisplayName: bootstrap.min.css
-  CheckSum: bd6d96e4aa28f3bfc3da28d6a3308163b9d1975891b717bf3ae8b6f534b6cc1d
-  IsDeleted: false
-- RecordId: 99dc6107-a4e1-f111-84ea-6045bd5918b8
+- RecordId: 0315f516-e7e1-f111-84ea-6045bd5918b8
   DisplayName: robots.txt
-  CheckSum: d471f85b7c52ca7f44a3a114c14392f014909a08d95325f50502ff3d8fd2879c
+  CheckSum: d453da8fb3d3146dddefe80a431796129a6b3048131544e2634779c7197a8a1e
   IsDeleted: false
-- RecordId: afdc6107-a4e1-f111-84ea-6045bd5918b8
-  DisplayName: portalbasictheme.css
-  CheckSum: 4451b1ba1caa8ba5f290dd5ee58f3067e73761f74522939a131761bb26840693
+- RecordId: 0b15f516-e7e1-f111-84ea-6045bd5918b8
+  DisplayName: bootstrap.min.css
+  CheckSum: c46cdaf413d5dcfbce0cf49cfbe131170519cd3193d4521b044047470fa4e769
   IsDeleted: false
-- RecordId: b0dc6107-a4e1-f111-84ea-6045bd5918b8
-  DisplayName: Logo-sm-64.png
-  CheckSum: 6df603ab649b8d7808f70e3bb7f072450ce9d412f035f3ca7bf9474cba481a45
-  IsDeleted: false
-- RecordId: d92dcc05-a4e1-f111-84e8-000d3a853cf7
+- RecordId: 1015f516-e7e1-f111-84ea-6045bd5918b8
   DisplayName: theme.css
-  CheckSum: fd004f3f0c307bed0664d66f1b5549f32315e9c5beeeb3f7753e200b13324e7d
+  CheckSum: fb4b7b506ba029faa1893627e63e7b2c8123122df6b582efdb73c9827abc62f0
+  IsDeleted: false
+- RecordId: 8e4cf510-e7e1-f111-84ea-6045bd5918b8
+  DisplayName: portalbasictheme.css
+  CheckSum: 09178fe83160d1bd40d3e570448214d5c93291783210d977b60dbaccd418ee91
+  IsDeleted: false
+- RecordId: 944cf510-e7e1-f111-84ea-6045bd5918b8
+  DisplayName: Logo-sm-64.png
+  CheckSum: f217367100c73ac23a148993f3903b880dc21779da6b0ca295bd3a3dc84127c3
+  IsDeleted: false
+- RecordId: 9c4cf510-e7e1-f111-84ea-6045bd5918b8
+  DisplayName: Cat-PC.png
+  CheckSum: b0ad052e006d28839a875eab7f74e0bddf1d19196896f2f960d788b3f7e4ef8c
   IsDeleted: false

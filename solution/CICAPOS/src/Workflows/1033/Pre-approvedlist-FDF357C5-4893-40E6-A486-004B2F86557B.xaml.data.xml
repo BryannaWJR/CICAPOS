@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{fdf357c5-4893-40e6-a486-004b2f86557b}" Name="Pre-approved list" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <XamlFileName>/Workflows/Pre-approvedlist-FDF357C5-4893-40E6-A486-004B2F86557B.xaml</XamlFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>4</Category>
+  <Mode>0</Mode>
+  <LanguageCode>1033</LanguageCode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>1</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <Rank>0</Rank>
+  <RunAs>1</RunAs>
+  <UniqueName>cicapos_bpf_pal</UniqueName>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <BusinessProcessType>0</BusinessProcessType>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <ModernFlowType>0</ModernFlowType>
+  <PrimaryEntity>cicapos_Palapplication</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="Pre-approved list" />
+  </LocalizedNames>
+  <labels>
+    <steplabels id="{41da7184-666b-4f0e-a9bd-6be4d2c9e41b}">
+      <label languagecode="1033" description="Submit" />
+    </steplabels>
+    <steplabels id="{90dac7b6-411c-4ac4-990a-9b173c33a953}">
+      <label languagecode="1033" description="Product name" />
+    </steplabels>
+    <steplabels id="{b229ee3e-4ace-434c-8321-7d86c43edf86}">
+      <label languagecode="1033" description="Assign" />
+    </steplabels>
+    <steplabels id="{d04cb59c-52bd-4a5d-acf1-855b947bafcf}">
+      <label languagecode="1033" description="Case handler" />
+    </steplabels>
+    <steplabels id="{e4a0678d-6d63-45b4-8390-8485126366ea}">
+      <label languagecode="1033" description="Review" />
+    </steplabels>
+    <steplabels id="{1ca043ba-456f-4e16-8e52-c58fb652abd5}">
+      <label languagecode="1033" description="Note" />
+    </steplabels>
+    <steplabels id="{0d667321-11d3-4c7c-b20c-38464f782bf6}">
+      <label languagecode="1033" description="Status" />
+    </steplabels>
+    <steplabels id="{acee375e-05b8-4013-a0f4-7dfa43f4e076}">
+      <label languagecode="1033" description="Request kind" />
+    </steplabels>
+    <steplabels id="{7d1211a7-09a6-47e6-9842-334aa12a188a}">
+      <label languagecode="1033" description="Proposed price (HK$)" />
+    </steplabels>
+    <steplabels id="{919b24ac-622f-4150-b81f-f9f10091d35d}">
+      <label languagecode="1033" description="Approve" />
+    </steplabels>
+    <steplabels id="{b1e12a96-5151-4208-9ca0-3f73d956f328}">
+      <label languagecode="1033" description="Submitted on" />
+    </steplabels>
+  </labels>
+</Workflow>

@@ -1,0 +1,34 @@
+adx_attachfile: true
+adx_attachfileaccept: .pdf,.jpg,.jpeg,.png
+adx_attachfileallowmultiple: false
+adx_attachfilerequired: false
+adx_attachfilerestrictaccept: true
+adx_attachfilestoragelocation: 756150000
+adx_captcharequired: false
+adx_entityformid: a5100001-e2e1-4111-8111-6045bd5911f2
+adx_entityname: cicapos_casequery
+adx_entitypermissionsenabled: true
+adx_entitysourcetype: 756150001
+adx_formname: Portal Answer
+adx_geolocation_enabled: false
+adx_mode: 100000001
+adx_name: Answer Case Query
+adx_onsuccess: 756150000
+adx_recordidquerystringparametername: qid
+adx_showownerfields: false
+adx_submitbuttontext: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Submit answers"
+    }
+  ]
+adx_successmessage: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Answer submitted."
+    }
+  ]
+adx_tabname: General
+adx_validationsummarylinksenabled: true

@@ -1,4 +1,5 @@
 <powerpagecomponent powerpagecomponentid="eeb95398-1496-44b7-8396-7eafa8e8f7c3">
+  <content>{}</content>
   <iscustomizable>1</iscustomizable>
   <name>Authentication/OpenAuth/Twitter/ConsumerSecret</name>
   <powerpagecomponenttype>9</powerpagecomponenttype>

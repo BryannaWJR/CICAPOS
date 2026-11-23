@@ -1,0 +1,16 @@
+adx_append: true
+adx_appendto: true
+adx_create: true
+adx_delete: false
+adx_entitylogicalname: annotation
+adx_entityname: annotation
+adx_entitypermission_webrole:
+- 5eb0973d-1e19-40b0-8a0b-e9b07cd67dfc
+- b4cdd773-d6e1-f111-84ea-6045bd5918b8
+- ccc02cfa-5698-4d2e-a0dd-c213f9847d93
+adx_entitypermissionid: a5100001-e2e1-4111-8111-6045bd591087
+adx_parententitypermission: a5100001-e2e1-4111-8111-6045bd591086
+adx_parentrelationship: cicapos_companyregistration_Annotations
+adx_read: true
+adx_scope: 756150003
+adx_write: false

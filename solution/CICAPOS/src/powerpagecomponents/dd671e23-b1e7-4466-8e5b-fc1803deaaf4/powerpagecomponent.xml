@@ -1,4 +1,5 @@
 <powerpagecomponent powerpagecomponentid="dd671e23-b1e7-4466-8e5b-fc1803deaaf4">
+  <content>{}</content>
   <iscustomizable>1</iscustomizable>
   <name>Authentication/OpenAuth/LinkedIn/ConsumerSecret</name>
   <powerpagecomponenttype>9</powerpagecomponenttype>

@@ -7,6 +7,14 @@
     <isprivate>0</isprivate>
     <isdefault>1</isdefault>
     <savedqueryid>{b87c3196-2262-4e9f-b066-fe4401e1536a}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="cicapos_name" select="1" icon="1" preview="1">
+        <row name="result" id="cicapos_vettingchecklistitemid">
+          <cell name="cicapos_name" width="150" />
+          <cell name="createdon" width="150" />
+        </row>
+      </grid>
+    </layoutxml>
     <querytype>8192</querytype>
     <fetchxml>
       <fetch version="1.0" mapping="logical" output-format="xml-platform">
@@ -15,15 +23,17 @@
           <filter type="and">
             <condition attribute="statecode" operator="eq" value="0" />
           </filter>
+          <attribute name="cicapos_name" />
+          <attribute name="createdon" />
         </entity>
       </fetch>
     </fetchxml>
     <IntroducedVersion>1.0</IntroducedVersion>
     <LocalizedNames>
-      <LocalizedName description="My Vetting Checklists" languagecode="1033" />
+      <LocalizedName description="My Review checklists" languagecode="1033" />
     </LocalizedNames>
     <Descriptions>
-      <Description description="All active Vetting Checklists" languagecode="1033" />
+      <Description description="All active Review checklists" languagecode="1033" />
     </Descriptions>
   </savedquery>
 </savedqueries>

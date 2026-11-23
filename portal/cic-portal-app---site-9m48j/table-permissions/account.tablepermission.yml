@@ -1,0 +1,13 @@
+adx_append: false
+adx_appendto: false
+adx_create: false
+adx_delete: false
+adx_entitylogicalname: account
+adx_entityname: account
+adx_entitypermission_webrole:
+- b4cdd773-d6e1-f111-84ea-6045bd5918b8
+- ccc02cfa-5698-4d2e-a0dd-c213f9847d93
+adx_entitypermissionid: b9cdd773-d6e1-f111-84ea-6045bd5918b8
+adx_read: true
+adx_scope: 756150002
+adx_write: false

@@ -4,9 +4,17 @@
   adx_webroleid: 5eb0973d-1e19-40b0-8a0b-e9b07cd67dfc
 - adx_anonymoususersrole: false
   adx_authenticatedusersrole: false
+  adx_name: Applicant
+  adx_webroleid: b4cdd773-d6e1-f111-84ea-6045bd5918b8
+- adx_anonymoususersrole: false
+  adx_authenticatedusersrole: false
   adx_name: Administrators
   adx_webroleid: cba98d1d-be5f-4bb2-894e-1a05f9d97015
 - adx_anonymoususersrole: false
   adx_authenticatedusersrole: true
   adx_name: Authenticated Users
   adx_webroleid: ccc02cfa-5698-4d2e-a0dd-c213f9847d93
+- adx_anonymoususersrole: false
+  adx_authenticatedusersrole: false
+  adx_name: Company User
+  adx_webroleid: a5100001-e2e1-4111-8111-6045bd5912f1

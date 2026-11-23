@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{90d2642f-cdbd-4576-a59d-fa80f52e968c}" Name="New non-pre-approved funding" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <XamlFileName>/Workflows/Newnon-pre-approvedfunding-90D2642F-CDBD-4576-A59D-FA80F52E968C.xaml</XamlFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>4</Category>
+  <Mode>0</Mode>
+  <LanguageCode>1033</LanguageCode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>0</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <Rank>1</Rank>
+  <RunAs>1</RunAs>
+  <UniqueName>cicapos_bpf_npa</UniqueName>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <BusinessProcessType>0</BusinessProcessType>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <ModernFlowType>0</ModernFlowType>
+  <PrimaryEntity>cicapos_Fundingapplication</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="New non-pre-approved funding" />
+  </LocalizedNames>
+  <labels>
+    <steplabels id="{1b65eb53-96ac-4469-b746-9710502c4b3d}">
+      <label languagecode="1033" description="Submit" />
+    </steplabels>
+    <steplabels id="{1de65276-5f5d-4627-a928-e16755911b5a}">
+      <label languagecode="1033" description="Project name" />
+    </steplabels>
+    <steplabels id="{6fe43a21-2e20-4f4d-a42d-98706da65e4c}">
+      <label languagecode="1033" description="Assign" />
+    </steplabels>
+    <steplabels id="{cc9be4e7-8b9b-4b06-af2f-65d51354b6a3}">
+      <label languagecode="1033" description="Case handler" />
+    </steplabels>
+    <steplabels id="{ba4649df-1c32-4977-be1c-0611df732989}">
+      <label languagecode="1033" description="Review" />
+    </steplabels>
+    <steplabels id="{f9bdba0f-f6ff-4159-b537-ae0a09dc4d0e}">
+      <label languagecode="1033" description="Objective" />
+    </steplabels>
+    <steplabels id="{cae45b48-1f17-43c7-b0b7-c849b01104c0}">
+      <label languagecode="1033" description="Status" />
+    </steplabels>
+    <steplabels id="{568769f4-37bd-4fe4-ac1f-55ebdeb74907}">
+      <label languagecode="1033" description="Reviewer" />
+    </steplabels>
+    <steplabels id="{05684846-066f-47fa-80b3-54e0685978b4}">
+      <label languagecode="1033" description="Approve" />
+    </steplabels>
+    <steplabels id="{9e85add4-e5fe-47ea-ba43-3e48aa93b7bb}">
+      <label languagecode="1033" description="Approver" />
+    </steplabels>
+  </labels>
+</Workflow>

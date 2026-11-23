@@ -1,0 +1,34 @@
+adx_attachfile: true
+adx_attachfileaccept: .pdf,.jpg,.jpeg,.png
+adx_attachfileallowmultiple: false
+adx_attachfilerequired: true
+adx_attachfilerestrictaccept: true
+adx_attachfilestoragelocation: 756150000
+adx_captcharequired: false
+adx_entityformid: a5100001-e2e1-4111-8111-6045bd591071
+adx_entityname: cicapos_companyregistration
+adx_entitypermissionsenabled: true
+adx_entitysourcetype: 756150001
+adx_formname: Portal Document
+adx_geolocation_enabled: false
+adx_mode: 100000001
+adx_name: Company Document
+adx_onsuccess: 756150000
+adx_recordidquerystringparametername: id
+adx_showownerfields: false
+adx_submitbuttontext: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Upload"
+    }
+  ]
+adx_successmessage: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Document uploaded."
+    }
+  ]
+adx_tabname: General
+adx_validationsummarylinksenabled: true

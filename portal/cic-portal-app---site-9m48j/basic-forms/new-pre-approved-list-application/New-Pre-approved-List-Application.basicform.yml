@@ -1,0 +1,27 @@
+adx_attachfile: false
+adx_captcharequired: false
+adx_entityformid: a5100001-e2e1-4111-8111-6045bd591015
+adx_entityname: cicapos_palapplication
+adx_entitypermissionsenabled: true
+adx_formname: Portal
+adx_geolocation_enabled: false
+adx_mode: 100000000
+adx_name: New Pre-approved List Application
+adx_onsuccess: 756150001
+adx_recordidquerystringparametername: id
+adx_redirectwebpage: a5100001-e2e1-4111-8111-6045bd591001
+adx_submitbuttontext: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Submit"
+    }
+  ]
+adx_successmessage: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Pre-approved list application submitted."
+    }
+  ]
+adx_tabname: General

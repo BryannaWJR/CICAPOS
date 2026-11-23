@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{f30f4f79-1894-4496-a08c-6cec6bfe5e24}" Name="Pre-approved funding" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <XamlFileName>/Workflows/Pre-approvedfunding-F30F4F79-1894-4496-A08C-6CEC6BFE5E24.xaml</XamlFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>4</Category>
+  <Mode>0</Mode>
+  <LanguageCode>1033</LanguageCode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>1</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <Rank>0</Rank>
+  <RunAs>1</RunAs>
+  <UniqueName>cicapos_bpf_preapproved</UniqueName>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <BusinessProcessType>0</BusinessProcessType>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <ModernFlowType>0</ModernFlowType>
+  <PrimaryEntity>cicapos_Fundingapplication</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="Pre-approved funding" />
+  </LocalizedNames>
+  <labels>
+    <steplabels id="{53918ea5-e0ad-4623-9de4-7594bda88a4e}">
+      <label languagecode="1033" description="Submit" />
+    </steplabels>
+    <steplabels id="{c158906d-5d6d-4b2d-933f-7b030135ae8e}">
+      <label languagecode="1033" description="Project name" />
+    </steplabels>
+    <steplabels id="{247d6bd7-bbce-4c74-9f90-9ade36f4fb25}">
+      <label languagecode="1033" description="Assign" />
+    </steplabels>
+    <steplabels id="{b30b2f58-313a-4c76-85b3-dedcabc11a50}">
+      <label languagecode="1033" description="Case handler" />
+    </steplabels>
+    <steplabels id="{ebfb5a78-f8f6-4f0a-a5cb-209bed3f6d0f}">
+      <label languagecode="1033" description="Objective" />
+    </steplabels>
+    <steplabels id="{4073d223-048f-4c89-b1b5-9c2bd5007c9e}">
+      <label languagecode="1033" description="Review" />
+    </steplabels>
+    <steplabels id="{cd9e282d-21b1-41f4-9b8f-3343fd697c70}">
+      <label languagecode="1033" description="Reviewer" />
+    </steplabels>
+    <steplabels id="{61be7ed5-0bbd-48af-8501-83cabddf09f4}">
+      <label languagecode="1033" description="Approve" />
+    </steplabels>
+    <steplabels id="{8d9767aa-2fec-414b-a1e2-d98ff8814282}">
+      <label languagecode="1033" description="Approver" />
+    </steplabels>
+  </labels>
+</Workflow>

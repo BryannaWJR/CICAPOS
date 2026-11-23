@@ -164,6 +164,12 @@
 - adx_description: Set whether the header web template is output cached.
   adx_name: Header/OutputCache/Enabled
   adx_sitesettingid: f5d0f9e6-4a17-45cd-981a-7706f7e55f08
-  adx_value: True
+  adx_value: false
 - adx_name: Authentication/OpenAuth/Twitter/ConsumerKey
   adx_sitesettingid: fbbc5885-5b6a-4805-a35e-9f874d0628e9
+- adx_name: Webapi/cicapos_aiassistjob/enabled
+  adx_sitesettingid: 24ce98b5-f3e6-f111-84e9-6045bd5918b8
+  adx_value: true
+- adx_name: Webapi/cicapos_aiassistjob/fields
+  adx_sitesettingid: 45ce98b5-f3e6-f111-84e9-6045bd5918b8
+  adx_value: '*'

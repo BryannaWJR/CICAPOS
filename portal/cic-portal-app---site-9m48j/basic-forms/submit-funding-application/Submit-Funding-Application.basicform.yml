@@ -1,0 +1,29 @@
+adx_attachfile: false
+adx_captcharequired: false
+adx_entityformid: a5100001-e2e1-4111-8111-6045bd591012
+adx_entityname: cicapos_fundingapplication
+adx_entitypermissionsenabled: true
+adx_entitysourcetype: 756150001
+adx_formname: Portal Submit
+adx_geolocation_enabled: false
+adx_mode: 100000001
+adx_name: Submit Funding Application
+adx_onsuccess: 756150001
+adx_recordidquerystringparametername: id
+adx_redirecturlappendentityidquerystring: false
+adx_redirectwebpage: a5100001-e2e1-4111-8111-6045bd591001
+adx_submitbuttontext: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Submit application"
+    }
+  ]
+adx_successmessage: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Funding application submitted."
+    }
+  ]
+adx_tabname: General

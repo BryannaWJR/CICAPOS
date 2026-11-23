@@ -1,0 +1,11 @@
+<powerpagecomponent powerpagecomponentid="c3cdd773-d6e1-f111-84ea-6045bd5918b8">
+  <content>{"adx_entitypermission_webrole":["ccc02cfa-5698-4d2e-a0dd-c213f9847d93","b4cdd773-d6e1-f111-84ea-6045bd5918b8"],"entityname":"cicapos_fundingscheme","entitylogicalname":"cicapos_fundingscheme","scope":756150000,"read":true,"write":false,"create":false,"delete":false,"append":false,"appendto":false}</content>
+  <iscustomizable>1</iscustomizable>
+  <name>cicapos_fundingscheme</name>
+  <powerpagecomponenttype>18</powerpagecomponenttype>
+  <powerpagesiteid>
+    <powerpagesiteid>ea8078b2-2728-4878-9694-7992c3061c1b</powerpagesiteid>
+  </powerpagesiteid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</powerpagecomponent>

@@ -1,0 +1,11 @@
+<powerpagecomponent powerpagecomponentid="3ec3027a-d6e1-f111-84ea-6045bd5918b8">
+  <content>{"adx_entitypermission_webrole":["ccc02cfa-5698-4d2e-a0dd-c213f9847d93","b4cdd773-d6e1-f111-84ea-6045bd5918b8"],"entityname":"cicapos_fundingapplication","entitylogicalname":"cicapos_fundingapplication","scope":756150002,"read":true,"write":true,"create":true,"delete":false,"append":true,"appendto":true,"accountrelationship":"cicapos_application_applicant"}</content>
+  <iscustomizable>1</iscustomizable>
+  <name>cicapos_fundingapplication</name>
+  <powerpagecomponenttype>18</powerpagecomponenttype>
+  <powerpagesiteid>
+    <powerpagesiteid>ea8078b2-2728-4878-9694-7992c3061c1b</powerpagesiteid>
+  </powerpagesiteid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</powerpagecomponent>

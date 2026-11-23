@@ -8,10 +8,11 @@
     <isdefault>1</isdefault>
     <savedqueryid>{c4f15b36-93c4-4bb9-83ba-4245b2512a42}</savedqueryid>
     <layoutxml>
-      <grid name="cicapos_inspections" jump="cicapos_name" select="1" icon="1" preview="1">
-        <row name="cicapos_inspection" id="cicapos_inspectionid">
-          <cell name="cicapos_name" width="300" />
-          <cell name="createdon" width="125" />
+      <grid name="resultset" jump="cicapos_name" select="1" icon="1" preview="1">
+        <row name="result" id="cicapos_inspectionid">
+          <cell name="cicapos_name" width="150" />
+          <cell name="cicapos_status" width="150" />
+          <cell name="createdon" width="150" />
         </row>
       </grid>
     </layoutxml>
@@ -26,6 +27,7 @@
           <filter type="and">
             <condition attribute="statecode" operator="eq" value="0" />
           </filter>
+          <attribute name="cicapos_status" />
         </entity>
       </fetch>
     </fetchxml>

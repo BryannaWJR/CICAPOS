@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{a5100001-e2e1-4111-8111-6045bd5910e6}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="false" showImage="false" maxWidth="1900">
+      <tabs>
+        <tab verticallayout="true" id="{a5100001-e2e1-4111-8111-6045bd5914e6}" IsUserDefined="1" name="General">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{a5100001-e2e1-4111-8111-6045bd5911e6}" name="Details" columns="1">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5912e6}">
+                        <labels><label description="Question" languagecode="1033" /></labels>
+                        <control id="cicapos_question" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_question" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd5913e6}">
+                        <labels><label description="Your answer" languagecode="1033" /></labels>
+                        <control id="cicapos_answer" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_answer" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Portal Answer" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Applicant reply to a CIC query" languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

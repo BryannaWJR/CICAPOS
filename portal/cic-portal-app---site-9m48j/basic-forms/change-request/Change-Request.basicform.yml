@@ -1,0 +1,33 @@
+adx_attachfile: false
+adx_captcharequired: false
+adx_entityformid: a5100001-e2e1-4111-8111-6045bd5910a5
+adx_entityname: cicapos_casequery
+adx_entitypermissionsenabled: true
+adx_formname: Portal
+adx_geolocation_enabled: false
+adx_mode: 100000000
+adx_name: Change Request
+adx_onsuccess: 756150000
+adx_referenceentitylogicalname: cicapos_fundingapplication
+adx_referenceentityrelationshipname: cicapos_query_application
+adx_referenceentitysourcetype: 756150000
+adx_referencequerystringisprimarykey: true
+adx_referencequerystringname: id
+adx_setentityreference: true
+adx_showownerfields: false
+adx_submitbuttontext: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Submit request"
+    }
+  ]
+adx_successmessage: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Change request submitted."
+    }
+  ]
+adx_tabname: General
+adx_validationsummarylinksenabled: true

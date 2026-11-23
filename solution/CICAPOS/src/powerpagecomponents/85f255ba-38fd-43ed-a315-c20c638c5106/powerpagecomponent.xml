@@ -1,4 +1,5 @@
 <powerpagecomponent powerpagecomponentid="85f255ba-38fd-43ed-a315-c20c638c5106">
+  <content>{}</content>
   <iscustomizable>1</iscustomizable>
   <name>Authentication/OpenAuth/Facebook/AppSecret</name>
   <powerpagecomponenttype>9</powerpagecomponenttype>

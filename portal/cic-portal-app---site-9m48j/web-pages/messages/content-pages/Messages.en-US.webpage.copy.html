@@ -1,0 +1,89 @@
+{% fetchxml queries %}
+<fetch version="1.0" mapping="logical">
+  <entity name="cicapos_casequery">
+    <attribute name="cicapos_name" />
+    <attribute name="cicapos_question" />
+    <attribute name="cicapos_answer" />
+    <attribute name="cicapos_status" />
+    <attribute name="cicapos_askedon" />
+    <attribute name="cicapos_fundingapplicationid" />
+    <attribute name="cicapos_disbursementrequestid" />
+    <attribute name="createdon" />
+    <order attribute="createdon" descending="true" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+<main class="p-main">
+  {% if request.params.id %}
+    {% assign current = nil %}
+    {% for q in queries.results.entities %}
+      {% assign qid = q.id | remove: "{" | remove: "}" | downcase %}
+      {% assign want = request.params.id | remove: "{" | remove: "}" | downcase %}
+      {% if qid == want %}{% assign current = q %}{% endif %}
+    {% endfor %}
+    <a class="back" href="/messages/">← Messages</a>
+    {% if current %}
+      {% assign st = current.cicapos_status.label %}
+      <div class="row between">
+        <div>
+          <h1>{{ current.cicapos_name | escape }}</h1>
+          <p class="sub">
+            {% if current.cicapos_fundingapplicationid.name %}Application {{ current.cicapos_fundingapplicationid.name | escape }}{% endif %}
+            {% if current.cicapos_disbursementrequestid.name %} · Disbursement {{ current.cicapos_disbursementrequestid.name | escape }}{% endif %}
+          </p>
+        </div>
+        <span class="pill {% if st == 'Answered' %}ok{% elsif st == 'Closed' %}{% else %}warn{% endif %}">{{ st | default: "Open" | escape }}</span>
+      </div>
+      <div class="card">
+        <div class="thread">
+          <div class="tm me">
+            <div class="tmh"><b>You</b><small>{% if current.cicapos_askedon %}{{ current.cicapos_askedon | date: "%d %b %Y" }}{% else %}{{ current.createdon | date: "%d %b %Y" }}{% endif %}</small></div>
+            <div>{{ current.cicapos_question | escape }}</div>
+          </div>
+          {% if current.cicapos_answer %}
+          <div class="tm cic">
+            <div class="tmh"><b>CIC</b></div>
+            <div>{{ current.cicapos_answer | escape }}</div>
+          </div>
+          {% else %}
+          <div class="note info">CIC has not answered yet. Reply by sending another question linked to the same application.</div>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div class="card">This question was not found on your company records.</div>
+    {% endif %}
+  {% else %}
+    <div class="row between">
+      <div>
+        <h1>Messages</h1>
+        <p class="sub">Your questions to CIC. Each one is linked to an application or a disbursement request.</p>
+      </div>
+      <a class="btn pri" href="#ask">+ Ask CIC a question</a>
+    </div>
+    <div class="card">
+      <div class="scroll">
+        <table class="tbl">
+          <thead><tr><th>Subject</th><th>Linked to</th><th>Asked</th><th>Status</th></tr></thead>
+          <tbody>
+          {% for q in queries.results.entities %}
+            {% assign st = q.cicapos_status.label %}
+            <tr>
+              <td><a href="/messages/?id={{ q.id }}">{{ q.cicapos_name | escape }}</a></td>
+              <td>{{ q.cicapos_fundingapplicationid.name | escape }}{% if q.cicapos_disbursementrequestid.name %}<br><small class="hint">{{ q.cicapos_disbursementrequestid.name | escape }}</small>{% endif %}</td>
+              <td>{% if q.cicapos_askedon %}{{ q.cicapos_askedon | date: "%d %b %Y" }}{% else %}{{ q.createdon | date: "%d %b %Y" }}{% endif %}</td>
+              <td><span class="pill {% if st == 'Answered' %}ok{% elsif st == 'Open' %}warn{% endif %}">{{ st | escape }}</span></td>
+            </tr>
+          {% endfor %}
+          {% if queries.results.entities.size == 0 %}<tr><td colspan="4">No messages yet.</td></tr>{% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endif %}
+  <div class="card" id="ask">
+    <h2>Ask CIC a question</h2>
+    <p class="sub">Choose the funding application this question is about. You can also attach a PDF or JPEG.</p>
+    {% entityform id:a5100001-e2e1-4111-8111-6045bd591072 %}
+  </div>
+</main>

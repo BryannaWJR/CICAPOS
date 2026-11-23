@@ -1,0 +1,204 @@
+{% fetchxml apps %}
+<fetch>
+  <entity name="cicapos_fundingapplication">
+    <attribute name="cicapos_name" />
+    <attribute name="cicapos_projectname" />
+    <attribute name="cicapos_status" />
+    <attribute name="cicapos_amountapplied" />
+    <attribute name="cicapos_applicantid" />
+    <attribute name="cicapos_contactid" />
+    <order attribute="cicapos_name" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% fetchxml regs %}
+<fetch>
+  <entity name="cicapos_companyregistration">
+    <attribute name="cicapos_name" />
+    <attribute name="cicapos_legalname" />
+    <attribute name="cicapos_status" />
+    <attribute name="cicapos_contactemail" />
+    <order attribute="cicapos_name" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% fetchxml pals %}
+<fetch>
+  <entity name="cicapos_palapplication">
+    <attribute name="cicapos_name" />
+    <attribute name="cicapos_productname" />
+    <attribute name="cicapos_status" />
+    <attribute name="cicapos_applicantid" />
+    <order attribute="cicapos_name" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% fetchxml products %}
+<fetch>
+  <entity name="cicapos_preapprovedproduct">
+    <attribute name="cicapos_code" />
+    <attribute name="cicapos_name" />
+    <attribute name="cicapos_status" />
+    <attribute name="cicapos_vendorid" />
+    <order attribute="cicapos_code" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% fetchxml drs %}
+<fetch>
+  <entity name="cicapos_disbursementrequest">
+    <attribute name="cicapos_name" />
+    <attribute name="cicapos_status" />
+    <attribute name="cicapos_claimedamount" />
+    <attribute name="cicapos_fundingapplicationid" />
+    <order attribute="cicapos_name" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+<main class="p-main">
+  <div>
+    <h1>Demo role list</h1>
+    <p class="sub">Hidden from the public sign-in page. Open a role to walk the corresponding flow. Sample records below are live in Dataverse.</p>
+  </div>
+
+  <div class="card">
+    <h2>Applicant portal</h2>
+    <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>Account</th><th>Role</th><th>CRM company</th><th>Open flow</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>carmen.lau@harbourbuild.example.com</td>
+            <td>Company Admin</td>
+            <td>Harbour Build Engineering Limited</td>
+            <td><a href="/flow/?email=carmen.lau%40harbourbuild.example.com">Company · CITF · Messages</a></td>
+          </tr>
+          <tr>
+            <td>kenny.wong@harbourbuild.example.com</td>
+            <td>Company User</td>
+            <td>Harbour Build Engineering Limited</td>
+            <td><a href="/flow/?email=kenny.wong%40harbourbuild.example.com">Endorsement</a></td>
+          </tr>
+          <tr>
+            <td>grace.ho@smartsite.example.com</td>
+            <td>Vendor · Company Admin</td>
+            <td>SmartSite Robotics HK Limited</td>
+            <td><a href="/flow/?email=grace.ho%40smartsite.example.com">Pre-approved List</a></td>
+          </tr>
+          <tr>
+            <td>ivan.cheng@kmic.example.com</td>
+            <td>Pending registration</td>
+            <td>Kowloon MiC Solutions Limited · CR-KMIC</td>
+            <td><a href="/flow/?email=ivan.cheng%40kmic.example.com">Registration pending</a> · <a href="/track/?ref=CR-KMIC&amp;email=ivan.cheng@kmic.example.com">Track in CRM</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Back office</h2>
+    <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>Persona</th><th>Role</th><th>Open flow</th></tr></thead>
+        <tbody>
+          <tr><td>Mandy Chan</td><td>Funding Application Review Officer</td><td><a href="/flow/?d365=Mandy%20Chan%20(Funding%20Application%20Review%20Officer)#/d/dash">Funding queue</a></td></tr>
+          <tr><td>Kelly Lau</td><td>PAL Application Review Officer</td><td><a href="/flow/?d365=Kelly%20Lau%20(PAL%20Application%20Review%20Officer)#/d/pal">PAL requests</a></td></tr>
+          <tr><td>Winnie Ho</td><td>Disbursement Review Officer</td><td><a href="/flow/?d365=Winnie%20Ho%20(Disbursement%20Review%20Officer)#/d/drs">Disbursements</a></td></tr>
+          <tr><td>Peter Yip</td><td>Approver / Reviewer</td><td><a href="/flow/?d365=Peter%20Yip%20(Approver%20%2F%20Reviewer)#/d/apps">Approvals</a></td></tr>
+          <tr><td>Eric Lam</td><td>Finance Department</td><td><a href="/flow/?d365=Eric%20Lam%20(Finance%20Department)#/d/payments">Payments</a></td></tr>
+          <tr><td>Admin</td><td>Administrator</td><td><a href="/flow/?d365=Admin%20(Administrator)#/d/security">Security</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>CRM · Company registrations</h2>
+    <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>Reference</th><th>Legal name</th><th>Contact email</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for r in regs.results.entities %}
+          <tr>
+            <td>{{ r.cicapos_name | escape }}</td>
+            <td>{{ r.cicapos_legalname | escape }}</td>
+            <td>{{ r.cicapos_contactemail | escape }}</td>
+            <td><span class="pill info">{{ r.cicapos_status.label | escape }}</span></td>
+          </tr>
+        {% endfor %}
+        {% if regs.results.entities.size == 0 %}<tr><td colspan="4">None</td></tr>{% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>CRM · Funding applications</h2>
+    <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>Reference</th><th>Applicant</th><th>Contact</th><th>Project</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for a in apps.results.entities %}
+          <tr>
+            <td>{{ a.cicapos_name | escape }}</td>
+            <td>{{ a.cicapos_applicantid.name | escape }}</td>
+            <td>{{ a.cicapos_contactid.name | escape }}</td>
+            <td>{{ a.cicapos_projectname | escape }}</td>
+            <td>{% if a.cicapos_amountapplied %}HK${{ a.cicapos_amountapplied | round: 0 }}{% else %}–{% endif %}</td>
+            <td><span class="pill info">{{ a.cicapos_status.label | escape }}</span></td>
+          </tr>
+        {% endfor %}
+        {% if apps.results.entities.size == 0 %}<tr><td colspan="6">None</td></tr>{% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>CRM · Disbursement requests</h2>
+    <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>Reference</th><th>Application</th><th>Claimed</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for d in drs.results.entities %}
+          <tr>
+            <td>{{ d.cicapos_name | escape }}</td>
+            <td>{{ d.cicapos_fundingapplicationid.name | escape }}</td>
+            <td>{% if d.cicapos_claimedamount %}HK${{ d.cicapos_claimedamount | round: 0 }}{% else %}–{% endif %}</td>
+            <td><span class="pill info">{{ d.cicapos_status.label | escape }}</span></td>
+          </tr>
+        {% endfor %}
+        {% if drs.results.entities.size == 0 %}<tr><td colspan="4">None</td></tr>{% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>CRM · Pre-approved products and PAL requests</h2>
+    <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>Code / Ref</th><th>Item</th><th>Vendor / Applicant</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for p in products.results.entities %}
+          <tr>
+            <td>{{ p.cicapos_code | escape }}</td>
+            <td>{{ p.cicapos_name | escape }}</td>
+            <td>{{ p.cicapos_vendorid.name | escape }}</td>
+            <td><span class="pill ok">{{ p.cicapos_status.label | escape }}</span></td>
+          </tr>
+        {% endfor %}
+        {% for p in pals.results.entities %}
+          <tr>
+            <td>{{ p.cicapos_name | escape }}</td>
+            <td>{{ p.cicapos_productname | escape }}</td>
+            <td>{{ p.cicapos_applicantid.name | escape }}</td>
+            <td><span class="pill info">{{ p.cicapos_status.label | escape }}</span></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>

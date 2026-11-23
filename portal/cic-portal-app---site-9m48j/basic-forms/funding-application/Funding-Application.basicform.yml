@@ -1,0 +1,34 @@
+adx_attachfile: true
+adx_attachfileaccept: .pdf,.jpg,.jpeg,.png
+adx_attachfileallowmultiple: true
+adx_attachfilerequired: false
+adx_attachfilerestrictaccept: true
+adx_attachfilestoragelocation: 756150000
+adx_captcharequired: false
+adx_entityformid: a5100001-e2e1-4111-8111-6045bd591011
+adx_entityname: cicapos_fundingapplication
+adx_entitypermissionsenabled: true
+adx_entitysourcetype: 756150001
+adx_formname: Portal
+adx_geolocation_enabled: false
+adx_mode: 100000001
+adx_name: Funding Application
+adx_onsuccess: 756150000
+adx_recordidquerystringparametername: id
+adx_showownerfields: false
+adx_submitbuttontext: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Save"
+    }
+  ]
+adx_successmessage: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Funding application saved."
+    }
+  ]
+adx_tabname: General
+adx_validationsummarylinksenabled: true

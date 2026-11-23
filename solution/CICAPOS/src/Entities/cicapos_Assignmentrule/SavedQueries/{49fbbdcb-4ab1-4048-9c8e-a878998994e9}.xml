@@ -8,10 +8,10 @@
     <isdefault>1</isdefault>
     <savedqueryid>{49fbbdcb-4ab1-4048-9c8e-a878998994e9}</savedqueryid>
     <layoutxml>
-      <grid name="cicapos_assignmentrules" jump="cicapos_name" select="1" icon="1" preview="1">
-        <row name="cicapos_assignmentrule" id="cicapos_assignmentruleid">
-          <cell name="cicapos_name" width="300" />
-          <cell name="createdon" width="125" />
+      <grid name="resultset" jump="cicapos_name" select="1" icon="1" preview="1">
+        <row name="result" id="cicapos_assignmentruleid">
+          <cell name="cicapos_name" width="150" />
+          <cell name="createdon" width="150" />
         </row>
       </grid>
     </layoutxml>

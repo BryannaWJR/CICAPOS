@@ -7,6 +7,14 @@
     <isprivate>0</isprivate>
     <isdefault>1</isdefault>
     <savedqueryid>{465a362c-f2c7-4ade-85e1-1450a0594fe2}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="cicapos_name" select="1" icon="1" preview="1">
+        <row name="result" id="cicapos_assignmentruleid">
+          <cell name="cicapos_name" width="150" />
+          <cell name="createdon" width="150" />
+        </row>
+      </grid>
+    </layoutxml>
     <querytype>8192</querytype>
     <fetchxml>
       <fetch version="1.0" mapping="logical" output-format="xml-platform">
@@ -15,6 +23,8 @@
           <filter type="and">
             <condition attribute="statecode" operator="eq" value="0" />
           </filter>
+          <attribute name="cicapos_name" />
+          <attribute name="createdon" />
         </entity>
       </fetch>
     </fetchxml>

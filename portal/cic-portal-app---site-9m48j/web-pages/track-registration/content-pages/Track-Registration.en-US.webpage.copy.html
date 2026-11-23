@@ -1,0 +1,59 @@
+<main class="p-main narrow">
+  <div>
+    <h1>Track my registration</h1>
+    <p class="sub">No account yet? Follow your registration with the reference and the contact email.</p>
+  </div>
+  <form class="card" method="get" action="/track/">
+    <div class="f"><label for="ref">Registration reference</label><input id="ref" name="ref" value="{{ request.params.ref | escape }}" placeholder="CR-00001" /></div>
+    <div class="f"><label for="email">Email used to register</label><input id="email" name="email" type="email" value="{{ request.params.email | escape }}" /></div>
+    <div class="row">
+      <button class="btn pri" type="submit">View progress</button>
+      <a class="btn ghost" href="/">Back to sign in</a>
+    </div>
+  </form>
+  {% if request.params.ref and request.params.email %}
+    {% fetchxml found %}
+    <fetch version="1.0" mapping="logical">
+      <entity name="cicapos_companyregistration">
+        <attribute name="cicapos_name" />
+        <attribute name="cicapos_legalname" />
+        <attribute name="cicapos_status" />
+        <attribute name="cicapos_submittedon" />
+        <attribute name="cicapos_contactemail" />
+        <filter type="and">
+          <condition attribute="cicapos_name" operator="eq" value="{{ request.params.ref }}" />
+          <condition attribute="cicapos_contactemail" operator="eq" value="{{ request.params.email }}" />
+        </filter>
+      </entity>
+    </fetch>
+    {% endfetchxml %}
+    {% if found.results.entities.size == 0 %}
+      <div class="note warn">No registration matches this reference and email.</div>
+    {% else %}
+      {% assign r = found.results.entities.first %}
+      {% assign st = r.cicapos_status.label %}
+      <div class="row between">
+        <div>
+          <h1>{{ r.cicapos_legalname | escape }}</h1>
+          <p class="sub">Registration {{ r.cicapos_name | escape }}{% if r.cicapos_submittedon %} · submitted {{ r.cicapos_submittedon | date: "%d %b %Y" }}{% endif %}</p>
+        </div>
+        <span class="pill {% if st == 'Approved' %}ok{% elsif st == 'Rejected' %}err{% elsif st == 'Request for information' %}warn{% else %}info{% endif %}">{{ st | escape }}</span>
+      </div>
+      <ol class="steps" style="grid-template-columns:repeat(4,1fr)">
+        <li class="done"><i></i>Submitted</li>
+        <li class="{% if st == 'Submitted' or st == 'Pending vetting' or st == 'Under review' or st == 'Request for information' %}cur{% elsif st == 'Approved' %}done{% endif %}"><i></i>Review</li>
+        <li class="{% if st == 'Approved' %}done{% endif %}"><i></i>Approved</li>
+        <li><i></i>Account active</li>
+      </ol>
+      {% if st == 'Request for information' %}
+        <div class="note warn">CIC has asked for more information. Sign in after your contact is approved, or reply with the documents CIC requested.</div>
+      {% elsif st == 'Approved' %}
+        <div class="note ok">Approved. Sign in with the identity provider on the Company Portal. Okta is not connected in this environment, so use Microsoft Entra ID.</div>
+      {% elsif st == 'Rejected' %}
+        <div class="note warn">CIC did not approve this registration.</div>
+      {% else %}
+        <div class="note info">AI review has checked your registration. A CIC officer is reviewing the findings. You will be notified when there is an update.</div>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+</main>

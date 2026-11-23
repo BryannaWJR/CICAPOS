@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{fb4122b3-bdf2-4d7b-b128-6a4f43a57901}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{53918ea5-e0ad-4623-9de4-7594bda88a4e}" name="StageStep2" locklevel="0" expanded="true" visible="false" labelid="{a775c3f3-b0fd-4fe7-a321-caad11211b40}">
+          <labels>
+            <label description="Submit" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{7a339533-7c4e-59f0-bcad-d7bcec78477c}" name="StageStep2_section1" labelid="{db2189b1-2d07-459c-b884-c293d66c9deb}">
+                  <labels>
+                    <label description="Submit" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{c158906d-5d6d-4b2d-933f-7b030135ae8e}" showlabel="true" visible="true" labelid="{abbc8466-0a4e-4e85-b694-cf3f898612e8}">
+                        <labels>
+                          <label description="Project name" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_fundingapplication_cicapos_bpf_preapproved:cicapos_projectname" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_projectname" relationship="bpf_cicapos_fundingapplication_cicapos_bpf_preapproved" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{247d6bd7-bbce-4c74-9f90-9ade36f4fb25}" name="StageStep5" locklevel="0" expanded="true" visible="false" labelid="{dfb91c8a-0728-4598-b84c-21e836fd83ed}">
+          <labels>
+            <label description="Assign" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{1a08bb18-33ab-8674-f2dd-58977ab6e167}" name="StageStep5_section1" labelid="{0efb23f8-79fa-473b-bdd8-a10e9f409746}">
+                  <labels>
+                    <label description="Assign" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{b30b2f58-313a-4c76-85b3-dedcabc11a50}" showlabel="true" visible="true" labelid="{74629cc9-5c8b-41c6-825c-7245f8047cdb}">
+                        <labels>
+                          <label description="Case handler" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_fundingapplication_cicapos_bpf_preapproved:cicapos_casehandlerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_casehandlerid" relationship="bpf_cicapos_fundingapplication_cicapos_bpf_preapproved" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{4073d223-048f-4c89-b1b5-9c2bd5007c9e}" name="StageStep11" locklevel="0" expanded="true" visible="false" labelid="{f690085b-31ff-49dd-976b-15a261ce91e6}">
+          <labels>
+            <label description="Review" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{6c8c8c68-84cf-3cb4-0f23-bdc78ea204ff}" name="StageStep11_section1" labelid="{af125bea-307d-46c0-9836-933e5a6c886d}">
+                  <labels>
+                    <label description="Review" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{ebfb5a78-f8f6-4f0a-a5cb-209bed3f6d0f}" showlabel="true" visible="true" labelid="{f8b31a97-dd52-4860-88ca-bf5e8c3fc948}">
+                        <labels>
+                          <label description="Objective" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_fundingapplication_cicapos_bpf_preapproved:cicapos_objective" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_objective" relationship="bpf_cicapos_fundingapplication_cicapos_bpf_preapproved" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{cd9e282d-21b1-41f4-9b8f-3343fd697c70}" showlabel="true" visible="true" labelid="{bcd4a965-39a2-4350-be29-5f8747955893}">
+                        <labels>
+                          <label description="Reviewer" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_fundingapplication_cicapos_bpf_preapproved:cicapos_reviewerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_reviewerid" relationship="bpf_cicapos_fundingapplication_cicapos_bpf_preapproved" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{61be7ed5-0bbd-48af-8501-83cabddf09f4}" name="StageStep14" locklevel="0" expanded="true" visible="false" labelid="{5644fc90-25d0-4ea9-939a-9db409c8e014}">
+          <labels>
+            <label description="Approve" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{f12ee7cc-4db8-33a2-99cd-65d8ac193874}" name="StageStep14_section1" labelid="{c046f762-dd32-4ed4-829f-8c0b67948619}">
+                  <labels>
+                    <label description="Approve" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{8d9767aa-2fec-414b-a1e2-d98ff8814282}" showlabel="true" visible="true" labelid="{39951843-a9b2-4b2e-9c56-b6480598fb79}">
+                        <labels>
+                          <label description="Approver" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_fundingapplication_cicapos_bpf_preapproved:cicapos_approverid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_approverid" relationship="bpf_cicapos_fundingapplication_cicapos_bpf_preapproved" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

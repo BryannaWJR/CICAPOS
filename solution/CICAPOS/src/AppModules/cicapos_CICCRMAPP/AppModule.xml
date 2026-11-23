@@ -1,8 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <AppModule>
   <UniqueName>cicapos_CICCRMAPP</UniqueName>
   <IntroducedVersion>1.0.0.0</IntroducedVersion>
   <WebResourceId>953b9fac-1e5e-e611-80d6-00155ded156f</WebResourceId>
+  <WelcomePageId>{a5100001-e2e1-4111-8111-6045bd591f01}</WelcomePageId>
   <OptimizedFor></OptimizedFor>
   <statecode>0</statecode>
   <statuscode>1</statuscode>
@@ -10,15 +11,97 @@
   <ClientType>4</ClientType>
   <NavigationType>0</NavigationType>
   <AppModuleComponents>
-    <AppModuleComponent type="60" id="{9de2de6f-1b31-4b2f-be64-db1fe3eeda7c}" />
+    <AppModuleComponent type="1" schemaName="cicapos_annualconfirmation" />
+    <AppModuleComponent type="1" schemaName="cicapos_assignmentrule" />
+    <AppModuleComponent type="1" schemaName="cicapos_bankfile" />
+    <AppModuleComponent type="1" schemaName="cicapos_casequery" />
+    <AppModuleComponent type="1" schemaName="cicapos_checklistanswer" />
+    <AppModuleComponent type="1" schemaName="cicapos_committeeassessment" />
+    <AppModuleComponent type="1" schemaName="cicapos_committeebatch" />
+    <AppModuleComponent type="1" schemaName="cicapos_companyregistration" />
+    <AppModuleComponent type="1" schemaName="cicapos_disbursementline" />
+    <AppModuleComponent type="1" schemaName="cicapos_disbursementrequest" />
+    <AppModuleComponent type="1" schemaName="cicapos_fundingapplication" />
+    <AppModuleComponent type="1" schemaName="cicapos_fundingitem" />
+    <AppModuleComponent type="1" schemaName="cicapos_fundingrule" />
+    <AppModuleComponent type="1" schemaName="cicapos_fundingscheme" />
+    <AppModuleComponent type="1" schemaName="cicapos_inspection" />
+    <AppModuleComponent type="1" schemaName="cicapos_inspectionsamplingrate" />
+    <AppModuleComponent type="1" schemaName="cicapos_letter" />
+    <AppModuleComponent type="1" schemaName="cicapos_lettertemplate" />
+    <AppModuleComponent type="1" schemaName="cicapos_noncompliancereport" />
+    <AppModuleComponent type="1" schemaName="cicapos_palapplication" />
+    <AppModuleComponent type="1" schemaName="cicapos_payment" />
+    <AppModuleComponent type="1" schemaName="cicapos_preapprovedproduct" />
+    <AppModuleComponent type="1" schemaName="cicapos_usagereport" />
+    <AppModuleComponent type="1" schemaName="cicapos_vettingchecklistitem" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd5910d5}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e0d}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e0c}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e0b}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e0a}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e09}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e08}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e07}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e06}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e05}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e04}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e03}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e02}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591e01}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d0d}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d0c}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d0b}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d0a}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d09}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d08}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d07}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d06}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d05}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d04}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d03}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d02}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591d01}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c0d}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c0c}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c0b}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c0a}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c09}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c08}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c07}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c06}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c05}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c04}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c03}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c02}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591c01}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b01}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b02}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b03}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b04}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b05}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b06}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b07}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b08}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b09}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b0a}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b0b}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b0c}" />
+    <AppModuleComponent type="61" id="{a5100001-e2e1-4111-8111-6045bd591b0d}" />
     <AppModuleComponent type="62" schemaName="cicapos_CICCRMAPP" />
   </AppModuleComponents>
   <AppModuleRoleMaps>
+    <Role id="{97b56d52-d6e1-f111-84ea-6045bd5918b8}" />
+    <Role id="{00576e3f-d6e1-f111-84ea-6045bd5918b8}" />
+    <Role id="{9b336f59-d6e1-f111-84ea-6045bd5918b8}" />
+    <Role id="{572d3d6d-d6e1-f111-84ea-6045bd5918b8}" />
+    <Role id="{32a9744c-d6e1-f111-84ea-6045bd5918b8}" />
+    <Role id="{66762d66-d6e1-f111-84ea-6045bd5918b8}" />
     <Role id="{627090ff-40a3-4053-8790-584edc5be201}" />
     <Role id="{119f245c-3cc8-4b62-b31c-d1a046ced15d}" />
   </AppModuleRoleMaps>
   <LocalizedNames>
-    <LocalizedName description="CIC CRM APP" languagecode="1033" />
+    <LocalizedName description="CITF Operation Platform" languagecode="1033" />
   </LocalizedNames>
   <appsettings>
     <appsetting settingdefinitionid.uniquename="AppChannel">

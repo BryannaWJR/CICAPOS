@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{c85c37f1-4c1e-4880-aeee-58dd1e3f32c7}" Name="Disbursement" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <XamlFileName>/Workflows/Disbursement-C85C37F1-4C1E-4880-AEEE-58DD1E3F32C7.xaml</XamlFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>4</Category>
+  <Mode>0</Mode>
+  <LanguageCode>1033</LanguageCode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>1</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <Rank>0</Rank>
+  <RunAs>1</RunAs>
+  <UniqueName>cicapos_bpf_disbursement</UniqueName>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <BusinessProcessType>0</BusinessProcessType>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <ModernFlowType>0</ModernFlowType>
+  <PrimaryEntity>cicapos_Disbursementrequest</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="Disbursement" />
+  </LocalizedNames>
+  <labels>
+    <steplabels id="{2deb9655-ab5c-4031-95c5-405ea99310c6}">
+      <label languagecode="1033" description="Submit" />
+    </steplabels>
+    <steplabels id="{24ec80ea-548d-40c7-8560-167fa1a794a3}">
+      <label languagecode="1033" description="Amount claimed (HK$)" />
+    </steplabels>
+    <steplabels id="{ea9f5930-7bac-469b-a058-99dcf80f4198}">
+      <label languagecode="1033" description="Assign" />
+    </steplabels>
+    <steplabels id="{bad2f5d8-3f3b-4add-ae38-1323582f9475}">
+      <label languagecode="1033" description="Case handler" />
+    </steplabels>
+    <steplabels id="{d25eddce-1291-41cb-9b2b-a718d1dc0d14}">
+      <label languagecode="1033" description="Status" />
+    </steplabels>
+    <steplabels id="{605cd3dc-eb56-484e-926d-b1f0aaeb2a24}">
+      <label languagecode="1033" description="Review" />
+    </steplabels>
+    <steplabels id="{d29c3d56-cb36-46a1-a351-7e541ec95064}">
+      <label languagecode="1033" description="Review required" />
+    </steplabels>
+    <steplabels id="{6d51d3c1-1db1-4488-b619-4758b0e23916}">
+      <label languagecode="1033" description="Spot check" />
+    </steplabels>
+    <steplabels id="{0de34992-bbb7-44d8-90a9-465b6da9c4b4}">
+      <label languagecode="1033" description="Selected for spot check" />
+    </steplabels>
+  </labels>
+</Workflow>

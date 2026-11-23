@@ -1,0 +1,514 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "cicapos_dataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_status_changes": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 4,
+              "subscriptionRequest/entityname": "cicapos_companyregistration",
+              "subscriptionRequest/scope": 4,
+              "subscriptionRequest/filteringattributes": "cicapos_status",
+              "subscriptionRequest/filterexpression": "cicapos_status eq 542400001 or cicapos_status eq 542400003 or cicapos_status eq 542400004 or cicapos_status eq 542400005",
+              "subscriptionRequest/runas": 1
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Init_audience": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Audience",
+                "type": "string",
+                "value": ""
+              }
+            ]
+          },
+          "runAfter": {}
+        },
+        "Init_subject": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Subject",
+                "type": "string",
+                "value": ""
+              }
+            ]
+          },
+          "runAfter": {
+            "Init_audience": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Init_body": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Body",
+                "type": "string",
+                "value": ""
+              }
+            ]
+          },
+          "runAfter": {
+            "Init_subject": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Which_status": {
+          "type": "Switch",
+          "expression": "@string(triggerOutputs()?['body/cicapos_status'])",
+          "default": {
+            "actions": {}
+          },
+          "cases": {
+            "Status_542400001": {
+              "case": "542400001",
+              "actions": {
+                "Set_audience_542400001": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Audience",
+                    "value": "applicant"
+                  },
+                  "runAfter": {}
+                },
+                "Set_subject_542400001": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Subject",
+                    "value": "@concat('Company registration ', coalesce(triggerOutputs()?['body/cicapos_name'], ''), ' has been submitted')"
+                  },
+                  "runAfter": {
+                    "Set_audience_542400001": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Set_body_542400001": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Body",
+                    "value": "@concat('<p>Company registration <b>', coalesce(triggerOutputs()?['body/cicapos_name'], ''), '</b> has been submitted.</p><p>CIC will vet the company particulars. Keep the registration reference.</p><p>Construction Innovation and Technology Fund · CIC</p>')"
+                  },
+                  "runAfter": {
+                    "Set_subject_542400001": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              }
+            },
+            "Status_542400003": {
+              "case": "542400003",
+              "actions": {
+                "Set_audience_542400003": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Audience",
+                    "value": "applicant"
+                  },
+                  "runAfter": {}
+                },
+                "Set_subject_542400003": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Subject",
+                    "value": "@concat('Company registration ', coalesce(triggerOutputs()?['body/cicapos_name'], ''), ' needs more information')"
+                  },
+                  "runAfter": {
+                    "Set_audience_542400003": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Set_body_542400003": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Body",
+                    "value": "@concat('<p>Company registration <b>', coalesce(triggerOutputs()?['body/cicapos_name'], ''), '</b> needs more information.</p><p>CIC needs more information before this registration can continue.</p><p>Construction Innovation and Technology Fund · CIC</p>')"
+                  },
+                  "runAfter": {
+                    "Set_subject_542400003": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              }
+            },
+            "Status_542400004": {
+              "case": "542400004",
+              "actions": {
+                "Set_audience_542400004": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Audience",
+                    "value": "applicant"
+                  },
+                  "runAfter": {}
+                },
+                "Set_subject_542400004": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Subject",
+                    "value": "@concat('Company registration ', coalesce(triggerOutputs()?['body/cicapos_name'], ''), ' is approved')"
+                  },
+                  "runAfter": {
+                    "Set_audience_542400004": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Set_body_542400004": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Body",
+                    "value": "@concat('<p>Company registration <b>', coalesce(triggerOutputs()?['body/cicapos_name'], ''), '</b> is approved.</p><p>The company can now use the portal services available to approved applicants.</p><p>Construction Innovation and Technology Fund · CIC</p>')"
+                  },
+                  "runAfter": {
+                    "Set_subject_542400004": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              }
+            },
+            "Status_542400005": {
+              "case": "542400005",
+              "actions": {
+                "Set_audience_542400005": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Audience",
+                    "value": "applicant"
+                  },
+                  "runAfter": {}
+                },
+                "Set_subject_542400005": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Subject",
+                    "value": "@concat('Company registration ', coalesce(triggerOutputs()?['body/cicapos_name'], ''), ' was not approved')"
+                  },
+                  "runAfter": {
+                    "Set_audience_542400005": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Set_body_542400005": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Body",
+                    "value": "@concat('<p>Company registration <b>', coalesce(triggerOutputs()?['body/cicapos_name'], ''), '</b> was not approved.</p><p>The decision is recorded on the registration.</p><p>Construction Innovation and Technology Fund · CIC</p>')"
+                  },
+                  "runAfter": {
+                    "Set_subject_542400005": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Init_body": [
+              "Succeeded"
+            ]
+          }
+        },
+        "If_ready": {
+          "type": "If",
+          "expression": {
+            "not": {
+              "equals": [
+                "@variables('Subject')",
+                ""
+              ]
+            }
+          },
+          "actions": {
+            "If_handler": {
+              "type": "If",
+              "expression": {
+                "equals": [
+                  "@variables('Audience')",
+                  "handler"
+                ]
+              },
+              "actions": {
+                "If_handler_known": {
+                  "type": "If",
+                  "expression": {
+                    "not": {
+                      "equals": [
+                        "@coalesce(triggerOutputs()?['body/_cicapos_casehandlerid_value'], '')",
+                        ""
+                      ]
+                    }
+                  },
+                  "actions": {
+                    "Handler_create_email": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "emails",
+                          "item/subject": "@variables('Subject')",
+                          "item/description": "@variables('Body')",
+                          "item/directioncode": true,
+                          "item/regardingobjectid_cicapos_companyregistration@odata.bind": "@concat('/cicapos_companyregistrations(', triggerOutputs()?['body/cicapos_companyregistrationid'], ')')"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    },
+                    "Handler_add_to": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "activityparties",
+                          "item/participationtypemask": 2,
+                          "item/activityid_activitypointer@odata.bind": "@concat('/activitypointers(', outputs('Handler_create_email')?['body/activityid'], ')')",
+                          "item/partyid_systemuser@odata.bind": "@concat('/systemusers(', triggerOutputs()?['body/_cicapos_casehandlerid_value'], ')')"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "Handler_create_email": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Handler_add_from": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "activityparties",
+                          "item/participationtypemask": 1,
+                          "item/partyid_systemuser@odata.bind": "@concat('/systemusers(', triggerOutputs()?['body/_ownerid_value'], ')')",
+                          "item/activityid_activitypointer@odata.bind": "@concat('/activitypointers(', outputs('Handler_create_email')?['body/activityid'], ')')"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "Handler_create_email": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Handler_send": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "PerformBoundAction",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "emails",
+                          "actionName": "Microsoft.Dynamics.CRM.SendEmail",
+                          "recordId": "@outputs('Handler_create_email')?['body/activityid']",
+                          "item/IssueSend": true
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "Handler_add_to": [
+                          "Succeeded"
+                        ],
+                        "Handler_add_from": [
+                          "Succeeded",
+                          "Failed",
+                          "Skipped"
+                        ]
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {}
+                  },
+                  "runAfter": {}
+                }
+              },
+              "else": {
+                "actions": {
+                  "If_applicant_known": {
+                    "type": "If",
+                    "expression": {
+                      "not": {
+                        "equals": [
+                          "@coalesce(triggerOutputs()?['body/cicapos_contactemail'], '')",
+                          ""
+                        ]
+                      }
+                    },
+                    "actions": {
+                      "Applicant_create_email": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "host": {
+                            "connectionName": "shared_commondataserviceforapps",
+                            "operationId": "CreateRecord",
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                          },
+                          "parameters": {
+                            "entityName": "emails",
+                            "item/subject": "@variables('Subject')",
+                            "item/description": "@variables('Body')",
+                            "item/directioncode": true,
+                            "item/regardingobjectid_cicapos_companyregistration@odata.bind": "@concat('/cicapos_companyregistrations(', triggerOutputs()?['body/cicapos_companyregistrationid'], ')')"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        },
+                        "runAfter": {}
+                      },
+                      "Applicant_add_to": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "host": {
+                            "connectionName": "shared_commondataserviceforapps",
+                            "operationId": "CreateRecord",
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                          },
+                          "parameters": {
+                            "entityName": "activityparties",
+                            "item/participationtypemask": 2,
+                            "item/activityid_activitypointer@odata.bind": "@concat('/activitypointers(', outputs('Applicant_create_email')?['body/activityid'], ')')",
+                            "item/addressused": "@triggerOutputs()?['body/cicapos_contactemail']"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        },
+                        "runAfter": {
+                          "Applicant_create_email": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Applicant_add_from": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "host": {
+                            "connectionName": "shared_commondataserviceforapps",
+                            "operationId": "CreateRecord",
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                          },
+                          "parameters": {
+                            "entityName": "activityparties",
+                            "item/participationtypemask": 1,
+                            "item/partyid_systemuser@odata.bind": "@concat('/systemusers(', triggerOutputs()?['body/_ownerid_value'], ')')",
+                            "item/activityid_activitypointer@odata.bind": "@concat('/activitypointers(', outputs('Applicant_create_email')?['body/activityid'], ')')"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        },
+                        "runAfter": {
+                          "Applicant_create_email": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Applicant_send": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "host": {
+                            "connectionName": "shared_commondataserviceforapps",
+                            "operationId": "PerformBoundAction",
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                          },
+                          "parameters": {
+                            "entityName": "emails",
+                            "actionName": "Microsoft.Dynamics.CRM.SendEmail",
+                            "recordId": "@outputs('Applicant_create_email')?['body/activityid']",
+                            "item/IssueSend": true
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        },
+                        "runAfter": {
+                          "Applicant_add_to": [
+                            "Succeeded"
+                          ],
+                          "Applicant_add_from": [
+                            "Succeeded",
+                            "Failed",
+                            "Skipped"
+                          ]
+                        }
+                      }
+                    },
+                    "else": {
+                      "actions": {}
+                    },
+                    "runAfter": {}
+                  }
+                }
+              },
+              "runAfter": {}
+            }
+          },
+          "else": {
+            "actions": {}
+          },
+          "runAfter": {
+            "Which_status": [
+              "Succeeded"
+            ]
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

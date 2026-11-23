@@ -1,0 +1,8 @@
+- adx_attributelogicalname: cicapos_status
+  adx_entityform: a5100001-e2e1-4111-8111-6045bd5911f2
+  adx_entityformmetadataid: a5100001-e2e1-4111-8111-6045bd591091
+  adx_name: cicapos_status
+  adx_onsavetype: 100000000
+  adx_onsavevalue: '542400001'
+  adx_setvalueonsave: true
+  adx_type: 100000000

@@ -1,4 +1,5 @@
 <powerpagecomponent powerpagecomponentid="10c57554-404a-4898-842a-dc6ab48358db">
+  <content>{}</content>
   <iscustomizable>1</iscustomizable>
   <name>Authentication/OpenAuth/Microsoft/ClientId</name>
   <powerpagecomponenttype>9</powerpagecomponenttype>

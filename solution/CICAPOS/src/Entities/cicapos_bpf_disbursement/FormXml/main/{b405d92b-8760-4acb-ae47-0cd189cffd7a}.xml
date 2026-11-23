@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{b405d92b-8760-4acb-ae47-0cd189cffd7a}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{2deb9655-ab5c-4031-95c5-405ea99310c6}" name="StageStep2" locklevel="0" expanded="true" visible="false" labelid="{e3aed02c-183a-4331-a0cd-6a66deb74ade}">
+          <labels>
+            <label description="Submit" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{837727b8-3aa1-effb-772a-2fe4b32610c2}" name="StageStep2_section1" labelid="{7375fc23-d72a-4b41-9578-44f40fd8196d}">
+                  <labels>
+                    <label description="Submit" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{24ec80ea-548d-40c7-8560-167fa1a794a3}" showlabel="true" visible="true" labelid="{8751daae-8a5d-4e25-bec3-4cd40de1f234}">
+                        <labels>
+                          <label description="Amount claimed (HK$)" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_disbursementrequest_cicapos_bpf_disbursement:cicapos_claimedamount" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="cicapos_claimedamount" relationship="bpf_cicapos_disbursementrequest_cicapos_bpf_disbursement" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{ea9f5930-7bac-469b-a058-99dcf80f4198}" name="StageStep5" locklevel="0" expanded="true" visible="false" labelid="{c96913e6-a4de-4fa7-a900-88bfe1922f65}">
+          <labels>
+            <label description="Assign" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{7c86c8b3-4fbb-1ec0-14eb-1500b3f64aa2}" name="StageStep5_section1" labelid="{38e0928e-6844-44d5-aa18-4227a83cec43}">
+                  <labels>
+                    <label description="Assign" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{bad2f5d8-3f3b-4add-ae38-1323582f9475}" showlabel="true" visible="true" labelid="{ac4ad63f-22f1-4afe-a031-0da2c87f310f}">
+                        <labels>
+                          <label description="Case handler" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_disbursementrequest_cicapos_bpf_disbursement:cicapos_casehandlerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cicapos_casehandlerid" relationship="bpf_cicapos_disbursementrequest_cicapos_bpf_disbursement" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{605cd3dc-eb56-484e-926d-b1f0aaeb2a24}" name="StageStep11" locklevel="0" expanded="true" visible="false" labelid="{c6c23e2a-c98b-4418-962f-e0c552758d6f}">
+          <labels>
+            <label description="Review" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{a991c950-4e50-f938-b762-b70f16f5db26}" name="StageStep11_section1" labelid="{92549d44-241f-4347-8612-aa5d0a023353}">
+                  <labels>
+                    <label description="Review" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{d25eddce-1291-41cb-9b2b-a718d1dc0d14}" showlabel="true" visible="true" labelid="{689523c9-2380-4fc3-b995-fabec064d43a}">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_disbursementrequest_cicapos_bpf_disbursement:cicapos_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cicapos_status" relationship="bpf_cicapos_disbursementrequest_cicapos_bpf_disbursement" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d29c3d56-cb36-46a1-a351-7e541ec95064}" showlabel="true" visible="true" labelid="{cfd7bf57-9bef-41f2-8ac4-f1f1acf96c0b}">
+                        <labels>
+                          <label description="Review required" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_disbursementrequest_cicapos_bpf_disbursement:cicapos_reviewrequired" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="cicapos_reviewrequired" relationship="bpf_cicapos_disbursementrequest_cicapos_bpf_disbursement" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{6d51d3c1-1db1-4488-b619-4758b0e23916}" name="StageStep14" locklevel="0" expanded="true" visible="false" labelid="{cf55cddb-0240-4d20-b315-45abc4ebb5f1}">
+          <labels>
+            <label description="Spot check" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{2b050b57-c742-0ac5-a79a-75fb2db84fa2}" name="StageStep14_section1" labelid="{22e2e5a8-109f-4094-add5-b0fdd31190e3}">
+                  <labels>
+                    <label description="Spot check" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{0de34992-bbb7-44d8-90a9-465b6da9c4b4}" showlabel="true" visible="true" labelid="{41198ae6-23c9-493e-b56e-f6fc24de1680}">
+                        <labels>
+                          <label description="Selected for spot check" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_cicapos_disbursementrequest_cicapos_bpf_disbursement:cicapos_spotcheckselected" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="cicapos_spotcheckselected" relationship="bpf_cicapos_disbursementrequest_cicapos_bpf_disbursement" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

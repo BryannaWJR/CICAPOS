@@ -8,10 +8,12 @@
     <isdefault>1</isdefault>
     <savedqueryid>{0ac4846c-20df-4787-a126-90350b5c1c93}</savedqueryid>
     <layoutxml>
-      <grid name="cicapos_annualconfirmations" jump="cicapos_name" select="1" icon="1" preview="1">
-        <row name="cicapos_annualconfirmation" id="cicapos_annualconfirmationid">
-          <cell name="cicapos_name" width="300" />
-          <cell name="createdon" width="125" />
+      <grid name="resultset" jump="cicapos_name" select="1" icon="1" preview="1">
+        <row name="result" id="cicapos_annualconfirmationid">
+          <cell name="cicapos_name" width="150" />
+          <cell name="cicapos_status" width="150" />
+          <cell name="cicapos_submittedon" width="150" />
+          <cell name="createdon" width="150" />
         </row>
       </grid>
     </layoutxml>
@@ -26,6 +28,8 @@
           <filter type="and">
             <condition attribute="statecode" operator="eq" value="0" />
           </filter>
+          <attribute name="cicapos_status" />
+          <attribute name="cicapos_submittedon" />
         </entity>
       </fetch>
     </fetchxml>

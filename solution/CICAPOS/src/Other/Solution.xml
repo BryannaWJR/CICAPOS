@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ImportExportXml version="9.2.26104.146" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26104.146" OrganizationSchemaType="Full" CRMServerServiceabilityVersion="9.2.26104.00146">
   <SolutionManifest>
     <UniqueName>CICAPOS</UniqueName>
@@ -6,7 +6,7 @@
       <LocalizedName description="CICAPOS" languagecode="1033" />
     </LocalizedNames>
     <Descriptions />
-    <Version>1.0.0.0</Version>
+    <Version>1.0.3.25</Version>
     <Managed>0</Managed>
     <Publisher>
       <UniqueName>CICAPOS</UniqueName>
@@ -82,6 +82,10 @@
       <RootComponent type="1" schemaName="cicapos_annualconfirmation" behavior="0" />
       <RootComponent type="1" schemaName="cicapos_assignmentrule" behavior="0" />
       <RootComponent type="1" schemaName="cicapos_bankfile" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_bpf_disbursement" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_bpf_npa" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_bpf_pal" behavior="0" />
+      <RootComponent type="1" schemaName="cicapos_bpf_preapproved" behavior="0" />
       <RootComponent type="1" schemaName="cicapos_casequery" behavior="0" />
       <RootComponent type="1" schemaName="cicapos_checklistanswer" behavior="0" />
       <RootComponent type="1" schemaName="cicapos_committeeassessment" behavior="0" />
@@ -105,7 +109,91 @@
       <RootComponent type="1" schemaName="cicapos_vettingchecklistitem" behavior="0" />
       <RootComponent type="1" schemaName="contact" behavior="1" />
       <RootComponent type="1" schemaName="systemuser" behavior="1" />
+      <RootComponent type="20" id="{00576e3f-d6e1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="20" id="{32a9744c-d6e1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="20" id="{572d3d6d-d6e1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="20" id="{66762d66-d6e1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="20" id="{97b56d52-d6e1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="20" id="{9b336f59-d6e1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="29" id="{90d2642f-cdbd-4576-a59d-fa80f52e968c}" behavior="0" />
+      <RootComponent type="29" id="{a5100001-e2e1-4111-8111-6045bd5910e1}" behavior="0" />
+      <RootComponent type="29" id="{a5100001-e2e1-4111-8111-6045bd5910e2}" behavior="0" />
+      <RootComponent type="29" id="{a5100001-e2e1-4111-8111-6045bd5910e3}" behavior="0" />
+      <RootComponent type="29" id="{a5100001-e2e1-4111-8111-6045bd5910e4}" behavior="0" />
+      <RootComponent type="29" id="{c85c37f1-4c1e-4880-aeee-58dd1e3f32c7}" behavior="0" />
+      <RootComponent type="29" id="{f30f4f79-1894-4496-a08c-6cec6bfe5e24}" behavior="0" />
+      <RootComponent type="29" id="{fdf357c5-4893-40e6-a486-004b2f86557b}" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_d365ops.html" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_welcome.html" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/chart.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/chart.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/users.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/users.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/money.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/money.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/doc.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/doc.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/chat.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/chat.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/star.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/star.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/cal.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/cal.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/check.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/check.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/flag.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/flag.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/mail.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/mail.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/lock.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/lock.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/book.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/book.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/grid.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_/icons/grid.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_chart.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_users.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_money.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_doc.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_chat.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_star.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_cal.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_check.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_flag.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_mail.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_lock.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_book.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_grid.png" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_book.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_cal.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_chart.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_chat.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_check.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_doc.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_flag.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_grid.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_lock.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_mail.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_money.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_star.svg" behavior="0" />
+      <RootComponent type="61" schemaName="cicapos_icon_users.svg" behavior="0" />
+      <RootComponent type="62" schemaName="cicapos_CICCRMAPP" behavior="0" />
       <RootComponent type="80" schemaName="cicapos_CICCRMAPP" behavior="0" />
+      <RootComponent type="91" id="{42ef2c1c-dde1-f111-84ea-6045bd5918b8}" schemaName="CICAPOS.Plugins, Version=1.0.1.0, Culture=neutral, PublicKeyToken=f907cd10d1e1e131" behavior="0" />
+      <RootComponent type="92" id="{0086c522-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{0286c522-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{0486c522-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{0e86c522-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{47ef2c1c-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{679dc328-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{699dc328-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{6b9dc328-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{7bb6c02e-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{7db6c02e-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{7fb6c02e-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{81b6c02e-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{f39ac328-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
+      <RootComponent type="92" id="{fa85c522-dde1-f111-84ea-6045bd5918b8}" behavior="0" />
     </RootComponents>
     <MissingDependencies>
       <MissingDependency>
@@ -124,17 +212,7 @@
         <Required type="61" schemaName="msdyn_/Images/AppModule_Default_Icon.png" displayName="msdyn_/Images/AppModule_Default_Icon.png" solution="AppModuleWebResources (2.5)">
           <package appName="AppModule Web Resources Package" version="2.5">AppModuleWebResources (2.5)</package>
         </Required>
-        <Dependent type="80" schemaName="cicapos_CICCRMAPP" displayName="CIC CRM APP" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="62" schemaName="cicapos_CICCRMAPP" solution="Active" />
-        <Dependent type="80" schemaName="cicapos_CICCRMAPP" displayName="CIC CRM APP" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="SettingDefinition" displayName="AppChannel" solution="msdyn_AppFrameworkInfraExtensions (1.0.0.28)" id.uniquename="AppChannel">
-          <package appName="PowerAppsAppFramework Package" version="1.0.0.30">PowerAppsAppFramework_Anchor (1.0.0.30)</package>
-        </Required>
-        <Dependent type="AppSetting" displayName="parentappmoduleid.uniquename=cicapos_CICCRMAPP,settingdefinitionid.uniquename=AppChannel" id.parentappmoduleid.uniquename="cicapos_CICCRMAPP" id.settingdefinitionid.uniquename="AppChannel" />
+        <Dependent type="80" schemaName="cicapos_CICCRMAPP" displayName="CITF Operation Platform" />
       </MissingDependency>
     </MissingDependencies>
   </SolutionManifest>

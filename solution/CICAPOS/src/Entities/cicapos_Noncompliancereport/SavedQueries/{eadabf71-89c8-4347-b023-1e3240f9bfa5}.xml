@@ -10,8 +10,9 @@
     <layoutxml>
       <grid name="resultset" jump="cicapos_name" select="1" icon="1" preview="1">
         <row name="result" id="cicapos_noncompliancereportid">
-          <cell name="cicapos_name" width="300" />
-          <cell name="createdon" width="125" />
+          <cell name="cicapos_name" width="150" />
+          <cell name="cicapos_status" width="150" />
+          <cell name="createdon" width="150" />
         </row>
       </grid>
     </layoutxml>
@@ -26,6 +27,7 @@
           <filter type="and">
             <condition attribute="statecode" operator="eq" value="1" />
           </filter>
+          <attribute name="cicapos_status" />
         </entity>
       </fetch>
     </fetchxml>

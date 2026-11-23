@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{a5100001-e2e1-4111-8111-6045bd591055}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="false" showImage="false" maxWidth="1900">
+      <tabs>
+        <tab verticallayout="true" id="{a5100001-e2e1-4111-8111-6045bd5910a5}" IsUserDefined="1" name="General">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{a5100001-e2e1-4111-8111-6045bd5910b5}" name="Details" columns="11">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591101}" colspan="2">
+                        <labels>
+                          <label description="Company type" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_companytype" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cicapos_companytype" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591102}">
+                        <labels>
+                          <label description="BR number" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_brnumber" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_brnumber" />
+                      </cell>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591103}">
+                        <labels>
+                          <label description="Branch code" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_branchcode" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_branchcode" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591104}" colspan="2">
+                        <labels>
+                          <label description="BR expiry" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_brexpiry" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="cicapos_brexpiry" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591105}">
+                        <labels>
+                          <label description="Legal name (English)" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_legalname" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_legalname" />
+                      </cell>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591106}">
+                        <labels>
+                          <label description="Legal name (Traditional Chinese)" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_legalnamezh" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_legalnamezh" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591107}">
+                        <labels>
+                          <label description="Website" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_website" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_website" />
+                      </cell>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591108}">
+                        <labels>
+                          <label description="Corporate email domain" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_emaildomain" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_emaildomain" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591109}" colspan="2">
+                        <labels>
+                          <label description="Registered address" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_registeredaddress" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_registeredaddress" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd59110a}" colspan="2">
+                        <labels>
+                          <label description="Correspondence address" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_correspondenceaddress" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cicapos_correspondenceaddress" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd59110b}">
+                        <labels>
+                          <label description="Contact name" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_contactname" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_contactname" />
+                      </cell>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd59110c}">
+                        <labels>
+                          <label description="Contact title" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_contacttitle" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_contacttitle" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd59110d}">
+                        <labels>
+                          <label description="Contact phone" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_contactphone" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_contactphone" />
+                      </cell>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd59110e}">
+                        <labels>
+                          <label description="Contact mobile" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_contactmobile" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_contactmobile" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd59110f}" colspan="2">
+                        <labels>
+                          <label description="Contact email" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_contactemail" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_contactemail" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591110}">
+                        <labels>
+                          <label description="Bank name" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_bankname" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_bankname" />
+                      </cell>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591111}">
+                        <labels>
+                          <label description="Bank account name" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_bankaccountname" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_bankaccountname" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a5100001-e2e1-4111-8111-6045bd591112}" colspan="2">
+                        <labels>
+                          <label description="Bank account number" languagecode="1033" />
+                        </labels>
+                        <control id="cicapos_bankaccountno" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cicapos_bankaccountno" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{a5100001-e2e1-4111-8111-6045bd5910c5}" celllabelposition="Left" columns="111">
+        <rows>
+          <row />
+        </rows>
+      </header>
+      <footer id="{a5100001-e2e1-4111-8111-6045bd5910d5}" celllabelposition="Left" columns="111">
+        <rows>
+          <row />
+        </rows>
+      </footer>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Portal" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Applicant registration on CIC Portal App" languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

@@ -1,0 +1,30 @@
+adx_calendar_enabled: false
+adx_detailsbuttonlabel: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "Open"
+    }
+  ]
+adx_emptylisttext: >-
+  [
+    {
+      "LCID": 1033,
+      "Value": "No disbursement requests yet."
+    }
+  ]
+adx_entitylistid: a5100001-e2e1-4111-8111-6045bd591021
+adx_entityname: cicapos_disbursementrequest
+adx_entitypermissionsenabled: true
+adx_filter_enabled: false
+adx_idquerystringparametername: id
+adx_map_enabled: false
+adx_name: My Disbursement Requests
+adx_odata_enabled: false
+adx_pagesize: 15
+adx_searchenabled: true
+adx_view: 903d547a-802f-43a1-9e1c-b7c22b732c5a
+adx_views: >-
+  {
+    "903d547a-802f-43a1-9e1c-b7c22b732c5a": []
+  }

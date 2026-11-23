@@ -1,5 +1,190 @@
-<div class="row sectionBlockLayout text-start" style="display: flex; flex-wrap: wrap; margin: 0px; min-height: auto; padding: 8px;">
-  <div class="container" style="padding: 0px; display: flex; flex-wrap: wrap;">
-    <div class="col-lg-12 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 300px;"></div>
+{% if user %}
+{% assign co = user.parentcustomerid.name | default: user.fullname %}
+<main class="p-main">
+  <div class="row between">
+    <div>
+      <h1>{{ co | escape }}</h1>
+      <p class="sub">One company account for CITF funding, disbursements and the Pre-approved List.</p>
+    </div>
+    <span class="pill ok">Signed in</span>
   </div>
-</div>
+  <nav class="tabs">
+    <a class="on" href="/">Company profile</a>
+    <a href="/documents/">Document vault</a>
+  </nav>
+  <div class="card">
+    <h2>Company profile</h2>
+    {% assign mail = user.emailaddress1 | default: "" %}
+    {% assign acct = user.parentcustomerid.id | remove: "{" | remove: "}" %}
+    {% fetchxml regs %}
+    <fetch version="1.0" mapping="logical">
+      <entity name="cicapos_companyregistration">
+        <attribute name="cicapos_name" />
+        <attribute name="cicapos_legalname" />
+        <attribute name="cicapos_legalnamezh" />
+        <attribute name="cicapos_companytype" />
+        <attribute name="cicapos_brnumber" />
+        <attribute name="cicapos_status" />
+        <attribute name="cicapos_bankname" />
+        <attribute name="cicapos_contactemail" />
+        <filter type="or">
+          {% if mail != "" %}<condition attribute="cicapos_contactemail" operator="eq" value="{{ mail }}" />{% endif %}
+          {% if acct != "" %}<condition attribute="cicapos_accountid" operator="eq" value="{{ acct }}" />{% endif %}
+          {% if mail == "" and acct == "" %}<condition attribute="cicapos_companyregistrationid" operator="null" />{% endif %}
+        </filter>
+      </entity>
+    </fetch>
+    {% endfetchxml %}
+    {% if regs.results.entities.size > 0 %}
+      {% assign r = regs.results.entities.first %}
+      <div class="kv">
+        <span>Registration</span><span>{{ r.cicapos_name | escape }} · {{ r.cicapos_status.label | escape }}</span>
+        <span>Legal name</span><span>{{ r.cicapos_legalname | escape }}{% if r.cicapos_legalnamezh %} · {{ r.cicapos_legalnamezh | escape }}{% endif %}</span>
+        <span>Company type</span><span>{{ r.cicapos_companytype.label | escape }}</span>
+        <span>BR number</span><span>{{ r.cicapos_brnumber | escape }}</span>
+        <span>Contact email</span><span>{{ r.cicapos_contactemail | escape }}</span>
+        <span>Bank</span><span>{{ r.cicapos_bankname | default: "Not provided" | escape }}</span>
+      </div>
+    {% else %}
+      <p class="sub">No company registration is linked to this sign-in yet.</p>
+      <a class="btn" href="/company-registration/">Register your company</a>
+    {% endif %}
+  </div>
+  <h2>Your CIC services</h2>
+  <div class="grid g2">
+    <a class="card row" href="/my-applications/">
+      <span class="kicker">▣</span>
+      <div>
+        <h3>CITF Application Portal</h3>
+        <span class="sub">Apply for CITF funding, claim disbursements</span>
+      </div>
+    </a>
+    <a class="card row" href="/pre-approved-list/">
+      <span class="kicker">▣</span>
+      <div>
+        <h3>Pre-approved List Portal</h3>
+        <span class="sub">Apply to list a product or request a change</span>
+      </div>
+    </a>
+  </div>
+</main>
+{% else %}
+<main class="p-main">
+  <div>
+    <h1>CIC Company Portal</h1>
+    <p class="sub">One company account and one sign-in for CITF and other CIC services.</p>
+  </div>
+  <div class="card body" style="max-width:560px">
+    <h2>Sign in</h2>
+    <div class="note info">Sign-in is handled by CIC’s Okta (OpenID Connect). MFA and password reset run in Okta.</div>
+    <div class="f">
+      <label for="demo-email">Email</label>
+      <input id="demo-email" name="email" type="email" value="carmen.lau@harbourbuild.example.com" autocomplete="username" />
+    </div>
+    <div class="f">
+      <label for="demo-password">Password</label>
+      <input id="demo-password" name="password" type="password" value="Passw0rd!" autocomplete="current-password" />
+    </div>
+    <div class="row">
+      <a class="btn pri" id="btn-okta" href="/flow/?email=carmen.lau%40harbourbuild.example.com">Sign in with Okta</a>
+      <a class="btn ghost" id="btn-iam" href="/flow/?email=carmen.lau%40harbourbuild.example.com">Sign in with iAM Smart (optional)</a>
+    </div>
+    <span>New company? <a href="/company-registration/">Register your company</a> · Already registered, waiting for approval? <a href="/track/">Track my registration</a></span>
+  </div>
+</main>
+<script>
+(function () {
+  var d365 = {
+    "mandy.chan@cic.example.com": "Mandy Chan (Funding Application Review Officer)",
+    "kelly.lau@cic.example.com": "Kelly Lau (PAL Application Review Officer)",
+    "winnie.ho@cic.example.com": "Winnie Ho (Disbursement Review Officer)",
+    "peter.yip@cic.example.com": "Peter Yip (Approver / Reviewer)",
+    "eric.lam@cic.example.com": "Eric Lam (Finance Department)",
+    "admin@cic.example.com": "Admin (Administrator)"
+  };
+  function dest() {
+    var email = String((document.getElementById("demo-email") || {}).value || "").trim().toLowerCase()
+      || "carmen.lau@harbourbuild.example.com";
+    if (d365[email]) {
+      return "/flow/?d365=" + encodeURIComponent(d365[email]) + "#/d/dash";
+    }
+    return "/flow/?email=" + encodeURIComponent(email);
+  }
+  function go(e) {
+    e.preventDefault();
+    location.href = dest();
+  }
+  var okta = document.getElementById("btn-okta");
+  var iam = document.getElementById("btn-iam");
+  if (okta) okta.addEventListener("click", go);
+  if (iam) iam.addEventListener("click", go);
+})();
+</script>
+{% endif %}
+<script>
+(function () {
+  function lang() {
+    var list = [];
+    try { list = (navigator.languages && navigator.languages.length) ? Array.prototype.slice.call(navigator.languages) : [navigator.language || ""]; } catch (e) {}
+    for (var i = 0; i < list.length; i++) {
+      var t = String(list[i] || "").toLowerCase().replace(/_/g, "-");
+      if (t === "zh-cn" || t === "zh-sg" || t.indexOf("zh-hans") === 0) return "SC";
+      if (t === "zh-hk" || t === "zh-tw" || t === "zh-mo" || t.indexOf("zh-hant") === 0) return "TC";
+      if (t === "zh" || t.indexOf("zh-") === 0) return "TC";
+      if (t === "en" || t.indexOf("en-") === 0) return "EN";
+    }
+    return "EN";
+  }
+  var code = lang();
+  try { document.documentElement.lang = { EN: "en", TC: "zh-HK", SC: "zh-CN" }[code] || "en"; } catch (e2) {}
+  if (code === "EN") return;
+  var sc = code === "SC";
+  var rows = [
+    ["Skip to main content", "跳到主要内容", "跳到主要內容"],
+    ["Sign in", "登录", "登入"],
+    ["Sign out", "登出", "登出"],
+    ["Register company", "公司登记", "公司登記"],
+    ["My Company", "我的公司", "我的公司"],
+    ["CITF Applications", "CITF 申请", "CITF 申請"],
+    ["Pre-approved List", "预先批核清单", "預先批核清單"],
+    ["Messages", "消息", "訊息"],
+    ["CIC Company Portal", "建造业议会公司门户", "建造業議會公司入口網站"],
+    ["One company account and one sign-in for CITF and other CIC services.", "一个公司账户，即可登录 CITF 及其他建造业议会服务。", "一個公司帳戶，即可登入 CITF 及其他建造業議會服務。"],
+    ["Sign-in is handled by CIC’s Okta (OpenID Connect). MFA and password reset run in Okta.", "登录由建造业议会的 Okta（OpenID Connect）处理。双重验证和重设密码在 Okta 进行。", "登入由建造業議會的 Okta（OpenID Connect）處理。雙重驗證和重設密碼在 Okta 進行。"],
+    ["Email", "电邮", "電郵"],
+    ["Password", "密码", "密碼"],
+    ["Sign in with Okta", "使用 Okta 登录", "使用 Okta 登入"],
+    ["Sign in with iAM Smart (optional)", "使用智方便登录（可选）", "使用智方便登入（可選）"],
+    ["New company?", "新公司？", "新公司？"],
+    ["Register your company", "登记你的公司", "登記你的公司"],
+    ["Already registered, waiting for approval?", "已经登记、正在等候审批？", "已經登記、正在等候審批？"],
+    ["Track my registration", "查询登记进度", "查詢登記進度"]
+  ];
+  var map = {};
+  for (var r = 0; r < rows.length; r++) map[rows[r][0]] = sc ? rows[r][1] : rows[r][2];
+  function loc(raw) {
+    var m = String(raw).match(/^(\s*)([\s\S]*?)(\s*)$/);
+    if (!m || !m[2] || !map[m[2]]) return raw;
+    return m[1] + map[m[2]] + m[3];
+  }
+  function apply() {
+    if (!document.body) return;
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (node) {
+        var p = node.parentElement;
+        if (!p || p.tagName === "SCRIPT" || p.tagName === "STYLE") return NodeFilter.FILTER_REJECT;
+        if (p.closest && p.closest(".logo, [data-keep-en], #app")) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var texts = [];
+    while (walker.nextNode()) texts.push(walker.currentNode);
+    for (var i = 0; i < texts.length; i++) {
+      var v = texts[i].nodeValue, t = loc(v);
+      if (t !== v) texts[i].nodeValue = t;
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply);
+  else apply();
+})();
+</script>
