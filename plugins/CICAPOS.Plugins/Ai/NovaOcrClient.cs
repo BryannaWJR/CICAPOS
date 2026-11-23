@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -21,9 +22,9 @@ public sealed class NovaOcrClient : INovaOcrClient
     public const string DefaultBaseUrl = "https://nova.deloitte.com.cn/nova-cloud/ocr/ocr/v1";
 
     readonly AiProviderConfig _config;
-    readonly Func<HttpRequestMessage, string> _send;
+    readonly Func<HttpRequestMessage, byte[]> _send;
 
-    public NovaOcrClient(AiProviderConfig config, Func<HttpRequestMessage, string>? send = null)
+    public NovaOcrClient(AiProviderConfig config, Func<HttpRequestMessage, byte[]>? send = null)
     {
         _config = config;
         _send = send ?? DefaultSend;
@@ -46,13 +47,14 @@ public sealed class NovaOcrClient : INovaOcrClient
         {
             req.Content = new ByteArrayContent(body);
             req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data; boundary=" + boundary);
-            var uploadRaw = _send(req);
+            var uploadRaw = Encoding.UTF8.GetString(_send(req));
+            EnsureSuccess(uploadRaw);
             var text = TryExtractText(uploadRaw);
-            if (!string.IsNullOrWhiteSpace(text))
+            if (text != null && !string.IsNullOrWhiteSpace(text))
                 return text;
 
             var id = TryExtractId(uploadRaw);
-            if (string.IsNullOrWhiteSpace(id))
+            if (id == null || string.IsNullOrWhiteSpace(id))
                 throw new InvalidOperationException("D.Nova OCR upload did not return fileId/taskId or text: " + Truncate(uploadRaw, 300));
 
             for (var i = 0; i < 30; i++)
@@ -61,42 +63,53 @@ public sealed class NovaOcrClient : INovaOcrClient
                 var statusUrl = baseUrl + "/queryStatus/" + Uri.EscapeDataString(id);
                 using var poll = new HttpRequestMessage(HttpMethod.Post, statusUrl);
                 poll.Content = new StringContent("{}", Encoding.UTF8, "application/json");
-                var statusRaw = _send(poll);
+                var statusRaw = Encoding.UTF8.GetString(_send(poll));
+                EnsureSuccess(statusRaw);
                 text = TryExtractText(statusRaw);
-                if (!string.IsNullOrWhiteSpace(text))
+                if (text != null && !string.IsNullOrWhiteSpace(text))
                     return text;
-                var st = FirstMatch(statusRaw, "\"(?:status|state|taskStatus)\"\\s*:\\s*\"?([^\",}\\s]+)");
+                var st = FirstMatch(statusRaw, "\"(?:status|state|taskStatus|message)\"\\s*:\\s*\"?([^\",}\\s]+)");
                 if (IsFailed(st))
                     throw new InvalidOperationException("D.Nova OCR failed: " + Truncate(statusRaw, 300));
-                if (IsDone(st) && string.IsNullOrWhiteSpace(text))
+                if (IsDone(st) || AiJson.ParseObject(statusRaw).GetValueOrDefault("processStatus") == "9")
                 {
-                    // Some deployments only finish with an id; try markdown download as last resort.
-                    var md = TryDownloadMarkdown(baseUrl, id);
-                    if (!string.IsNullOrWhiteSpace(md)) return md;
-                    break;
+                    // Completion supplies the download task ID, which can differ from the upload ID.
+                    return DownloadMarkdown(baseUrl, TryExtractId(statusRaw) ?? id);
                 }
             }
             throw new InvalidOperationException("D.Nova OCR timed out waiting for text (fileId=" + id + ").");
         }
     }
 
-    string? TryDownloadMarkdown(string baseUrl, string taskId)
+    string DownloadMarkdown(string baseUrl, string taskId)
     {
-        try
+        using var req = new HttpRequestMessage(HttpMethod.Post, baseUrl + "/downloadByTaskId");
+        req.Content = new StringContent("{\"downloadType\":\"md\",\"taskId\":" + Quote(taskId) + "}", Encoding.UTF8, "application/json");
+        var bytes = _send(req);
+        using var stream = new MemoryStream(bytes);
+        using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
+        var parts = new List<string>();
+        long total = 0;
+        foreach (var entry in archive.Entries)
         {
-            // Host root may be nova.deloitte.com.cn — download path from docs.
-            var root = "https://nova.deloitte.com.cn";
-            var url = root + "/nova-cloud/ocr/ocr/v1/downloadByTaskId";
-            var payload = "{\"downloadType\":\"md\",\"taskId\":" + Quote(taskId) + "}";
-            using var req = new HttpRequestMessage(HttpMethod.Post, url);
-            req.Content = new StringContent(payload, Encoding.UTF8, "application/json");
-            var raw = _send(req);
-            return string.IsNullOrWhiteSpace(raw) ? null : raw;
+            if (!entry.FullName.EndsWith(".md", StringComparison.OrdinalIgnoreCase)) continue;
+            total += entry.Length;
+            if (total > 16 * 1024 * 1024)
+                throw new InvalidOperationException("D.Nova OCR Markdown exceeds the 16 MB text limit.");
+            using var reader = new StreamReader(entry.Open(), Encoding.UTF8);
+            parts.Add(reader.ReadToEnd());
         }
-        catch
-        {
-            return null;
-        }
+        var text = string.Join("\n\n", parts);
+        if (string.IsNullOrWhiteSpace(text))
+            throw new InvalidOperationException("D.Nova OCR download contains no Markdown text.");
+        return text;
+    }
+
+    static void EnsureSuccess(string raw)
+    {
+        var code = AiJson.ParseObject(raw).GetValueOrDefault("code");
+        if (!string.IsNullOrEmpty(code) && code != "200" && code != "0")
+            throw new InvalidOperationException("D.Nova OCR rejected request (code " + code + ").");
     }
 
     static byte[] BuildMultipart(string boundary, string fileName, byte[] fileBytes, string fileInfoJson)
@@ -111,7 +124,7 @@ public sealed class NovaOcrClient : INovaOcrClient
         Write("\r\n");
 
         Write("--" + boundary + "\r\n");
-        Write("Content-Disposition: form-data; name=\"fileInfo\"\r\n\r\n");
+        Write("Content-Disposition: form-data; name=\"fileInfo\"\r\nContent-Type: application/json\r\n\r\n");
         Write(fileInfoJson);
         Write("\r\n--" + boundary + "--\r\n");
         return ms.ToArray();
@@ -140,7 +153,7 @@ public sealed class NovaOcrClient : INovaOcrClient
     public static string? TryExtractId(string raw)
     {
         if (string.IsNullOrWhiteSpace(raw)) return null;
-        foreach (var key in new[] { "taskId", "task_id", "fileId", "file_id", "jobId", "job_id", "requestId", "request_id" })
+        foreach (var key in new[] { "taskId", "task_id", "fileId", "file_id", "jobId", "job_id", "requestId", "request_id", "data" })
         {
             var quoted = Regex.Match(raw, "\"" + key + "\"\\s*:\\s*\"([^\"]+)\"", RegexOptions.IgnoreCase);
             if (quoted.Success && quoted.Groups[1].Value.Length > 2) return quoted.Groups[1].Value;
@@ -172,17 +185,15 @@ public sealed class NovaOcrClient : INovaOcrClient
         return m.Success ? m.Groups[1].Value : null;
     }
 
-    static string DefaultSend(HttpRequestMessage request)
+    static byte[] DefaultSend(HttpRequestMessage request)
     {
         ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
-        // D.Nova sample uses verify=False; keep demo environments working behind corp TLS inspect.
-        ServicePointManager.ServerCertificateValidationCallback = static (_, __, ___, ____) => true;
         using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(90) };
         using var response = client.SendAsync(request).GetAwaiter().GetResult();
-        var text = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        var bytes = response.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
         if (!response.IsSuccessStatusCode)
-            throw new InvalidOperationException("D.Nova OCR HTTP " + (int)response.StatusCode + ": " + Truncate(text, 400));
-        return text;
+            throw new InvalidOperationException("D.Nova OCR HTTP " + (int)response.StatusCode + ": " + Truncate(Encoding.UTF8.GetString(bytes), 400));
+        return bytes;
     }
 
     static string Quote(string value) => "\"" + (value ?? "").Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"";

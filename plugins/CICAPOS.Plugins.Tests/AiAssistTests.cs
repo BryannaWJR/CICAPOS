@@ -199,11 +199,11 @@ public class AiAssistTests
     public void Ocr_ParsesNestedTaskIdThenPollsText()
     {
         var n = 0;
-        string Send(HttpRequestMessage req)
+        byte[] Send(HttpRequestMessage req)
         {
             n++;
-            if (n == 1) return "{\"code\":0,\"data\":{\"taskId\":\"t-99\"}}";
-            return "{\"status\":\"success\",\"content\":\"Business Registration No. 68899001 extra sample text.\"}";
+            if (n == 1) return System.Text.Encoding.UTF8.GetBytes("{\"code\":0,\"data\":{\"taskId\":\"t-99\"}}");
+            return System.Text.Encoding.UTF8.GetBytes("{\"status\":\"success\",\"content\":\"Business Registration No. 68899001 extra sample text.\"}");
         }
         var client = new NovaOcrClient(new AiProviderConfig { OcrApiKey = "sk-test" }, Send);
         var text = client.ExtractText(new byte[] { 1, 2, 3, 4 }, "br.pdf");
