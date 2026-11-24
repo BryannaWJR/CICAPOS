@@ -27,9 +27,11 @@ public static class AiQuality
         {
             var words = WordCount(objective);
             if (words > ObjectiveMaxWords)
-                issues.Add(Issue("objective", "too_long", "Project objective is over 250 words"));
+                issues.Add(Issue("objective", "too_long",
+                    "Project objective is over 250 words (now " + words + ") – AI quality check"));
             else if (words < ObjectiveMinWords)
-                issues.Add(Issue("objective", "too_brief", "Project objective is too brief – describe the benefits and how you will implement (AI quality check)"));
+                issues.Add(Issue("objective", "too_brief",
+                    "Project objective is too brief (minimum 12 words, now " + words + ") – describe benefits and implementation (AI quality check)"));
             else if (!HasBenefitCue(objective) || !HasImplementCue(objective))
                 issues.Add(Issue("objective", "weak_content", "Project objective should cover expected benefits and how you will implement (AI quality check)"));
         }
@@ -131,10 +133,19 @@ public static class AiQuality
     public static string BuildFundingValidatePrompt(IDictionary<string, string> values, AiFormSchema schema)
         => "You are a CITF application quality checker for the Construction Industry Council. "
             + "Return ONLY JSON: {\"pass\":boolean,\"issues\":[{\"field\":\"\",\"code\":\"\",\"message\":\"\",\"severity\":\"error|warn\"}]}. "
-            + "Check that the project objective describes benefits and implementation (not just a title), "
-            + "and each item implementation plan includes at least one quantitative detail (workers, floors, area, savings, devices, days). "
+            + "Count words in the project objective (whitespace-separated tokens). "
+            + "If fewer than " + ObjectiveMinWords + " words, add issue code too_brief. "
+            + "If more than " + ObjectiveMaxWords + " words, add issue code too_long. "
+            + "The filled objective MUST sit inside that min/max range. "
+            + "Also check that the objective describes expected benefits AND how it will be implemented (not just a title). "
+            + "Each item implementation plan needs at least one quantitative detail (workers, floors, area, savings, devices, days). "
             + "Do not invent missing documents. Schema: " + schema.Title + ". "
             + "Data: " + AiJson.ToObjectJson(values);
+
+    public static string BuildSummaryPrompt(IDictionary<string, string> values)
+        => "Write a CITF funding application submission summary for CIC officers. "
+            + "Return ONLY JSON: {\"summary\":\"120-180 words covering scheme, site, objective, items, amounts and any risks\",\"score\":integer 0-100,\"risks\":[\"short flag\"]}. "
+            + "Be factual from the data. Do not invent documents. Data: " + AiJson.ToObjectJson(values);
 
     public static string BuildPrefillPrompt(string documentText, AiFormSchema schema)
         => "Extract fields for a CITF portal form from the document text. "

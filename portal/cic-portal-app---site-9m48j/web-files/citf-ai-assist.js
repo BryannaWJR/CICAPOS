@@ -11,7 +11,8 @@
     Prefill: "prefill",
     ValidateUpload: "validate_upload",
     ValidateForm: "validate_form",
-    Suggest: "suggest"
+    Suggest: "suggest",
+    Summarize: "summarize"
   };
 
   var SCHEMAS = {
@@ -165,8 +166,8 @@
       issues.push({ field: "objective", code: "missing", message: "Project objective and expected benefits are missing", severity: "error" });
     } else {
       var w = words(objective);
-      if (w > OBJECTIVE_MAX) issues.push({ field: "objective", code: "too_long", message: "Project objective is over 250 words", severity: "error" });
-      else if (w < OBJECTIVE_MIN) issues.push({ field: "objective", code: "too_brief", message: "Project objective is too brief – describe the benefits and how you will implement (AI quality check)", severity: "error" });
+      if (w > OBJECTIVE_MAX) issues.push({ field: "objective", code: "too_long", message: "Project objective is over 250 words (now " + w + ") – AI quality check", severity: "error" });
+      else if (w < OBJECTIVE_MIN) issues.push({ field: "objective", code: "too_brief", message: "Project objective is too brief (minimum 12 words, now " + w + ") – describe benefits and implementation (AI quality check)", severity: "error" });
       else if (!hasBenefit(objective) || !hasImplement(objective)) issues.push({ field: "objective", code: "weak_content", message: "Project objective should cover expected benefits and how you will implement (AI quality check)", severity: "error" });
     }
     var items = [];
@@ -249,6 +250,16 @@
       else if (/bim/.test(q)) suggestions = [{ code: "PA-BIM-0105", name: "BIM Authoring Suite (1-year licence)" }];
       fields = { suggestionsJson: JSON.stringify(suggestions) };
       notes = "Demo suggestions";
+    } else if (action === ACTIONS.Summarize) {
+      var nWords = words(current.objective || "");
+      fields = {
+        summary: "Applicant submitted a " + (current.schemes || "CITF") + " funding application for " + (current.project || "the nominated site")
+          + ". Objective (" + nWords + " words) is checked against the 12–250 word range. Items: " + (current.itemsJson || "[]")
+          + ". AI text analysis completed on submit; a CIC officer still reviews the case.",
+        score: "82",
+        risksJson: "[]"
+      };
+      notes = fields.summary;
     } else {
       return Promise.reject(new Error("Unsupported AI action: " + action));
     }
@@ -405,8 +416,25 @@
     });
   }
 
+  function stripHtml(html) {
+    var t = String(html || "");
+    t = t.replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ");
+    return t.replace(/\s+/g, " ").trim();
+  }
+
   function resolveDocumentText(cfg, req) {
     if (req.documentText && String(req.documentText).trim()) return Promise.resolve({ text: String(req.documentText), usedOcr: false });
+    var pageUrl = (req.currentValues && (req.currentValues.pageUrl || req.currentValues.url)) || "";
+    if (pageUrl) {
+      return fetch(String(pageUrl), { credentials: "omit" }).then(function (r) {
+        return r.text().then(function (html) {
+          if (!r.ok) throw new Error("Webpage HTTP " + r.status);
+          var text = stripHtml(html);
+          if (!text || text.length < 40) throw new Error("Product webpage did not return readable text");
+          return { text: text.slice(0, 12000), usedOcr: false };
+        });
+      });
+    }
     if (!req.fileBase64) return Promise.resolve({ text: "", usedOcr: false });
     return ocrExtract(cfg, req.fileBase64, req.fileName).then(function (text) {
       return { text: text, usedOcr: true };
@@ -427,7 +455,7 @@
       return chatCompletions(
         cfg,
         "Return JSON only with pass and issues array for CITF quality checking.",
-        "Check objective benefits/implementation and that each item plan has a quantitative detail. Data: " + JSON.stringify(current)
+        "Count words in the project objective. If fewer than 12 words use code too_brief; if more than 250 words use code too_long. The filled objective MUST sit in that min/max range. Also check benefits/implementation and that each item plan has a quantitative detail. Data: " + JSON.stringify(current)
       ).then(function (raw) {
         var parsed = {};
         try { parsed = JSON.parse(raw); } catch (e) { parsed = {}; }
@@ -460,6 +488,30 @@
           fields: { suggestionsJson: JSON.stringify(parsed.suggestions || []) },
           issues: [],
           notes: "AI suggestions",
+          contentHash: hash
+        };
+      });
+    }
+
+    if (action === ACTIONS.Summarize) {
+      return chatCompletions(
+        cfg,
+        "Return JSON only with summary, score and risks for a CITF funding submission.",
+        "Write a 120-180 word factual submission summary. JSON {summary, score, risks:[]}. Data: " + JSON.stringify(current)
+      ).then(function (raw) {
+        var parsed = {};
+        try { parsed = JSON.parse(raw); } catch (e) { parsed = {}; }
+        return {
+          pass: true,
+          source: "nova-compatible",
+          model: cfg.model,
+          fields: {
+            summary: parsed.summary || "",
+            score: String(parsed.score || 80),
+            risksJson: JSON.stringify(parsed.risks || [])
+          },
+          issues: [],
+          notes: parsed.summary || "AI submission summary",
           contentHash: hash
         };
       });

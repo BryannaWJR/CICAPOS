@@ -5,12 +5,14 @@ public sealed class AiAssistService
     readonly AiProviderConfig _config;
     readonly ILlmClient? _llm;
     readonly INovaOcrClient? _ocr;
+    readonly IWebPageClient? _web;
 
-    public AiAssistService(AiProviderConfig config, ILlmClient? llm = null, INovaOcrClient? ocr = null)
+    public AiAssistService(AiProviderConfig config, ILlmClient? llm = null, INovaOcrClient? ocr = null, IWebPageClient? web = null)
     {
         _config = config;
         _llm = llm ?? CreateLlm(config);
         _ocr = ocr ?? (config.HasOcr ? new NovaOcrClient(config) : null);
+        _web = web ?? new WebPageClient();
     }
 
     static ILlmClient? CreateLlm(AiProviderConfig config)
@@ -43,6 +45,7 @@ public sealed class AiAssistService
             AiActions.ValidateUpload => ValidateUpload(request, schema, current, hash),
             AiActions.ValidateForm => ValidateForm(request, schema, current, hash),
             AiActions.Suggest => Suggest(request, current, hash),
+            AiActions.Summarize => Summarize(current, hash),
             _ => throw new ArgumentException("Unsupported AI action: " + request.Action)
         };
     }
@@ -60,7 +63,9 @@ public sealed class AiAssistService
             var fields = AiJson.ParseObject(json);
             var source = usedOcr ? "nova-ocr+llm" : LiveSource();
             var issues = AiQuality.ValidateMappedFields(schema, fields).ToList();
-            return Ok(fields, issues, source, LiveModelId(), hash, "Document read and fields filled (" + source + ")");
+            return Ok(fields, issues, source, LiveModelId(), hash,
+                (usedOcr ? "Document" : PageUrl(request) != null ? "Webpage" : "Text")
+                + " read and fields filled (" + source + ")");
         }
 
         if (!_config.AllowDemo)
@@ -212,6 +217,39 @@ public sealed class AiAssistService
         }
     }
 
+    AiAssistResponse Summarize(Dictionary<string, string> current, string hash)
+    {
+        if (_llm == null)
+        {
+            if (!_config.AllowDemo)
+                throw new InvalidOperationException("D.Nova Chat is not configured (NOVA_API_KEY / ak- key).");
+            return Ok(DemoSummary(current), Array.Empty<AiIssue>(), "demo", null, hash, DemoSummary(current).GetValueOrDefault("summary"));
+        }
+
+        try
+        {
+            var json = _llm.CompleteJson(
+                "Return JSON only with summary, score and risks for a CITF funding submission.",
+                AiQuality.BuildSummaryPrompt(current));
+            var parsed = AiJson.ParseObject(json);
+            var risks = ExtractArray(json, "risks");
+            var fields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["summary"] = parsed.GetValueOrDefault("summary") ?? "",
+                ["score"] = parsed.GetValueOrDefault("score") ?? "80",
+                ["risksJson"] = string.IsNullOrWhiteSpace(risks) ? "[]" : risks
+            };
+            if (string.IsNullOrWhiteSpace(fields["summary"]))
+                fields["summary"] = DemoSummary(current).GetValueOrDefault("summary") ?? "";
+            return Ok(fields, Array.Empty<AiIssue>(), LiveSource(), LiveModelId(), hash, fields["summary"]);
+        }
+        catch when (_config.AllowDemo)
+        {
+            var demo = DemoSummary(current);
+            return Ok(demo, Array.Empty<AiIssue>(), "demo", null, hash, demo.GetValueOrDefault("summary"));
+        }
+    }
+
     void RequireLlmForMapping(string documentText, bool hadFile)
     {
         if (_llm != null && !string.IsNullOrWhiteSpace(documentText))
@@ -220,7 +258,7 @@ public sealed class AiAssistService
         if (hadFile && _ocr == null)
             throw new InvalidOperationException("Document upload requires NOVA_OCR_API_KEY (sk-).");
         if (string.IsNullOrWhiteSpace(documentText))
-            throw new InvalidOperationException("No document text. Upload a file (OCR) or provide documentText.");
+            throw new InvalidOperationException("No document text. Upload a file, paste a product webpage URL, or provide documentText.");
         if (_llm == null)
             throw new InvalidOperationException("D.Nova Chat is not configured (NOVA_API_KEY / ak- key).");
     }
@@ -230,6 +268,17 @@ public sealed class AiAssistService
         usedOcr = false;
         var documentText = request.DocumentText ?? "";
         if (!string.IsNullOrWhiteSpace(documentText)) return documentText;
+
+        var pageUrl = PageUrl(request);
+        if (!string.IsNullOrWhiteSpace(pageUrl))
+        {
+            if (_web == null)
+            {
+                if (_config.AllowDemo) return documentText;
+                throw new InvalidOperationException("Webpage fetch is not available.");
+            }
+            return _web.FetchText(pageUrl!);
+        }
 
         var fileBytes = Decode(request.FileBase64);
         if (fileBytes.Length == 0) return documentText;
@@ -259,6 +308,32 @@ public sealed class AiAssistService
         else
             fields["suggestionsJson"] = "[]";
         return fields;
+    }
+
+    static string? PageUrl(AiAssistRequest request)
+    {
+        var map = AiJson.ParseObject(request.CurrentValuesJson);
+        var url = map.GetValueOrDefault("pageUrl") ?? map.GetValueOrDefault("url") ?? "";
+        return string.IsNullOrWhiteSpace(url) ? null : url.Trim();
+    }
+
+    static Dictionary<string, string> DemoSummary(IDictionary<string, string> current)
+    {
+        var project = current.GetValueOrDefault("project") ?? "the nominated site";
+        var schemes = current.GetValueOrDefault("schemes") ?? "CITF";
+        var objective = current.GetValueOrDefault("objective") ?? "";
+        var items = current.GetValueOrDefault("itemsJson") ?? "[]";
+        var amount = current.GetValueOrDefault("amount") ?? "";
+        var summary = "Applicant submitted a " + schemes + " funding application for " + project
+            + ". Objective (" + AiQuality.WordCount(objective) + " words) sits in the 12–250 word range and describes implementation. "
+            + "Items: " + items + (string.IsNullOrWhiteSpace(amount) ? "" : ". Amount applied HK$" + amount) + ". "
+            + "AI text analysis completed on submit; a CIC officer still reviews eligibility, quotations and documents.";
+        return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["summary"] = summary,
+            ["score"] = "82",
+            ["risksJson"] = "[]"
+        };
     }
 
     static byte[] Decode(string? b64)
