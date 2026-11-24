@@ -8,6 +8,7 @@ public static class AiActions
     public const string ValidateUpload = "validate_upload";
     public const string ValidateForm = "validate_form";
     public const string Suggest = "suggest";
+    public const string Summarize = "summarize";
 }
 
 public static class AiSchemaKeys

@@ -20,7 +20,7 @@
     const e = {};
     if (el.dataset.next !== '0') {
       if (!a.schemes.length) e.schemes = 'Choose at least one scheme'; if (!a.project) e.project = 'Required';
-      if (!a.objective.trim()) e.objective = 'Required'; else if (words(a.objective) > 250) e.objective = 'Keep it to 250 words or fewer (now ' + words(a.objective) + ')';
+      if (!a.objective.trim()) e.objective = 'Required';
       if (a.schemes.includes('MPD')) { if (!a.mpdDate) e.mpdDate = 'Required for MPD'; else if ((new Date(a.mpdDate) - now()) / 864e5 < rule('mpdLead')) e.mpdDate = 'MPD applications must be submitted at least ' + rule('mpdLead') + ' days before the activity'; }
     }
     UI.err = e; save();
@@ -40,6 +40,16 @@
     timed.then(function (res) {
       const src = (res && res.source) || (a.aiQuality && a.aiQuality.source) || 'unknown';
       const model = (res && res.model) || (a.aiQuality && a.aiQuality.model) || '';
+      const lengthIssue = ((res && res.issues) || []).find(function (i) {
+        return i && i.field === 'objective' && (i.code === 'too_brief' || i.code === 'too_long');
+      });
+      if (lengthIssue && el.dataset.next !== '0') {
+        UI.err = { objective: lengthIssue.message };
+        save();
+        render();
+        toast(lengthIssue.message, true);
+        return;
+      }
       toast('AI check source: ' + src + (model ? ' · ' + model : '') + (/nova/i.test(src) ? '' : ' (not live Nova)'));
       render(); goNext();
     }).catch(function (err) {
@@ -93,22 +103,37 @@
     });
   };
 
+  function applyPalAiFields(p, it, i, k, res, sourceName) {
+    const f = (res && res.fields) || {};
+    Object.assign(it, f, { supplier: myCo().nameEn, aiFilled: true, price: f.price ? +f.price : it.price });
+    it.files = it.files || {};
+    const pick = k === 'course' ? ['Photos', 'Authorisation letter', 'Catalogue', 'Price list', 'Reference letter'] : ['Photos', 'Video'].concat(PAL_AI_MATRIX).concat(['Reference letter', 'Test report']);
+    pick.forEach(t => { const ext = (PAL_UPLOADS.find(u => u[0] === t) || [t, 'pdf'])[1].replace('image', 'jpg').replace('video', 'mp4'); if (!it.files[t]) it.files[t] = palFileName(p, i, it, t, ext); });
+    if (it.local === 'Yes' && !it.files['Local development proof']) it.files['Local development proof'] = palFileName(p, i, it, 'Local development proof', 'pdf');
+    it.fileAi = it.fileAi || {};
+    Object.keys(it.files).forEach(tt => { if (!it.fileAi[tt]) it.fileAi[tt] = { ai: 'ok', note: PAL_AI_MATRIX.includes(tt) ? 'AI/OCR pre-checked against form fields' : 'Readable' }; });
+    save(); render();
+    toast('AI filled all 9 sections from ' + sourceName + ' · ' + ((res && res.source) || '') + ' – please check each one');
+  }
+
   A.palPrefill = function (el) {
     const p = S.palApps.find(x => x.id === el.dataset.id), it = p.items.find(i => i.id === el.dataset.it), i = p.items.indexOf(it), k = palCat(p.scheme).kind;
+    const url = ((document.getElementById('palPageUrl') || {}).value || it.mfWeb || '').trim();
+    const schemaKey = k === 'course' ? 'pal_course' : 'pal_product';
+    if (url) {
+      toast('AI reading product webpage…');
+      return CitfAi.assist({ action: 'prefill', schemaKey: schemaKey, docType: k, currentValues: { pageUrl: url } }).then(function (res) {
+        it.mfWeb = it.mfWeb || url;
+        applyPalAiFields(p, it, i, k, res, 'webpage');
+      }).catch(function (err) {
+        toast((err && err.message) || 'Could not read that webpage', true);
+      });
+    }
     withPickedFile('Choose ' + (k === 'course' ? 'course outline' : 'catalogue / specification') + '…', function (file) {
       toast('AI reading ' + (k === 'course' ? 'course outline' : 'document matrix') + '…');
-      return CitfAi.assist({ action: 'prefill', schemaKey: k === 'course' ? 'pal_course' : 'pal_product', docType: k, fileName: file.fileName, fileBase64: file.fileBase64 }).then(res => {
-        const f = res.fields || {};
-        Object.assign(it, f, { supplier: myCo().nameEn, aiFilled: true, price: f.price ? +f.price : it.price });
-        it.files = it.files || {};
-        const pick = k === 'course' ? ['Photos', 'Authorisation letter', 'Catalogue', 'Price list', 'Reference letter'] : ['Photos', 'Video'].concat(PAL_AI_MATRIX).concat(['Reference letter', 'Test report']);
-        pick.forEach(t => { const ext = (PAL_UPLOADS.find(u => u[0] === t) || [t, 'pdf'])[1].replace('image', 'jpg').replace('video', 'mp4'); if (!it.files[t]) it.files[t] = palFileName(p, i, it, t, ext); });
-        if (it.local === 'Yes' && !it.files['Local development proof']) it.files['Local development proof'] = palFileName(p, i, it, 'Local development proof', 'pdf');
+      return CitfAi.assist({ action: 'prefill', schemaKey: schemaKey, docType: k, fileName: file.fileName, fileBase64: file.fileBase64 }).then(res => {
         if (file.fileName) it.files[k === 'course' ? 'Catalogue' : 'Specification'] = file.fileName;
-        it.fileAi = it.fileAi || {};
-        Object.keys(it.files).forEach(tt => { if (!it.fileAi[tt]) it.fileAi[tt] = { ai: 'ok', note: PAL_AI_MATRIX.includes(tt) ? 'AI/OCR pre-checked against form fields' : 'Readable' }; });
-        save(); render();
-        toast('AI filled all 9 sections · ' + res.source + ' – please check each one');
+        applyPalAiFields(p, it, i, k, res, 'document');
       });
     });
   };

@@ -488,6 +488,25 @@ const DOCS_DR = ['Purchase order', 'Invoice', 'Delivery note', 'Payment receipt'
 const STEPS_APP = ['Submitted', 'Review', 'Approval', 'Result'];
 
 function pal(code, name, scheme, vendor, price, origin, apps, s4) { return {id:uid('pa'), code, name, scheme, vendor, price, origin, apps, status:'Listed', safety:'General', listedOn:'2025-03-01', s4:!!s4}; }
+function demoPalCatalog() {
+  return [
+    pal('PA-ACT-0412', 'SiteEye AI Safety Camera System (4S)', 'ACT', 'c3', 86000, 'Hong Kong', 14, true), pal('PA-ACT-0398', 'RoboLayout Total-station Robot', 'ACT', 'c3', 238000, 'Hong Kong', 6),
+    pal('PA-ACT-0377', 'DroneScan Site Survey Kit', 'ACT', 'x', 129000, 'Mainland China', 21), pal('PA-BIM-0105', 'BIM Authoring Suite (1-year licence)', 'BIM', 'x', 24500, 'United States', 52),
+    pal('PA-BIM-0121', 'Common Data Environment Cloud (per user)', 'BIM', 'x', 6800, 'United Kingdom', 33), pal('PA-BIM-0067', 'BIM Coordinator Certificate Course', 'BIM', 'x', 18000, 'Hong Kong', 41),
+    pal('PA-ACT-0441', 'Smart Lifting Monitoring System (4S)', 'ACT', 'x', 156000, 'Hong Kong', 3, true), pal('PA-ACT-0302', 'Concrete Curing IoT Sensors (set of 20)', 'ACT', 'c3', 42000, 'Hong Kong', 0),
+    pal('PA-MEP-0201', 'Prefabricated plant-room MEP module', 'MiMEP', 'c3', 480000, 'Hong Kong', 4), pal('PA-MEP-0208', 'Integrated riser MEP cassette', 'MiMEP', 'x', 126000, 'Mainland China', 2),
+    pal('PA-MIC-0110', 'Steel MiC bathroom unit', 'MiC', 'c2', 89000, 'Hong Kong', 8), pal('PA-STB-0055', 'Prefabricated rebar cage (per tonne)', 'STB', 'x', 9200, 'Hong Kong', 11)
+  ];
+}
+function ensureDemoPal() {
+  if (!S.pal) S.pal = [];
+  const have = new Set(S.pal.map(p => p.code));
+  demoPalCatalog().forEach(p => {
+    if (have.has(p.code)) return;
+    p.vendors = p.vendor === 'c3' ? ['SmartSite Robotics HK Limited', 'BuildTech Distribution Ltd'] : ['Asia Digital Construction Ltd', 'Pacific Survey Supplies Ltd', 'BuildTech Distribution Ltd'];
+    S.pal.push(p);
+  });
+}
 function seed() {
   const S = {companies:{}, users:[], apps:[], drs:[], pal:[], palApps:[], reviews:[], inspections:[], batches:[], emails:[], seq:{app:46, dr:113, co:2310, pal:88}, sessions:{}, masters:{}};
   const co = (id, o) => { S.companies[id] = Object.assign({id, nameTc:'', branch:'000', address:'', corr:'', website:'', domain:'', status:'Verified', companyId:'', submittedOn:'2026-06-01T10:00:00', risk:'Low',
@@ -508,10 +527,7 @@ function seed() {
   usr('kenny.wong@harbourbuild.example.com', 'c1', 'Company User', 'Kenny Wong', 'applicant');
   usr('grace.ho@smartsite.example.com', 'c3', 'Company Admin', 'Grace Ho', 'vendor');
   usr('ivan.cheng@kmic.example.com', 'c2', 'Company Admin', 'Ivan Cheng', 'applicant');
-  S.pal = [pal('PA-ACT-0412', 'SiteEye AI Safety Camera System (4S)', 'ACT', 'c3', 86000, 'Hong Kong', 14, true), pal('PA-ACT-0398', 'RoboLayout Total-station Robot', 'ACT', 'c3', 238000, 'Hong Kong', 6),
-    pal('PA-ACT-0377', 'DroneScan Site Survey Kit', 'ACT', 'x', 129000, 'Mainland China', 21), pal('PA-BIM-0105', 'BIM Authoring Suite (1-year licence)', 'BIM', 'x', 24500, 'United States', 52),
-    pal('PA-BIM-0121', 'Common Data Environment Cloud (per user)', 'BIM', 'x', 6800, 'United Kingdom', 33), pal('PA-BIM-0067', 'BIM Coordinator Certificate Course', 'BIM', 'x', 18000, 'Hong Kong', 41),
-    pal('PA-ACT-0441', 'Smart Lifting Monitoring System (4S)', 'ACT', 'x', 156000, 'Hong Kong', 3, true), pal('PA-ACT-0302', 'Concrete Curing IoT Sensors (set of 20)', 'ACT', 'c3', 42000, 'Hong Kong', 0)];
+  S.pal = demoPalCatalog();
   S.pal[7].status = 'Listed'; S.pal[6].listedOn = '2026-08-01'; S.pal[1].vendorAlt = ['RoboBuild Trading Co.', 'Pacific Survey Supplies Ltd'];
   S.pal.forEach(p => { p.vendors = p.vendor === 'c3' ? ['SmartSite Robotics HK Limited', 'BuildTech Distribution Ltd'] : ['Asia Digital Construction Ltd', 'Pacific Survey Supplies Ltd', 'BuildTech Distribution Ltd']; });
   // applications
@@ -600,7 +616,7 @@ function letterHtml(L) { const a = app(L.appId), c = company(a.companyId), f = l
     <p>Yours faithfully,<br><br>CITF Secretariat<br>Construction Industry Council</p><p style="font-size:11px;color:#777">Generated in Dynamics 365 from the “${esc(letterTpl(L.kind).name || '')}” template · filed to SharePoint</p></div>`; }
 function issueLetter(kind, a, extra) { const L = Object.assign({id:uid('lt'), kind, appId:a.id, no:'CITF/' + LETTER_PREFIX[kind] + '/2027/' + String(S.seq.letter++).padStart(4, '0'), on:now().toISOString(), by:typeof meD === 'function' ? meD() : 'System'}, extra || {});
   S.letters = S.letters || []; S.letters.push(L); a.history.push({on:L.on, what:letterTpl(kind).name + ' ' + L.no + ' issued and filed to SharePoint; visible on the portal'}); return L; }
-function load() { try { const raw = localStorage.getItem(KEY); S = raw ? JSON.parse(raw) : seed(); } catch (e) { S = seed(); } }
+function load() { try { const raw = localStorage.getItem(KEY); S = raw ? JSON.parse(raw) : seed(); } catch (e) { S = seed(); } try { ensureDemoPal(); } catch (e) {} }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
 /* ===== CitfAi assist (forms + one-click prefill) ===== */
@@ -617,7 +633,8 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e
     Prefill: "prefill",
     ValidateUpload: "validate_upload",
     ValidateForm: "validate_form",
-    Suggest: "suggest"
+    Suggest: "suggest",
+    Summarize: "summarize"
   };
 
   var SCHEMAS = {
@@ -771,8 +788,8 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e
       issues.push({ field: "objective", code: "missing", message: "Project objective and expected benefits are missing", severity: "error" });
     } else {
       var w = words(objective);
-      if (w > OBJECTIVE_MAX) issues.push({ field: "objective", code: "too_long", message: "Project objective is over 250 words", severity: "error" });
-      else if (w < OBJECTIVE_MIN) issues.push({ field: "objective", code: "too_brief", message: "Project objective is too brief – describe the benefits and how you will implement (AI quality check)", severity: "error" });
+      if (w > OBJECTIVE_MAX) issues.push({ field: "objective", code: "too_long", message: "Project objective is over 250 words (now " + w + ") – AI quality check", severity: "error" });
+      else if (w < OBJECTIVE_MIN) issues.push({ field: "objective", code: "too_brief", message: "Project objective is too brief (minimum 12 words, now " + w + ") – describe benefits and implementation (AI quality check)", severity: "error" });
       else if (!hasBenefit(objective) || !hasImplement(objective)) issues.push({ field: "objective", code: "weak_content", message: "Project objective should cover expected benefits and how you will implement (AI quality check)", severity: "error" });
     }
     var items = [];
@@ -855,6 +872,16 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e
       else if (/bim/.test(q)) suggestions = [{ code: "PA-BIM-0105", name: "BIM Authoring Suite (1-year licence)" }];
       fields = { suggestionsJson: JSON.stringify(suggestions) };
       notes = "Demo suggestions";
+    } else if (action === ACTIONS.Summarize) {
+      var nWords = words(current.objective || "");
+      fields = {
+        summary: "Applicant submitted a " + (current.schemes || "CITF") + " funding application for " + (current.project || "the nominated site")
+          + ". Objective (" + nWords + " words) is checked against the 12–250 word range. Items: " + (current.itemsJson || "[]")
+          + ". AI text analysis completed on submit; a CIC officer still reviews the case.",
+        score: "82",
+        risksJson: "[]"
+      };
+      notes = fields.summary;
     } else {
       return Promise.reject(new Error("Unsupported AI action: " + action));
     }
@@ -1013,6 +1040,17 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e
 
   function resolveDocumentText(cfg, req) {
     if (req.documentText && String(req.documentText).trim()) return Promise.resolve({ text: String(req.documentText), usedOcr: false });
+    var pageUrl = (req.currentValues && (req.currentValues.pageUrl || req.currentValues.url)) || "";
+    if (pageUrl) {
+      return fetch(String(pageUrl), { credentials: "omit" }).then(function (r) {
+        return r.text().then(function (html) {
+          if (!r.ok) throw new Error("Webpage HTTP " + r.status);
+          var t = String(html || "").replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+          if (!t || t.length < 40) throw new Error("Product webpage did not return readable text");
+          return { text: t.slice(0, 12000), usedOcr: false };
+        });
+      });
+    }
     if (!req.fileBase64) return Promise.resolve({ text: "", usedOcr: false });
     return ocrExtract(cfg, req.fileBase64, req.fileName).then(function (text) {
       return { text: text, usedOcr: true };
@@ -1033,7 +1071,7 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e
       return chatCompletions(
         cfg,
         "Return JSON only with pass and issues array for CITF quality checking.",
-        "Check objective benefits/implementation and that each item plan has a quantitative detail. Data: " + JSON.stringify(current)
+        "Count words in the project objective. If fewer than 12 words use code too_brief; if more than 250 words use code too_long. The filled objective MUST sit in that min/max range. Also check benefits/implementation and that each item plan has a quantitative detail. Data: " + JSON.stringify(current)
       ).then(function (raw) {
         var parsed = {};
         try { parsed = JSON.parse(raw); } catch (e) { parsed = {}; }
@@ -1066,6 +1104,30 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e
           fields: { suggestionsJson: JSON.stringify(parsed.suggestions || []) },
           issues: [],
           notes: "AI suggestions",
+          contentHash: hash
+        };
+      });
+    }
+
+    if (action === ACTIONS.Summarize) {
+      return chatCompletions(
+        cfg,
+        "Return JSON only with summary, score and risks for a CITF funding submission.",
+        "Write a 120-180 word factual submission summary. JSON {summary, score, risks:[]}. Data: " + JSON.stringify(current)
+      ).then(function (raw) {
+        var parsed = {};
+        try { parsed = JSON.parse(raw); } catch (e) { parsed = {}; }
+        return {
+          pass: true,
+          source: "nova-compatible",
+          model: cfg.model,
+          fields: {
+            summary: parsed.summary || "",
+            score: String(parsed.score || 80),
+            risksJson: JSON.stringify(parsed.risks || [])
+          },
+          issues: [],
+          notes: parsed.summary || "AI submission summary",
           contentHash: hash
         };
       });
@@ -1459,6 +1521,8 @@ const I18N_ROWS = [
   ["One application can cover several categories unless they are not eligible together.","一份申请可以涵盖多个类别，除非这些类别不能一并申请。","一份申請可以涵蓋多個類別，除非這些類別不能一併申請。"],
   ["Project / site","工程／地盘","工程／地盤"],["Sites come from your CITF profile.","地盘来自你的 CITF 资料。","地盤來自你的 CITF 資料。"],
   ["Project objective, expected benefits and cost-effective implementation plan (max 250 words)","项目目标、预期效益及具成本效益的实施方案（最多 250 字）","項目目標、預期效益及具成本效益的實施方案（最多 250 字）"],
+  ["Project objective, expected benefits and cost-effective implementation plan (12–250 words)","项目目标、预期效益及具成本效益的实施方案（12–250 词）","項目目標、預期效益及具成本效益的實施方案（12–250 詞）"],
+  ["AI quality check runs on Save and continue, and again when you Submit.","人工智能会在「保存并继续」和最后「提交申请」时校验字数与内容。","人工智能會在「儲存並繼續」和最後「提交申請」時校驗字數與內容。"],
   ["AI quality check runs on Save and continue","人工智能质量检查会在「保存并继续」时运行","人工智能質素檢查會在「儲存並繼續」時運行"],
   ["Save and continue","保存并继续","儲存並繼續"],["Save as draft","保存为草稿","儲存為草稿"],
   ["Other funding for the same items (ITF, PASS or other public funding)","同一项目的其他资助（ITF、PASS 或其他公帑）","同一項目的其他資助（ITF、PASS 或其他公帑）"],
@@ -1475,6 +1539,10 @@ const I18N_ROWS = [
   ["Justify","说明原因","說明原因"],["Not the lowest bid, or fewer quotations than needed","不是最低报价，或报价数目不足","不是最低報價，或報價數目不足"],
   ["Contact vendors","联络供应商","聯絡供應商"],["Remove","删除","刪除"],
   ["No items yet. Add pre-approved products or a non-pre-approved item.","尚未加入项目。请加入预先批核产品或非预先批核项目。","尚未加入項目。請加入預先批核產品或非預先批核項目。"],
+  ["Tick ACT or BIM on step 1 to see the demo catalogue, or add a non-pre-approved item (Form 1).","可在第 1 步勾选 ACT 或 BIM 查看示范目录，或加入非预先批核项目（表格 1）。","可在第 1 步勾選 ACT 或 BIM 查看示範目錄，或加入非預先批核項目（表格 1）。"],
+  ["AI checking project objective (12–250 words)…","人工智能正在检查项目目标（12–250 词）…","人工智能正在檢查項目目標（12–250 詞）…"],
+  ["Need at least 12 words (now 2)","至少需要 12 个词（现在 2 个）","至少需要 12 個詞（現在 2 個）"],
+  ["Keep it to 250 words or fewer","请控制在 250 词以内","請控制在 250 詞以內"],
   ["Not sure what to apply for?","不确定可以申请什么？","不確定可以申請什麼？"],
   ["Describe your project in one sentence, e.g. tower crane site needing safety monitoring","用一句话描述工程，例如：需要安全监察的天秤地盘","用一句話描述工程，例如：需要安全監察的天秤地盤"],
   ["Suggest","建议","建議"],["optional","可选","可選"],
@@ -2091,7 +2159,7 @@ function refreshFundingAiQuality(a) {
 function dataBlockers(a) { const b = [];
   if (!a.schemes.length) b.push('Choose at least one scheme'); if (!a.project) b.push('Choose the project / site');
   if (!a.items.length) b.push('Add at least one item');
-  if (!(a.objective || '').trim()) b.push('Project objective and expected benefits are missing'); else if (words(a.objective) > 250) b.push('Project objective is over 250 words');
+  if (!(a.objective || '').trim()) b.push('Project objective and expected benefits are missing');
   if (a.schemes.includes('MPD') && (!a.mpdDate || (new Date(a.mpdDate) - now()) / 864e5 < rule('mpdLead'))) b.push(`MPD: the activity must start at least ${rule('mpdLead')} days after submission`);
   a.items.forEach((it, i) => { if (it.aiCheck === 'flag') b.push(`Item ${i + 1}: ${it.aiNote}`); if (it.lowest === false && !it.just) b.push(`Item ${i + 1}: lowest bid not selected – give a justification`); });
   const g = ceiling(a.companyId), mine = preSubmit(a) ? grantOf(a) : 0; if (mine > g.left) b.push(`Grant ${money(mine)} exceeds the remaining ACT + BIM cap (${money(g.left)})`);
@@ -2109,8 +2177,8 @@ function vApply(id, step) {
   if (step === 1) body = `<form class="card" data-form onsubmit="return false"><h2>Funding schemes</h2><p class="sub" style="margin:0">One application can cover several categories unless they are not eligible together.</p>
     <div class="grid g3">${S.masters.schemes.filter(s => s.active === 'Active').map(s => `<label class="chk drop" style="justify-content:flex-start"><input type="checkbox" name="schemes" data-multi="1" value="${s.code}" ${a.schemes.includes(s.code) ? 'checked' : ''}> <b>${esc(s.code)}</b> ${esc(s.name)}</label>`).join('')}</div>${err('schemes')}
     ${fld('Project / site', 'project', a.project, {req:1, type:'select', options:c.sites.map(s => [s.name, s.no + ' – ' + s.name]), hint:'Sites come from your CITF profile.'})}
-    ${fld('Project objective, expected benefits and cost-effective implementation plan (max 250 words)', 'objective', a.objective, {type:'textarea', req:1, rows:4, hint:words(a.objective) + ' / 250 words'})}
-    ${a.aiQuality && a.aiQuality.fromSubmit ? `<div class="hint">Last AI quality check: <span class="pill ${/nova/i.test(a.aiQuality.source || '') ? 'ok' : (/^rules/i.test(a.aiQuality.source || '') ? 'warn' : 'info')}">${esc(a.aiQuality.source || 'unknown')}</span>${a.aiQuality.model ? ' · ' + esc(a.aiQuality.model) : ''}${a.aiQuality.on ? ' · ' + esc(String(a.aiQuality.on).slice(0, 19).replace('T', ' ')) : ''}</div>` : `<div class="hint">AI quality check runs when you click <b>Submit</b> on step 4.</div>`}
+    ${fld('Project objective, expected benefits and cost-effective implementation plan (12–250 words)', 'objective', a.objective, {type:'textarea', req:1, rows:4, hint:words(a.objective) + ' / 250 words · AI checks min 12 and max 250'})}
+    ${a.aiQuality ? `<div class="hint">Last AI quality check: <span class="pill ${/nova/i.test(a.aiQuality.source || '') ? 'ok' : (/^rules/i.test(a.aiQuality.source || '') ? 'warn' : 'info')}">${esc(a.aiQuality.source || 'unknown')}</span>${a.aiQuality.model ? ' · ' + esc(a.aiQuality.model) : ''}${a.aiQuality.on ? ' · ' + esc(String(a.aiQuality.on).slice(0, 19).replace('T', ' ')) : ''}</div>` : `<div class="hint">AI quality check runs on Save and continue, and again when you Submit.</div>`}
     <div class="grid g2">${fld('Other funding for the same items (ITF, PASS or other public funding)', 'otherFund', a.otherFund || 'None', {type:'select', blank:false, options:['None', 'Innovation and Technology Fund (ITF)', 'Pilot Subsidy Scheme (PASS)', 'Other public funding']})}${fld('MPD only: activity start date', 'mpdDate', a.mpdDate || '', {type:'date', hint:'Submit at least ' + rule('mpdLead') + ' calendar days before the activity, with budget and full supporting documents.'})}</div>
     <div class="note info" style="font-size:13px">Submit before committing any expenditure. You may start procurement after submitting, at your own risk, before the approval notice is issued.</div>
     <div class="row"><button class="btn pri" data-act="wSave" data-id="${a.id}" data-next="2">Save and continue</button><button class="btn ghost" data-act="wSave" data-id="${a.id}" data-next="0">Save as draft</button></div></form>`;
@@ -2155,7 +2223,8 @@ function vAppView(id, tab) {
   tab = tab || 'overview'; const cur = appStep(a); const open = a.queries.filter(q => !q.ans).length;
   const tabs = [['overview', 'Overview'], ['qa', 'Q&A' + (open ? ` (${open})` : '')], ['dr', 'Disbursement'], ['change', 'Changes & withdrawal']].concat(a.status === 'Approved' ? [['compliance', 'Compliance']] : []);
   let body = '';
-  if (tab === 'overview') body = `<div class="card"><h2>Items</h2><div class="scroll"><table class="tbl"><thead><tr><th>Item</th><th>Qty</th><th>Amount</th><th>Approved grant</th></tr></thead><tbody>${a.items.map(it => `<tr><td>${esc(it.product)} <small>${esc(it.paCode)}</small></td><td>${it.qty}</td><td>${money(itemAmt(it))}</td><td>${it.approved != null ? money(it.approved) : '–'}</td></tr>`).join('')}</tbody></table></div>
+  if (tab === 'overview') body = `${a.ai && a.ai.summary ? `<div class="card"><h2>AI submission summary</h2><p class="sub" style="margin:0 0 8px">Text analysis after submit · ${esc(a.ai.source || 'AI')}${a.ai.model ? ' · ' + esc(a.ai.model) : ''}${a.ai.score != null ? ' · score ' + a.ai.score + '/100' : ''}</p><p style="margin:0;font-size:14px">${esc(a.ai.summary)}</p>${(a.ai.risks || []).map(r => `<div class="note warn" style="margin-top:8px">${esc(r)}</div>`).join('')}</div>` : ''}
+    <div class="card"><h2>Items</h2><div class="scroll"><table class="tbl"><thead><tr><th>Item</th><th>Qty</th><th>Amount</th><th>Approved grant</th></tr></thead><tbody>${a.items.map(it => `<tr><td>${esc(it.product)} <small>${esc(it.paCode)}</small></td><td>${it.qty}</td><td>${money(itemAmt(it))}</td><td>${it.approved != null ? money(it.approved) : '–'}</td></tr>`).join('')}</tbody></table></div>
     ${(() => { const ls = (S.letters || []).filter(l => l.appId === a.id); return ls.length ? `<div class="note ok"><b>Letters from CIC</b><br>${ls.map(l => `${esc(letterTpl(l.kind).name)} <b>${esc(l.no)}</b> · ${fmtD(l.on)} · <a href="#" data-act="letterView" data-lid="${l.id}">View / download</a>`).join('<br>')}</div>` : ''; })()}</div>
     <div class="card"><h2>History</h2><div class="col">${a.history.slice().reverse().map(h => `<div class="row" style="font-size:13px"><span class="hint" style="width:130px">${fmtDT(h.on)}</span>${esc(h.what)}</div>`).join('')}</div></div>`;
   if (tab === 'qa') body = `<form class="card" data-form onsubmit="return false"><h2>Queries from CIC</h2><p class="sub" style="margin:0">Answer each query here; email replies are not accepted. If no reply is received within 90 days, processing is suspended.</p>
@@ -2600,12 +2669,13 @@ const A = {
   bankSave(el) { const d = formData(el), c = myCo(); if (!d.bank || !d.acct || !d.aname) { UI.err = {acct:d.acct ? '' : 'Required'}; return render(); } c.bank = Object.assign(c.bank || {}, {bank:d.bank, acct:d.acct, name:d.aname}); save(); toast('Bank account saved (encrypted field)'); render(); },
   wSave(el) { const a = app(el.dataset.id), d = formData(el); a.schemes = d.schemes || []; a.project = d.project; a.objective = d.objective || ''; a.otherFund = d.otherFund; a.mpdDate = d.mpdDate; const e = {};
     if (el.dataset.next !== '0') { if (!a.schemes.length) e.schemes = 'Choose at least one scheme'; if (!a.project) e.project = 'Required';
-      if (!a.objective.trim()) e.objective = 'Required'; else if (words(a.objective) > 250) e.objective = 'Keep it to 250 words or fewer (now ' + words(a.objective) + ')';
+      if (!a.objective.trim()) e.objective = 'Required';
       if (a.schemes.includes('MPD')) { if (!a.mpdDate) e.mpdDate = 'Required for MPD'; else if ((new Date(a.mpdDate) - now()) / 864e5 < rule('mpdLead')) e.mpdDate = 'MPD applications must be submitted at least ' + rule('mpdLead') + ' days before the activity'; } }
     UI.err = e; save(); if (Object.keys(e).length) return render(); if (el.dataset.next === '0') { toast('Draft saved'); return go('#/p/citf'); } go('#/p/apply/' + a.id + '/' + el.dataset.next); },
-  paPicker(el) { const a = app(el.dataset.id); const list = S.pal.filter(p => p.status === 'Listed' && (!a.schemes.length || a.schemes.includes(p.scheme)));
+  paPicker(el) { const a = app(el.dataset.id); try { ensureDemoPal(); } catch (e) {}
+    const list = S.pal.filter(p => p.status === 'Listed' && (!a.schemes.length || a.schemes.includes(p.scheme)));
     modal(`<h2>Pre-approved products and courses</h2><span class="hint">Showing ${esc(a.schemes.join(', ') || 'all schemes')}. Tick two or more to compare side by side.</span>
-    <div class="scroll"><table class="tbl"><thead><tr><th></th><th>PA code</th><th>Item</th><th>Origin</th><th>Approved price</th><th></th></tr></thead><tbody>${list.map(p => `<tr><td><input type="checkbox" name="cmp" data-multi="1" value="${p.id}" aria-label="Compare"></td><td>${p.code}</td><td>${esc(p.name)}</td><td>${esc(p.origin)}</td><td>${money(p.price)}</td><td><button class="btn sm pri" data-act="paAdd" data-id="${a.id}" data-p="${p.id}">Add</button></td></tr>`).join('')}</tbody></table></div>
+    <div class="scroll"><table class="tbl"><thead><tr><th></th><th>PA code</th><th>Item</th><th>Origin</th><th>Approved price</th><th></th></tr></thead><tbody>${list.length ? list.map(p => `<tr><td><input type="checkbox" name="cmp" data-multi="1" value="${p.id}" aria-label="Compare"></td><td>${p.code}</td><td>${esc(p.name)}</td><td>${esc(p.origin)}</td><td>${money(p.price)}</td><td><button class="btn sm pri" data-act="paAdd" data-id="${a.id}" data-p="${p.id}">Add</button></td></tr>`).join('') : `<tr><td colspan="6">No listed items for ${esc(a.schemes.join(', ') || 'this scheme')}. Tick ACT or BIM on step 1 to see the demo catalogue, or add a non-pre-approved item (Form 1).</td></tr>`}</tbody></table></div>
     <div id="cmpOut"></div><div class="acts"><button class="btn" data-act="paCompare">Compare selected</button><button class="btn" data-act="close">Close</button></div>`, true); },
   paCompare(el) { const ids = formData(el).cmp || []; const ps = S.pal.filter(p => ids.includes(p.id)); if (ps.length < 2) { document.getElementById('cmpOut').innerHTML = '<div class="note warn">Tick at least two items.</div>'; return; }
     document.getElementById('cmpOut').innerHTML = `<div class="scroll"><table class="tbl"><thead><tr><th></th>${ps.map(p => `<th>${esc(p.name)}</th>`).join('')}</tr></thead><tbody>${[['PA code', p => p.code], ['Scheme', p => p.scheme], ['Approved price', p => money(p.price)], ['Origin', p => p.origin], ['Funding applications', p => p.apps], ['Vendors', p => p.vendors.length]].map(r => `<tr><td><b>${r[0]}</b></td>${ps.map(p => `<td>${esc(r[1](p))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; },
@@ -3185,8 +3255,10 @@ function vPalApply(id, step) { if (needLogin()) return ''; const p = S.palApps.f
     const sec = (n, inner) => `<section class="card palsec"><h3><span class="num">${n}</span> ${PAL_SECTIONS[n - 1]}</h3>${inner}</section>`;
     const jobs = (it.jobs || []).concat([{}, {}, {}]).slice(0, 3), hist = (it.hist || []).concat([{}, {}, {}]).slice(0, 3);
     body = `<form data-form onsubmit="return false" class="col" style="gap:14px"><div class="row between"><h2 style="margin:0">Item ${i + 1}: ${esc(it.name || 'New ' + (k === 'course' ? 'course' : k === 'software' ? 'software' : 'technology'))}</h2><span class="pill info">${esc(cat.name)}</span></div>
-      <div class="aifill"><div><b>✨ Fill this form from your documents</b><br><small>Upload the ${k === 'course' ? 'course outline' : 'catalogue or data sheet'} and AI fills all 9 sections. You check and edit before saving.</small></div><button class="btn pri" type="button" data-act="palPrefill" data-id="${p.id}" data-it="${it.id}">✨ One-click prefill</button></div>
-      ${it.aiFilled ? '<div class="note ok" style="font-size:13px">Pre-filled by AI from your documents. Please check every section – you are responsible for the information submitted.</div>' : ''}
+      <div class="aifill"><div><b>✨ One-click prefill from product webpage</b><br><small>Paste the public product / catalogue URL. AI reads the page and fills all 9 sections. You can still upload a PDF instead if the URL is empty.</small>
+        <input id="palPageUrl" type="url" value="${esc(it.mfWeb || '')}" placeholder="https://… product webpage" style="width:min(100%,420px);margin-top:8px;height:36px">
+      </div><button class="btn pri" type="button" data-act="palPrefill" data-id="${p.id}" data-it="${it.id}">✨ One-click prefill</button></div>
+      ${it.aiFilled ? '<div class="note ok" style="font-size:13px">Pre-filled by AI from the webpage or document. Please check every section – you are responsible for the information submitted.</div>' : ''}
       <div class="note info" style="font-size:13px">Fields marked * are needed to submit. CIC sets the final list of required fields; the form is configured in D365, not coded.</div>
       ${sec(1, `<div class="grid g3">${fld(k === 'course' ? 'Course name' : 'Product / system name', 'name', it.name, {req:1})}${k === 'course' ? fld('Course code', 'model', it.model) : fld('Model number', 'model', it.model, {req:1})}${fld(k === 'course' ? 'Course version / syllabus year' : 'Current version / firmware', 'version', it.version)}</div>
         ${fld(k === 'course' ? 'Course outline (duration, mode, entry level, assessment)' : 'Technical specifications (key parameters, capacity, accuracy, power, compatibility)', 'spec', it.spec, {type:'textarea', req:1, rows:3})}${fld('Version updates (what changed in each version and when)', 'versions', it.versions, {type:'textarea', rows:2, ph:'e.g. v5.0 (03/2026): adds PPE detection; v4.2 (09/2025): night mode'})}`)}
@@ -4061,7 +4133,7 @@ function citfParticulars(c) { if (!c.appCat && !c.levyNo && !c.mgmt) return ''; 
     const e = {};
     if (el.dataset.next !== '0') {
       if (!a.schemes.length) e.schemes = 'Choose at least one scheme'; if (!a.project) e.project = 'Required';
-      if (!a.objective.trim()) e.objective = 'Required'; else if (words(a.objective) > 250) e.objective = 'Keep it to 250 words or fewer (now ' + words(a.objective) + ')';
+      if (!a.objective.trim()) e.objective = 'Required';
       if (a.schemes.includes('MPD')) { if (!a.mpdDate) e.mpdDate = 'Required for MPD'; else if ((new Date(a.mpdDate) - now()) / 864e5 < rule('mpdLead')) e.mpdDate = 'MPD applications must be submitted at least ' + rule('mpdLead') + ' days before the activity'; }
     }
     UI.err = e; save();
@@ -4069,8 +4141,40 @@ function citfParticulars(c) { if (!c.appCat && !c.levyNo && !c.mgmt) return ''; 
       toast(Object.values(e)[0], true);
       return render();
     }
-    if (el.dataset.next === '0') { toast('Draft saved'); return go('#/p/citf'); }
-    go('#/p/apply/' + a.id + '/' + el.dataset.next);
+    const goNext = () => { if (el.dataset.next === '0') { toast('Draft saved'); return go('#/p/citf'); } go('#/p/apply/' + a.id + '/' + el.dataset.next); };
+    render();
+    if (typeof showAiBusy === 'function') showAiBusy('AI checking project objective (12–250 words)…');
+    const timed = Promise.race([
+      refreshFundingAiQuality(a),
+      new Promise(function (_, rej) { setTimeout(function () { rej(new Error('AI check timed out')); }, 45000); })
+    ]);
+    timed.then(function (res) {
+      if (typeof hideAiBusy === 'function') hideAiBusy();
+      const lengthIssue = ((res && res.issues) || []).find(function (i) {
+        return i && i.field === 'objective' && (i.code === 'too_brief' || i.code === 'too_long');
+      });
+      if (lengthIssue && el.dataset.next !== '0') {
+        UI.err = { objective: lengthIssue.message };
+        save(); render(); toast(lengthIssue.message, true);
+        return;
+      }
+      toast('AI objective check: ' + ((res && res.source) || 'done'));
+      render(); goNext();
+    }).catch(function (err) {
+      if (typeof hideAiBusy === 'function') hideAiBusy();
+      try { syncFundingAiQuality(a); save(); } catch (x) {}
+      const issues = (a.aiQuality && a.aiQuality.issues) || [];
+      const lengthIssue = issues.find(function (i) {
+        return i && i.field === 'objective' && (i.code === 'too_brief' || i.code === 'too_long');
+      });
+      if (lengthIssue && el.dataset.next !== '0') {
+        UI.err = { objective: lengthIssue.message };
+        save(); render(); toast(lengthIssue.message, true);
+        return;
+      }
+      toast((err && err.message) || 'AI check used local rules');
+      render(); goNext();
+    });
   };
 
   A.siteAi = function () {
@@ -4110,20 +4214,34 @@ function citfParticulars(c) { if (!c.appCat && !c.levyNo && !c.mgmt) return ''; 
 
   A.palPrefill = function (el) {
     const p = S.palApps.find(x => x.id === el.dataset.id), it = p.items.find(i => i.id === el.dataset.it), i = p.items.indexOf(it), k = palCat(p.scheme).kind;
+    const url = ((document.getElementById('palPageUrl') || {}).value || it.mfWeb || '').trim();
+    const schemaKey = k === 'course' ? 'pal_course' : 'pal_product';
+    const applyFields = function (res, sourceName, extraFile) {
+      const f = (res && res.fields) || {};
+      Object.assign(it, f, { supplier: myCo().nameEn, aiFilled: true, price: f.price ? +f.price : it.price });
+      it.files = it.files || {};
+      const pick = k === 'course' ? ['Photos', 'Authorisation letter', 'Catalogue', 'Price list', 'Reference letter'] : ['Photos', 'Video'].concat(PAL_AI_MATRIX).concat(['Reference letter', 'Test report']);
+      pick.forEach(t => { const ext = (PAL_UPLOADS.find(u => u[0] === t) || [t, 'pdf'])[1].replace('image', 'jpg').replace('video', 'mp4'); if (!it.files[t]) it.files[t] = palFileName(p, i, it, t, ext); });
+      if (it.local === 'Yes' && !it.files['Local development proof']) it.files['Local development proof'] = palFileName(p, i, it, 'Local development proof', 'pdf');
+      if (extraFile) it.files[k === 'course' ? 'Catalogue' : 'Specification'] = extraFile;
+      it.fileAi = it.fileAi || {};
+      Object.keys(it.files).forEach(tt => { if (!it.fileAi[tt]) it.fileAi[tt] = { ai: 'ok', note: PAL_AI_MATRIX.includes(tt) ? 'AI/OCR pre-checked against form fields' : 'Readable' }; });
+      save(); render();
+      toast('AI filled all 9 sections from ' + sourceName + ' · ' + ((res && res.source) || '') + ' – please check each one');
+    };
+    if (url) {
+      toast('AI reading product webpage…');
+      return CitfAi.assist({ action: 'prefill', schemaKey: schemaKey, docType: k, currentValues: { pageUrl: url } }).then(function (res) {
+        it.mfWeb = it.mfWeb || url;
+        applyFields(res, 'webpage');
+      }).catch(function (err) {
+        toast((err && err.message) || 'Could not read that webpage', true);
+      });
+    }
     withPickedFile('Choose ' + (k === 'course' ? 'course outline' : 'catalogue / specification') + '…', function (file) {
       toast('AI reading ' + (k === 'course' ? 'course outline' : 'document matrix') + '…');
-      return CitfAi.assist({ action: 'prefill', schemaKey: k === 'course' ? 'pal_course' : 'pal_product', docType: k, fileName: file.fileName, fileBase64: file.fileBase64 }).then(res => {
-        const f = res.fields || {};
-        Object.assign(it, f, { supplier: myCo().nameEn, aiFilled: true, price: f.price ? +f.price : it.price });
-        it.files = it.files || {};
-        const pick = k === 'course' ? ['Photos', 'Authorisation letter', 'Catalogue', 'Price list', 'Reference letter'] : ['Photos', 'Video'].concat(PAL_AI_MATRIX).concat(['Reference letter', 'Test report']);
-        pick.forEach(t => { const ext = (PAL_UPLOADS.find(u => u[0] === t) || [t, 'pdf'])[1].replace('image', 'jpg').replace('video', 'mp4'); if (!it.files[t]) it.files[t] = palFileName(p, i, it, t, ext); });
-        if (it.local === 'Yes' && !it.files['Local development proof']) it.files['Local development proof'] = palFileName(p, i, it, 'Local development proof', 'pdf');
-        if (file.fileName) it.files[k === 'course' ? 'Catalogue' : 'Specification'] = file.fileName;
-        it.fileAi = it.fileAi || {};
-        Object.keys(it.files).forEach(tt => { if (!it.fileAi[tt]) it.fileAi[tt] = { ai: 'ok', note: PAL_AI_MATRIX.includes(tt) ? 'AI/OCR pre-checked against form fields' : 'Readable' }; });
-        save(); render();
-        toast('AI filled all 9 sections · ' + res.source + ' – please check each one');
+      return CitfAi.assist({ action: 'prefill', schemaKey: schemaKey, docType: k, fileName: file.fileName, fileBase64: file.fileBase64 }).then(function (res) {
+        applyFields(res, 'document', file.fileName);
       });
     });
   };
@@ -4190,6 +4308,33 @@ function citfParticulars(c) { if (!c.appCat && !c.levyNo && !c.mgmt) return ''; 
         return;
       }
       next();
+      const submitted = app(el.dataset.id);
+      showAiBusy('AI writing submission summary…');
+      CitfAi.assist({
+        action: 'summarize',
+        schemaKey: 'funding_application',
+        currentValues: {
+          objective: submitted.objective || '',
+          project: submitted.project || '',
+          schemes: (submitted.schemes || []).join(', '),
+          itemsJson: JSON.stringify((submitted.items || []).map(function (it) { return { product: it.product, plan: it.plan, qty: it.qty }; })),
+          amount: String(appAmt(submitted)),
+          grant: String(grantOf(submitted))
+        }
+      }).then(function (sum) {
+        hideAiBusy();
+        const f = (sum && sum.fields) || {};
+        let risks = [];
+        try { risks = JSON.parse(f.risksJson || '[]'); } catch (e2) { risks = []; }
+        submitted.ai = Object.assign(submitted.ai || {}, {
+          summary: f.summary || sum.notes || (submitted.ai && submitted.ai.summary) || '',
+          score: +(f.score || (submitted.ai && submitted.ai.score) || 80),
+          risks: risks,
+          source: (sum && sum.source) || '',
+          model: (sum && sum.model) || ''
+        });
+        save(); render();
+      }).catch(function () { hideAiBusy(); render(); });
     }).catch(function (err) {
       hideAiBusy();
       render();
@@ -4550,6 +4695,7 @@ async function dvHydrate(opts) {
     if (apps.length) S.apps = apps;
     if (drs.length) S.drs = drs;
     if (pal.length) { S.pal = pal; try { palInit(); } catch (e) {} }
+    try { ensureDemoPal(); palInit(); } catch (e) {}
     if (palApps.length) S.palApps = palApps;
     if (tickets.length) S.tickets = tickets;
     if (inspections.length) S.inspections = inspections;

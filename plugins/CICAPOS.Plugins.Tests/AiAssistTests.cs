@@ -62,6 +62,20 @@ public class AiAssistTests
     }
 
     [Fact]
+    public void ValidateForm_RejectsObjectiveOverMaxWords()
+    {
+        var longObj = string.Join(" ", Enumerable.Repeat("word", 251));
+        var res = DemoService().Execute(new AiAssistRequest
+        {
+            Action = AiActions.ValidateForm,
+            SchemaKey = AiSchemaKeys.FundingApplication,
+            CurrentValuesJson = "{\"objective\":\"" + longObj + "\",\"itemsJson\":\"[{\\\"plan\\\":\\\"Monitor 4 tower crane zones\\\"}]\"}"
+        });
+        Assert.False(res.Pass);
+        Assert.Contains(AiJson.ParseIssues(res.IssuesJson), i => i.Code == "too_long");
+    }
+
+    [Fact]
     public void ValidateForm_RejectsPlanWithoutQuantity()
     {
         var res = DemoService().Execute(new AiAssistRequest
@@ -262,6 +276,57 @@ public class AiAssistTests
             CurrentValuesJson = "{\"hasNc\":\"No\",\"prod\":\"4\",\"safety\":\"5\",\"quality\":\"3\"}"
         });
         Assert.True(res.Pass);
+    }
+
+    [Fact]
+    public void Prefill_FromProductWebpage_MapsListingFields()
+    {
+        var cfg = new AiProviderConfig
+        {
+            CompatibleBaseUrl = "https://example.test/v1",
+            CompatibleApiKey = "ak-test",
+            CompatibleModel = "DeepSeek-V4-Flash"
+        };
+        var llm = new FakeLlm("{\"name\":\"SiteEye AI Safety Camera\",\"model\":\"SE-400\",\"spec\":\"IP66 edge AI camera\",\"mf\":\"SmartSite\",\"price\":\"86000\"}");
+        var web = new FakeWeb("SiteEye AI Safety Camera SE-400 IP66 helmet detection HK$86,000 manufacturer SmartSite Robotics.");
+        var svc = new AiAssistService(cfg, llm, ocr: null, web: web);
+        var res = svc.Execute(new AiAssistRequest
+        {
+            Action = AiActions.Prefill,
+            SchemaKey = AiSchemaKeys.PalProduct,
+            CurrentValuesJson = "{\"pageUrl\":\"https://smartsite.example.com/se-400\"}"
+        });
+        Assert.Contains("Webpage", res.Notes ?? "");
+        Assert.Equal("SiteEye AI Safety Camera", AiJson.ParseObject(res.FieldsJson)["name"]);
+        Assert.True(web.Called);
+        Assert.True(llm.Called);
+    }
+
+    [Fact]
+    public void Summarize_Demo_ReturnsSubmissionSummary()
+    {
+        var res = DemoService().Execute(new AiAssistRequest
+        {
+            Action = AiActions.Summarize,
+            SchemaKey = AiSchemaKeys.FundingApplication,
+            CurrentValuesJson = "{\"project\":\"Tung Chung Site 3\",\"schemes\":\"ACT\",\"objective\":\"Cut struck-by incidents on four tower-crane zones and automate podium rebar tying.\",\"itemsJson\":\"[{\\\"product\\\":\\\"SiteEye\\\"}]\",\"amount\":\"764000\"}"
+        });
+        Assert.True(res.Pass);
+        var fields = AiJson.ParseObject(res.FieldsJson);
+        Assert.False(string.IsNullOrWhiteSpace(fields["summary"]));
+        Assert.Contains("ACT", fields["summary"]);
+    }
+
+    sealed class FakeWeb : IWebPageClient
+    {
+        readonly string _text;
+        public bool Called { get; private set; }
+        public FakeWeb(string text) => _text = text;
+        public string FetchText(string url)
+        {
+            Called = true;
+            return _text;
+        }
     }
 
     sealed class FakeOcr : INovaOcrClient
