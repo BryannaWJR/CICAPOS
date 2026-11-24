@@ -1168,7 +1168,29 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e
     });
     }).then(function (r) {
       if (!r.ok) return r.text().then(function (t) { throw new Error("AI API HTTP " + r.status + (t ? " " + t.slice(0, 180) : "")); });
-      return r.json();
+      return r.text().then(function (text) {
+        if (text.trim()) return JSON.parse(text);
+        // Power Pages may return 204 with entityid even when representation is requested.
+        var identity = r.headers.get("entityid") || r.headers.get("OData-EntityId") || "";
+        var match = identity.match(/(?:^|\(|\{)([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:$|\)|\})/i);
+        if (!match) throw new Error("AI job create returned no result or record ID (HTTP " + r.status + ").");
+        var select = "cicapos_pass,cicapos_source,cicapos_model,cicapos_fieldsjson,cicapos_issuesjson,cicapos_notes,cicapos_contenthash";
+        return portalToken().then(function (token) {
+          var headers = { Accept: "application/json" };
+          if (token) headers["__RequestVerificationToken"] = token;
+          return fetch(url + "(" + match[1] + ")?$select=" + select, {
+            method: "GET", headers: headers, credentials: "same-origin"
+          });
+        }).then(function (result) {
+          if (!result.ok) return result.text().then(function (body) {
+            throw new Error("AI job read HTTP " + result.status + (body ? " " + body.slice(0, 180) : ""));
+          });
+          return result.text().then(function (body) {
+            if (!body.trim()) throw new Error("AI job read returned an empty response (HTTP " + result.status + ").");
+            return JSON.parse(body);
+          });
+        });
+      });
     }).then(function (data) {
       var fields = {};
       var issues = [];
