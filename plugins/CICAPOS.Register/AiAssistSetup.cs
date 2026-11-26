@@ -122,8 +122,8 @@ static class AiAssistSetup
             ["write"] = true,
             ["create"] = true,
             ["delete"] = false,
-            ["append"] = false,
-            ["appendto"] = false
+            ["append"] = true,
+            ["appendto"] = true
         }.ToJsonString();
 
         UpsertPageComponent(service, Guid.Parse(PermId), "cicapos_aiassistjob", TablePermissionType, Guid.Parse(SiteId), content);
@@ -143,22 +143,12 @@ static class AiAssistSetup
             }
         }
 
-        try
-        {
-            service.Disassociate("mspp_entitypermission", Guid.Parse(PermId),
-                new Relationship("mspp_entitypermission_webrole"),
-                new EntityReferenceCollection { new EntityReference("mspp_webrole", Guid.Parse(CompanyUserRole)) });
-            Console.WriteLine("Removed Company User from cicapos_aiassistjob permission.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Company User unlink: " + ex.Message.Split('\n')[0]);
-        }
-
+        _ = CompanyUserRole;
         UpsertSiteSettingComponent(service, Guid.Parse(SiteId), SiteSettingType,
             "24ce98b5-f3e6-f111-84e9-6045bd5918b8", "Webapi/cicapos_aiassistjob/enabled", "true");
         UpsertSiteSettingComponent(service, Guid.Parse(SiteId), SiteSettingType,
-            "45ce98b5-f3e6-f111-84e9-6045bd5918b8", "Webapi/cicapos_aiassistjob/fields", "*");
+            "45ce98b5-f3e6-f111-84e9-6045bd5918b8", "Webapi/cicapos_aiassistjob/fields",
+            "cicapos_name,cicapos_action,cicapos_schemakey,cicapos_doctype,cicapos_documenttext,cicapos_filename,cicapos_filebase64,cicapos_currentvaluesjson,cicapos_contenthash,cicapos_pass,cicapos_source,cicapos_model,cicapos_fieldsjson,cicapos_issuesjson,cicapos_notes");
         UpsertSiteSettingComponent(service, Guid.Parse(SiteId), SiteSettingType,
             "457d4ee7-e9e6-f111-84e9-6045bd5918b8", "Webapi/enable", "true");
     }

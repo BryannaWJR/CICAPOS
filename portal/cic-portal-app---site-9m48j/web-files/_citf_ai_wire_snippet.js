@@ -16,56 +16,39 @@
   const _wSave = A.wSave;
   A.wSave = function (el) {
     const a = app(el.dataset.id), d = formData(el);
-    a.schemes = d.schemes || []; a.project = d.project; a.objective = d.objective || ''; a.otherFund = d.otherFund; a.mpdDate = d.mpdDate;
-    const e = {};
-    if (el.dataset.next !== '0') {
-      if (!a.schemes.length) e.schemes = 'Choose at least one scheme'; if (!a.project) e.project = 'Required';
-      if (!a.objective.trim()) e.objective = 'Required';
-      if (a.schemes.includes('MPD')) { if (!a.mpdDate) e.mpdDate = 'Required for MPD'; else if ((new Date(a.mpdDate) - now()) / 864e5 < rule('mpdLead')) e.mpdDate = 'MPD applications must be submitted at least ' + rule('mpdLead') + ' days before the activity'; }
+    a.schemes = Array.isArray(d.schemes) ? d.schemes.filter(Boolean) : (d.schemes ? [d.schemes] : []);
+    a.project = d.project; a.objective = d.objective || ''; a.otherFund = d.otherFund; a.mpdDate = d.mpdDate;
+    if (el.dataset.next === '0') {
+      a.status = 'Draft'; a.edited = now().toISOString(); a.step = 1; UI.err = {}; save();
+      toast('Draft saved. You can continue later.');
+      return go('#/p/citf');
     }
-    UI.err = e; save();
-    if (Object.keys(e).length) {
-      toast(Object.values(e)[0], true);
-      return render();
+    UI.err = {};
+    if (!a.schemes.length) {
+      UI.err = { schemes: 'Choose at least one scheme' };
+      save(); render(); toast('Choose at least one scheme', true);
+      return;
     }
-    const goNext = () => { if (el.dataset.next === '0') { toast('Draft saved'); return go('#/p/citf'); } go('#/p/apply/' + a.id + '/' + el.dataset.next); };
-    const liveCfg = (typeof CitfAi !== 'undefined' && CitfAi.novaConfig) ? CitfAi.novaConfig() : null;
-    toast(liveCfg && liveCfg.apiKey ? 'AI checking via D.Nova…' : 'AI checking… (no CITF_NOVA key – will try Custom API / local rules)');
-    // Never block navigation on AI hang/CORS: local rules fallback + timeout, then continue.
-    const localFallback = () => { try { syncFundingAiQuality(a); save(); } catch (x) {} };
-    const timed = Promise.race([
-      refreshFundingAiQuality(a),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('AI check timed out')), 12000))
-    ]);
-    timed.then(function (res) {
-      const src = (res && res.source) || (a.aiQuality && a.aiQuality.source) || 'unknown';
-      const model = (res && res.model) || (a.aiQuality && a.aiQuality.model) || '';
-      const lengthIssue = ((res && res.issues) || []).find(function (i) {
-        return i && i.field === 'objective' && (i.code === 'too_brief' || i.code === 'too_long');
-      });
-      if (lengthIssue && el.dataset.next !== '0') {
-        UI.err = { objective: lengthIssue.message };
-        save();
-        render();
-        toast(lengthIssue.message, true);
-        return;
-      }
-      toast('AI check source: ' + src + (model ? ' · ' + model : '') + (/nova/i.test(src) ? '' : ' (not live Nova)'));
-      render(); goNext();
-    }).catch(function (err) {
-      localFallback();
-      toast((err && err.message ? err.message + ' – ' : '') + 'fallback source: rules (local mock)', true);
-      render();
-      goNext();
-    });
+    save();
+    if (typeof scheduleFundingAiCheck === 'function') scheduleFundingAiCheck(a, 'objective');
+    go('#/p/apply/' + a.id + '/' + el.dataset.next);
   };
 
-  const _itPlan = A.itPlan;
-  A.itPlan = function (el) {
-    _itPlan.call(this, el);
-    const a = app(el.dataset.id);
-    clearTimeout(A._aiPlanT);
-    A._aiPlanT = setTimeout(() => refreshFundingAiQuality(a).then(() => save()), 450);
+  A.wItemsNext = function (el) {
+    try {
+      const a = app(el.dataset.id);
+      if (!a) { toast('Application not found', true); return; }
+      if (typeof flushItemPlans === 'function') flushItemPlans(a);
+      save();
+      if (!a.items.length) { toast('Add at least one item', true); return render(); }
+      if (!a.items.every(function (it) { return String(it.plan || '').trim(); })) {
+        toast('Fill an implementation plan for every item', true); return render();
+      }
+      if (typeof scheduleFundingAiCheck === 'function') scheduleFundingAiCheck(a, 'plan');
+      go('#/p/apply/' + a.id + '/3');
+    } catch (e) {
+      toast((e && e.message) || 'Could not continue', true);
+    }
   };
 
   A.siteAi = function () {
@@ -104,38 +87,116 @@
   };
 
   function applyPalAiFields(p, it, i, k, res, sourceName) {
+    if (typeof palApplyExtracted === 'function') return palApplyExtracted(p, it, i, k, res, sourceName);
     const f = (res && res.fields) || {};
     Object.assign(it, f, { supplier: myCo().nameEn, aiFilled: true, price: f.price ? +f.price : it.price });
-    it.files = it.files || {};
-    const pick = k === 'course' ? ['Photos', 'Authorisation letter', 'Catalogue', 'Price list', 'Reference letter'] : ['Photos', 'Video'].concat(PAL_AI_MATRIX).concat(['Reference letter', 'Test report']);
-    pick.forEach(t => { const ext = (PAL_UPLOADS.find(u => u[0] === t) || [t, 'pdf'])[1].replace('image', 'jpg').replace('video', 'mp4'); if (!it.files[t]) it.files[t] = palFileName(p, i, it, t, ext); });
-    if (it.local === 'Yes' && !it.files['Local development proof']) it.files['Local development proof'] = palFileName(p, i, it, 'Local development proof', 'pdf');
-    it.fileAi = it.fileAi || {};
-    Object.keys(it.files).forEach(tt => { if (!it.fileAi[tt]) it.fileAi[tt] = { ai: 'ok', note: PAL_AI_MATRIX.includes(tt) ? 'AI/OCR pre-checked against form fields' : 'Readable' }; });
     save(); render();
-    toast('AI filled all 9 sections from ' + sourceName + ' · ' + ((res && res.source) || '') + ' – please check each one');
+    toast('AI filled all 9 sections from ' + sourceName);
+  }
+
+  function asFilePayload(file) {
+    if (!file) return Promise.resolve(null);
+    if (file.fileBase64) return Promise.resolve(file);
+    if (CitfAi.readFile) return CitfAi.readFile(file);
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload = function () { resolve({ fileName: file.name, fileBase64: String(r.result || ''), mime: file.type || '' }); };
+      r.onerror = function () { reject(r.error || new Error('read failed')); };
+      r.readAsDataURL(file);
+    });
   }
 
   A.palPrefill = function (el) {
-    const p = S.palApps.find(x => x.id === el.dataset.id), it = p.items.find(i => i.id === el.dataset.it), i = p.items.indexOf(it), k = palCat(p.scheme).kind;
-    const url = ((document.getElementById('palPageUrl') || {}).value || it.mfWeb || '').trim();
+    const p = S.palApps.find(x => x.id === el.dataset.id);
+    if (!p) { toast('Open the item form first', true); return; }
+    const it = p.items.find(i => i.id === el.dataset.it), i = p.items.indexOf(it), k = palCat(p.scheme).kind;
+    if (!it) { toast('Item not found', true); return; }
+    const demoUrl = typeof palDemoUrl === 'function' ? palDemoUrl() : 'https://site-9m48j.powerappsportals.com/sitemodel-cde.html';
+    const url = ((document.getElementById('palPageUrl') || {}).value || '').trim() || demoUrl;
     const schemaKey = k === 'course' ? 'pal_course' : 'pal_product';
-    if (url) {
-      toast('AI reading product webpage…');
-      return CitfAi.assist({ action: 'prefill', schemaKey: schemaKey, docType: k, currentValues: { pageUrl: url } }).then(function (res) {
-        it.mfWeb = it.mfWeb || url;
-        applyPalAiFields(p, it, i, k, res, 'webpage');
-      }).catch(function (err) {
-        toast((err && err.message) || 'Could not read that webpage', true);
-      });
+    const busy = function (msg) { if (typeof showAiBusy === 'function') showAiBusy(msg); else toast(msg); };
+    const done = function () { if (typeof hideAiBusy === 'function') hideAiBusy(); };
+    const isDemo = /sitemodel-cde/i.test(url);
+    busy('AI checking · reading product webpage…');
+    toast('AI checking product webpage…');
+    return CitfAi.assist({
+      action: 'prefill',
+      schemaKey: schemaKey,
+      docType: k,
+      documentText: isDemo && typeof PAL_DEMO_DOC !== 'undefined' ? PAL_DEMO_DOC : undefined,
+      currentValues: { pageUrl: url }
+    }).then(function (res) {
+      it.mfWeb = url;
+      applyPalAiFields(p, it, i, k, res, 'webpage');
+    }).catch(function (err) {
+      toast((err && err.message) || 'Could not read that webpage', true);
+    }).finally(done);
+  };
+
+  A.palItemSave = function (el) {
+    const p = S.palApps.find(x => x.id === el.dataset.id);
+    const it = A.palCollect(el);
+    p.name = p.items[0].name || '(draft)';
+    p.price = +p.items[0].price || 0;
+    p.status = 'Draft'; p.edited = now().toISOString();
+    const k = palCat(p.scheme).kind;
+    const schemaKey = k === 'course' ? 'pal_course' : 'pal_product';
+    const gaps = palItemGaps(p, it);
+    if (el.dataset.draft === '1' || !palItemStarted(it)) {
+      it.aiChecked = false;
+      it.aiGaps = [];
+      UI.err = {};
+      save();
+      if (el.dataset.draft === '1') {
+        toast('Draft saved. You can continue later.');
+        return go('#/p/pal');
+      }
+      go('#/p/palapp/' + p.id + '/2');
+      toast('Item saved');
+      return;
     }
-    withPickedFile('Choose ' + (k === 'course' ? 'course outline' : 'catalogue / specification') + '…', function (file) {
-      toast('AI reading ' + (k === 'course' ? 'course outline' : 'document matrix') + '…');
-      return CitfAi.assist({ action: 'prefill', schemaKey: schemaKey, docType: k, fileName: file.fileName, fileBase64: file.fileBase64 }).then(res => {
-        if (file.fileName) it.files[k === 'course' ? 'Catalogue' : 'Specification'] = file.fileName;
-        applyPalAiFields(p, it, i, k, res, 'document');
+    it.aiGaps = gaps.slice();
+    it.aiChecked = true;
+    save();
+    const busy = function (msg) { if (typeof showAiBusy === 'function') showAiBusy(msg); else toast(msg); };
+    const done = function () { if (typeof hideAiBusy === 'function') hideAiBusy(); };
+    function finish(aiIssues) {
+      done();
+      (aiIssues || []).forEach(function (i) {
+        if (!i || !i.message || i.severity === 'warn') return;
+        if (i.field === 'objective' || /^item:/.test(i.field || '')) return;
+        if (!gaps.some(function (g) { return g.indexOf(i.field || '') >= 0 || g === i.message; }))
+          gaps.push(i.field ? (i.field + ' · ' + i.message) : i.message);
       });
-    });
+      it.aiGaps = gaps;
+      it.aiChecked = true;
+      UI.err = typeof palGapFields === 'function' ? palGapFields(gaps) : {};
+      (aiIssues || []).forEach(function (i) {
+        if (i && i.field && i.message && i.severity !== 'warn') UI.err[i.field] = i.message;
+      });
+      save();
+      if (gaps.length) {
+        render();
+        toast('AI quality check: ' + gaps.length + ' required field(s) missing — ' + gaps.join('; '), true);
+        try { const box = document.querySelector('.f.bad, .note.err'); if (box) box.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (x) {}
+        return;
+      }
+      go('#/p/palapp/' + p.id + '/2');
+      toast('Item saved · AI check passed');
+    }
+    busy('AI checking required fields…');
+    const current = {
+      name: it.name || '', model: it.model || '', spec: it.spec || '', mf: it.mf || '',
+      supplier: it.supplier || '', launch: it.launch || '', origin: it.origin || '',
+      functions: it.functions || '', innovation: it.innovation || '', merits: it.merits || '',
+      price: String(it.price || ''), obj: (it.obj || []).join(','),
+      jobsJson: JSON.stringify(it.jobs || []), files: Object.keys(it.files || {}).join(',')
+    };
+    const timed = Promise.race([
+      CitfAi.assist({ action: 'validate_form', schemaKey: schemaKey, currentValues: current }),
+      new Promise(function (_, rej) { setTimeout(function () { rej(new Error('AI check timed out')); }, 8000); })
+    ]);
+    timed.then(function (res) { finish((res && res.issues) || []); }).catch(function () { finish([]); });
   };
 
   A.palUp = function (el) {
@@ -191,12 +252,12 @@
 
   A.docBlur = function (el) {
     const a = app(el.dataset.id), t = el.dataset.t, iid = el.dataset.it || null;
-    toast('AI quality check…');
-    CitfAi.assist({ action: 'validate_upload', schemaKey: 'supporting_doc', docType: 'blurred' }).then(res => {
-      a.docs = a.docs.filter(d => !(d.type === t && (d.itemId || null) === iid));
-      a.docs.push({ type: t, itemId: iid, file: 'scan_blurred.jpg', ai: 'flag', note: (res.issues[0] && res.issues[0].message) || res.notes });
-      save(); render(); toast('AI quality check: blurred scan rejected', true);
-    });
+    const note = 'Image is blurred – text cannot be read. Please upload a clearer copy.';
+    a.docs = a.docs.filter(d => !(d.type === t && (d.itemId || null) === iid));
+    a.docs.push({ type: t, itemId: iid, file: 'scan_blurred.jpg', ai: 'flag', note: note });
+    save(); render();
+    toast('AI quality check: blurred scan rejected', true);
+    CitfAi.assist({ action: 'validate_upload', schemaKey: 'supporting_doc', docType: 'blurred' }).catch(function () {});
   };
 
   A.aiSuggest = function (el) {

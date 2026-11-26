@@ -14,21 +14,27 @@ const string Url = "https://org1f690222.crm5.dynamics.com";
 
 var dll = args.FirstOrDefault(arg => arg.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
     ?? Path.GetFullPath("plugins/CICAPOS.Plugins/bin/Release/net462/CICAPOS.Plugins.dll");
-if (!File.Exists(dll))
+if (!args.Contains("--lang") && !File.Exists(dll))
 {
     Console.Error.WriteLine("Plugin assembly not found: " + dll);
     return 1;
 }
 
-var assemblyName = AssemblyName.GetAssemblyName(dll);
-var tokenBytes = assemblyName.GetPublicKeyToken();
-if (tokenBytes == null || tokenBytes.Length == 0)
+var token = "";
+var version = "1.0.1.0";
+AssemblyName? assemblyName = null;
+if (!args.Contains("--lang") || File.Exists(dll))
 {
-    Console.Error.WriteLine("Plugin assembly is not signed.");
-    return 1;
+    assemblyName = AssemblyName.GetAssemblyName(dll);
+    var tokenBytes = assemblyName.GetPublicKeyToken();
+    if (tokenBytes == null || tokenBytes.Length == 0)
+    {
+        Console.Error.WriteLine("Plugin assembly is not signed.");
+        return 1;
+    }
+    token = Convert.ToHexString(tokenBytes).ToLowerInvariant();
+    version = assemblyName.Version?.ToString() ?? "1.0.1.0";
 }
-var token = Convert.ToHexString(tokenBytes).ToLowerInvariant();
-var version = assemblyName.Version?.ToString() ?? "1.0.1.0";
 
 Console.WriteLine("Connecting...");
 using var service = new ServiceClient($"AuthType=OAuth;Url={Url};SkipDiscovery=true;Authority=https://login.microsoftonline.com/common;AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=http://localhost;LoginPrompt=Never;TokenCacheStorePath=/tmp/cicapossync/dvcache.bin;RequireNewInstance=true");
@@ -83,6 +89,21 @@ if (args.Contains("--ai-perm"))
         Environment.Exit(1);
     }
 }
+if (args.Contains("--lang"))
+{
+    try
+    {
+        CICAPOS.Register.AiPortalDeploy.PublishLanguage(service);
+        Environment.Exit(0);
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine(Describe(ex));
+        if (!string.IsNullOrWhiteSpace(service.LastError))
+            Console.Error.WriteLine(service.LastError);
+        Environment.Exit(1);
+    }
+}
 if (args.Contains("--ai-deploy"))
 {
     try
@@ -103,7 +124,7 @@ var parked = new List<Guid>();
 var exitCode = 0;
 try
 {
-    var assemblyId = UploadAssembly(service, dll, assemblyName.Name ?? "CICAPOS.Plugins", token, version);
+    var assemblyId = UploadAssembly(service, dll, assemblyName?.Name ?? "CICAPOS.Plugins", token, version);
     var typeIds = new Dictionary<string, Guid>(StringComparer.Ordinal);
     foreach (var typeName in new[] { "CICAPOS.Plugins.FundingRoutePlugin", "CICAPOS.Plugins.AssignmentPlugin", "CICAPOS.Plugins.DisbursementRoutePlugin" })
         typeIds[typeName] = EnsureType(service, assemblyId, typeName);

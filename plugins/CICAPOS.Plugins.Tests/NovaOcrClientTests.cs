@@ -61,6 +61,21 @@ public class NovaOcrClientTests
     }
 
     [Fact]
+    public void RateLimitRetriesThenSucceeds()
+    {
+        var calls = 0;
+        byte[] Send(HttpRequestMessage request)
+        {
+            calls++;
+            if (calls < 3) return Utf8("{\"code\":429,\"message\":\"too many requests\"}");
+            return Utf8("{\"code\":200,\"content\":\"NAR1 annual return of Harbour Build Engineering Limited xxxxx extra\"}");
+        }
+        var client = new NovaOcrClient(new AiProviderConfig { OcrApiKey = "sk-test" }, Send);
+        Assert.Contains("Harbour Build", client.ExtractText(new byte[] { 1 }, "nar1.pdf"));
+        Assert.Equal(3, calls);
+    }
+
+    [Fact]
     public void ApiFailureDoesNotTreatDataAsSuccessfulJob()
     {
         var client = new NovaOcrClient(new AiProviderConfig { OcrApiKey = "sk-test" },

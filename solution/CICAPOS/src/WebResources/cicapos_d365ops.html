@@ -18,13 +18,17 @@ html.citf-pane #citf-boot{position:absolute;inset:0;min-height:100%}
 
 
 /* Pane mode: only right-hand content inside MDA content iframe — no fake left nav / top bar */
-html.citf-pane,html.citf-pane body{overflow:auto!important;height:auto!important;min-height:100%}
-html.citf-pane #app{position:relative!important;inset:auto!important;z-index:1!important;min-height:100%;height:auto;overflow:visible}
+html.citf-pane,html.citf-pane body{overflow:auto!important;height:100%!important;min-height:100%;min-height:100vh}
+html.citf-pane #citf-boot{position:fixed;inset:0;min-height:100%;min-height:100vh}
+html.citf-pane #app{position:relative!important;inset:auto!important;z-index:1!important;min-height:100%;min-height:100vh;height:auto;overflow:visible}
 html.citf-pane .u-top,html.citf-pane .u-map,html.citf-pane .u-area,html.citf-pane .u-cop,html.citf-pane .buddy,html.citf-pane .buddy-fab,html.citf-pane .demo{display:none!important}
 html.citf-pane .u{min-height:0}
 html.citf-pane .u-wrap{display:block!important}
 html.citf-pane .u-main{width:100%!important;max-width:none!important;margin:0!important}
 html.citf-pane .u-body{padding:12px 16px 24px}
+html.citf-pane .u-cmd{position:sticky;top:0;z-index:5}
+html.citf-pane .u-cmd .who{margin-left:auto;display:flex;align-items:center;gap:8px;color:#242424;font-size:12px}
+html.citf-pane .u-cmd .who select{height:32px;max-width:min(360px,52vw);border:1px solid #C8C6C4;border-radius:4px;background:#fff;color:#242424;padding:0 8px}
 #modalRoot,#toastRoot{position:relative;z-index:2147483001}
 
 
@@ -509,6 +513,25 @@ const DOCS_DR = ['Purchase order', 'Invoice', 'Delivery note', 'Payment receipt'
 const STEPS_APP = ['Submitted', 'Review', 'Approval', 'Result'];
 
 function pal(code, name, scheme, vendor, price, origin, apps, s4) { return {id:uid('pa'), code, name, scheme, vendor, price, origin, apps, status:'Listed', safety:'General', listedOn:'2025-03-01', s4:!!s4}; }
+const PAL_FN = {
+  'PA-ACT-0412': '24/7 site video analytics: detects missing PPE and people in crane or plant exclusion zones; alerts the supervisor phone and site speaker within about 2 seconds; keeps a daily safety log.',
+  'PA-ACT-0398': 'Robotic total station for automated setting-out from a BIM model; typical ±2 mm layout accuracy on site.',
+  'PA-ACT-0377': 'UAV photogrammetry kit for progress surveys, stockpile volumes and as-built capture over open excavation and building envelopes.',
+  'PA-BIM-0105': 'Desktop BIM authoring for architecture, structure and MEP models, drawings and clash detection on a 1-year licence.',
+  'PA-BIM-0121': 'Cloud common data environment: stores and shares models and drawings, approval workflows, and site issue tracking from a phone.',
+  'PA-BIM-0067': 'Instructor-led BIM coordinator course: federated models, quantities, CDE issues and using models in site inspections.',
+  'PA-ACT-0441': 'Load, radius and exclusion-zone sensors on lifting plant; live alerts to the crane cabin and a site dashboard when limits are approached.',
+  'PA-ACT-0302': 'Wireless concrete temperature and humidity sensors (set of 20) for curing control on slabs and walls, with a pour log.',
+  'PA-MEP-0201': 'Factory-assembled plant-room MEP module (pipework, plant and supports) delivered for lift-in installation.',
+  'PA-MEP-0208': 'Prefabricated vertical riser cassette for stacked MEP services, reducing on-site cutting and jointing.',
+  'PA-MIC-0110': 'Steel MiC bathroom volumetric unit with finishes and fittings, installed as a complete module.',
+  'PA-STB-0055': 'Off-site prefabricated rebar cage (per tonne) for columns, beams or piles, delivered ready to lift in.'
+};
+function palFn(p) {
+  if (!p) return '';
+  const t = String(p.functions || PAL_FN[p.code] || '').trim();
+  return t || 'As listed in the approved data sheet.';
+}
 function seed() {
   const S = {companies:{}, users:[], apps:[], drs:[], pal:[], palApps:[], reviews:[], inspections:[], batches:[], emails:[], seq:{app:46, dr:113, co:2310, pal:88}, sessions:{}, masters:{}};
   const co = (id, o) => { S.companies[id] = Object.assign({id, nameTc:'', branch:'000', address:'', corr:'', website:'', domain:'', status:'Verified', companyId:'', submittedOn:'2026-06-01T10:00:00', risk:'Low',
@@ -623,7 +646,7 @@ function issueLetter(kind, a, extra) { const L = Object.assign({id:uid('lt'), ki
   S.letters = S.letters || []; S.letters.push(L); a.history.push({on:L.on, what:letterTpl(kind).name + ' ' + L.no + ' issued and filed to SharePoint; visible on the portal'}); return L; }
 function inCrmShell() { return /WebResources|d365ops/i.test(String(location.href || '')); }
 function emptyStore() {
-  return {companies:{}, users:[], apps:[], drs:[], pal:[], palApps:[], reviews:[], inspections:[], batches:[], emails:[], tickets:[], letters:[], team:[],
+  return {companies:{}, users:[], apps:[], drs:[], pal:[], palApps:[], reviews:[{id:'rv1', year:'2027', status:'Scheduled', items:[], schedule:'2027-01-15'}], inspections:[], batches:[], emails:[], tickets:[], letters:[], team:[],
     seq:{app:1, dr:1, co:1, pal:1, letter:1, tk:1}, sessions:{},
     masters:{
       schemes:SCHEMES.map(s => ({id:uid('m'), name:s.name, code:s.code, cap:s.cap, ratio:s.ratio, pledge:s.pledge, active:'Active'})),
@@ -1349,14 +1372,13 @@ function browserLang() {
   try { list = (navigator.languages && navigator.languages.length) ? Array.prototype.slice.call(navigator.languages) : [navigator.language || '']; } catch (e) {}
   for (var i = 0; i < list.length; i++) {
     var t = String(list[i] || '').toLowerCase().replace(/_/g, '-');
-    if (t === 'zh-cn' || t === 'zh-sg' || t.indexOf('zh-hans') === 0) return 'SC';
-    if (t === 'zh-hk' || t === 'zh-tw' || t === 'zh-mo' || t.indexOf('zh-hant') === 0) return 'TC';
     if (t === 'zh' || t.indexOf('zh-') === 0) return 'TC';
     if (t === 'en' || t.indexOf('en-') === 0) return 'EN';
   }
   return 'EN';
 }
 const UI = {err:{}, sel:{}, d365User:'Mandy Chan (Funding Application Review Officer)', lang:browserLang(), copilot:false, chat:[], buddy:false, buddyChat:[]};
+try { const savedWho = localStorage.getItem('cicap-d365-user'); if (savedWho) UI.d365User = savedWho; } catch (e) {}
 try { document.documentElement.lang = {EN:'en', TC:'zh-HK', SC:'zh-CN'}[UI.lang] || 'en'; } catch (e) {}
 
 /* lookups */
@@ -1447,9 +1469,19 @@ const pill = (t) => { const m = {Verified:'ok', Approved:'ok', Paid:'ok', Listed
 /* ---- router ---- */
 let CUR = '';
 function curHash() { let h = ''; try { h = location.hash; } catch (e) {} return h && h.startsWith('#/') ? h : ''; }
+function applyHash(h) {
+  CUR = h || CUR || DEFAULT_ROUTE;
+  try {
+    var next = String(CUR);
+    if (next.charAt(0) !== '#') next = '#' + next;
+    if (location.hash === next) return;
+    var path = (location.pathname || '') + (location.search || '') + next;
+    history.replaceState(history.state, '', path);
+  } catch (e) {}
+}
 function go(h, keep) { const same = CUR === h; CUR = h;
   if (!same && !keep) { UI.err = {}; UI.edit = null; UI.dq = ''; try { window.scrollTo(0, 0); } catch (e) {} }
-  try { history.replaceState(null, '', h); } catch (e) {} render(); }
+  applyHash(h); render(); }
 function route() { const h = CUR || DEFAULT_ROUTE; const parts = h.split('?')[0].slice(2).split('/'); return {area:parts[0], parts:parts.slice(1), q:Object.fromEntries(new URLSearchParams(h.split('?')[1] || ''))}; }
 
 /* ===== Portal (Power Pages) ===== */
@@ -1459,7 +1491,7 @@ const isAdmin = () => (me() || {}).role === 'Company Admin';
 const L = {
   EN:{home:'Home', citf:'CITF Applications', pal:'Pre-approved List', co:'My Company', signin:'Sign in', reg:'Register company', out:'Sign out'},
   TC:{home:'首頁', citf:'CITF 申請', pal:'預先批核清單', co:'我的公司', signin:'登入', reg:'公司登記', out:'登出'},
-  SC:{home:'首页', citf:'CITF 申请', pal:'预先批核清单', co:'我的公司', signin:'登录', reg:'公司登记', out:'登出'}};
+  SC:{home:'首頁', citf:'CITF 申請', pal:'預先批核清單', co:'我的公司', signin:'登入', reg:'公司登記', out:'登出'}};
 const T = k => (L[UI.lang] || L.EN)[k] || L.EN[k];
 const myNotes = () => { const c = myCo(); if (!c) return []; const n = [];
   S.apps.filter(a => a.companyId === c.id && a.queries.some(q => !q.ans)).forEach(a => n.push(['Query on ' + a.ref + ' – reply needed', '#/p/app/' + a.id + '/qa']));
@@ -1786,9 +1818,14 @@ const MASTER_DEF = {
   letters:{title:'Letter Templates', one:'Letter template', icon:'doc', cols:[['name', 'Letter', 'text', 1], ['module', 'Module', 'text', 1], ['body', 'Template text (first line = heading; merge fields in braces)', 'textarea', 1]]},
   templates:{title:'Email Templates', one:'Email template', icon:'mail', cols:[['name', 'Template', 'text', 1], ['module', 'Module', 'text', 1], ['send', 'Sending', ['Auto', 'Manual'], 1]]},
 };
+const D365_USERS = ['Mandy Chan (Funding Application Review Officer)', 'Kelly Lau (PAL Application Review Officer)', 'Winnie Ho (Disbursement Review Officer)', 'Peter Yip (Approver / Reviewer)', 'Eric Lam (Finance Department)', 'Admin (Administrator)'];
+function whoSelectHtml() {
+  const initials = meD().split(' ').map(x => x[0]).join('').slice(0, 2);
+  return `<label class="who"><span class="sr">Signed in as</span><select data-act="d365User" aria-label="Signed in as">${D365_USERS.map(u => `<option ${UI.d365User === u ? 'selected' : ''}>${esc(u)}</option>`).join('')}</select><span class="u-av">${initials}</span></label>`;
+}
 function dShell(on, cmdbar, body) {
   if (UI.paneMode) {
-    return `<div class="u pane-only">${cmdbar ? `<div class="u-cmd" role="toolbar">${cmdbar}</div>` : ''}<main class="u-main">${body}</main></div>`;
+    return `<div class="u pane-only"><div class="u-cmd" role="toolbar">${cmdbar || ''}${SEP}${whoSelectHtml()}</div><main class="u-main">${body}</main></div>`;
   }
   const Lk = (h, l, k, i, n) => `<a href="${h}" class="${on === k ? 'on' : ''}">${ico(i)}${l}${n ? `<span class="u-cnt">${n}</span>` : ''}</a>`;
   const nPend = Object.values(S.companies).filter(c => c.status === 'Pending Vetting' || c.pendingChange).length;
@@ -1801,10 +1838,9 @@ function dShell(on, cmdbar, body) {
     <div class="grp">Compliance</div>${Lk('#/d/inspections', 'Inspections', 'inspections', 'check')}${Lk('#/d/compliance', 'Post-award Compliance', 'compliance', 'flag', (S.comp ? S.comp.nc.filter(n => n.status === 'Under review').length : 0))}${Lk('#/d/emails', 'Email Log', 'emails', 'mail')}${Lk('#/d/audit', 'System Audit Trail', 'audit', 'lock')}
     <div class="grp">CITF Setup</div>${Object.entries(MASTER_DEF).map(([k, v]) => Lk('#/d/master/' + k, v.title, 'm_' + k, v.icon)).join('')}
     ${Lk('#/d/security', 'Security and Governance', 'security', 'lock')}<div class="u-area"><b>CF</b>CITF Operations</div></nav>`;
-  const initials = meD().split(' ').map(x => x[0]).join('').slice(0, 2);
   return `<div class="u"><header class="u-top"><span class="u-waffle">${ico('grid', 18)}</span><span class="brand">Dynamics 365</span><span class="app">CITF Operation Platform</span>
     <a class="search" href="#/d/search" style="color:inherit;text-decoration:none">⌕ Search records</a>${alertBell()}<button class="u-copbtn" data-act="openMail" title="Demo mailbox">✉ Mail</button><button class="u-copbtn" data-act="guide" title="How to demo">How to demo</button><button class="u-copbtn ${UI.copilot ? 'on' : ''}" data-act="copilot">${ico('spark', 16)} Copilot</button><span class="ic">${ico('gear', 18)}</span>
-    <label class="who"><span class="sr">Signed in as</span><select data-act="d365User" aria-label="Signed in as">${['Mandy Chan (Funding Application Review Officer)', 'Kelly Lau (PAL Application Review Officer)', 'Winnie Ho (Disbursement Review Officer)', 'Peter Yip (Approver / Reviewer)', 'Eric Lam (Finance Department)', 'Admin (Administrator)'].map(u => `<option ${UI.d365User === u ? 'selected' : ''}>${u}</option>`).join('')}</select><span class="u-av">${initials}</span></label></header>
+    ${whoSelectHtml()}</header>
     <div class="u-wrap">${map}<main class="u-main">${cmdbar ? `<div class="u-cmd" role="toolbar">${cmdbar}</div>` : ''}${body}</main>${UI.copilot ? copilotPane() : ''}</div></div>`;
 }
 const C = (label, act, data, opt) => `<button type="button" data-act="${act}" ${Object.entries(data || {}).map(([k, v]) => `data-${k}="${esc(v)}"`).join(' ')} ${opt && opt.dis ? 'disabled' : ''} ${opt && opt.tip ? `title="${esc(opt.tip)}"` : ''}>${ico((opt && opt.i) || 'add')}${label}</button>`;
@@ -1841,7 +1877,7 @@ function dDash() {
   const officers = (UI.dvLive && UI.dvLive.on) ? [...new Set(S.apps.map(a => a.officer).filter(Boolean))] : OFFICERS; const load = officers.map(o => [o, open.filter(a => a.officer === o).length]);
   const schemeCodes = [...new Set(S.apps.flatMap(a => a.schemes || []))]; const utilSrc = schemeCodes.length ? schemeCodes.map(code => ({code, name: code})) : SCHEMES.slice(0, 7); const util = utilSrc.map(s => { const code = s.code; const v = sum(S.apps.filter(a => a.status === 'Approved' && (a.schemes || []).includes(code)), grantOf); return [code + (s.name && s.name !== code ? ' – ' + String(s.name).split(' ')[0] : ''), v, '', money(v)]; });
   return dShell('dash', C('Refresh', 'refresh', {}, {i:'ref'}) + C('Export to Excel', 'exportViewXlsx', {}, {i:'excel'}) + C('Ask Copilot for a report', 'copilot', {}, {i:'spark'}),
-  `<div class="u-body">${viewHead('CITF Operations Dashboard', {})}<div class="u-nb info">${ico('flag')}<span>As of ${fmtDT((UI.dvLive && UI.dvLive.asof) || now())}. ${UI.dvLive && UI.dvLive.on ? `<b>Live Dataverse</b> · ${UI.dvLive.counts.apps} applications · ${UI.dvLive.counts.companies} companies · ${UI.dvLive.counts.drs} DRs${UI.dvLive.err ? ' · ' + esc(UI.dvLive.err) : ''}` : (inCrmShell() ? `<b>Dataverse</b> · ${esc((UI.dvLive && UI.dvLive.err) || 'loading')}` : `<b>Local demo seed</b>${UI.dvLive && UI.dvLive.err ? ` · ${esc(UI.dvLive.err)}` : ' · waiting for Dataverse connection'}`)} · build 1.0.3.25</span></div>
+  `<div class="u-body">${viewHead('CITF Operations Dashboard', {})}<div class="u-nb info">${ico('flag')}<span>As of ${fmtDT((UI.dvLive && UI.dvLive.asof) || now())}. ${UI.dvLive && UI.dvLive.on ? `<b>Live Dataverse</b> · ${UI.dvLive.counts.apps} applications · ${UI.dvLive.counts.companies} companies · ${UI.dvLive.counts.drs} DRs${UI.dvLive.err ? ' · ' + esc(UI.dvLive.err) : ''}` : (inCrmShell() ? `<b>Dataverse</b> · ${esc((UI.dvLive && UI.dvLive.err) || 'loading')}` : `<b>Local demo seed</b>${UI.dvLive && UI.dvLive.err ? ` · ${esc(UI.dvLive.err)}` : ' · waiting for Dataverse connection'}`)} · build 1.0.3.27</span></div>
   <div class="u-kpis"><div class="u-kpi"><small>Open cases</small><b>${open.length}</b></div><div class="u-kpi"><small>Pending information</small><b>${S.apps.filter(a => a.status === 'Pending information').length}</b></div>
   <div class="u-kpi"><small>Pledge at risk (≤ 7 days)</small><b style="color:${risk.length ? '#C50F1F' : 'inherit'}">${risk.length}</b></div><div class="u-kpi"><small>Companies in review</small><b>${Object.values(S.companies).filter(c => c.status === 'Pending Vetting').length}</b></div>
   <div class="u-kpi"><small>DRs in progress</small><b>${S.drs.filter(d => !['Paid', 'Returned'].includes(d.status)).length}</b></div><div class="u-kpi"><small>Approved grants (YTD)</small><b style="font-size:20px">${money(sum(S.apps.filter(a => a.status === 'Approved'), grantOf))}</b></div></div>
@@ -1926,13 +1962,13 @@ function dApps() {
   if (v === 'Pledge at risk') rows = rows.filter(a => { const d = daysTo(pledgeDate(a)); return !['Approved', 'Rejected', 'Withdrawn', 'Suspended'].includes(a.status) && d != null && d <= 7; });
   if (v === 'Unassigned') rows = rows.filter(a => !a.officer);
   if (v === 'Awaiting review / approval') rows = rows.filter(a => ['Under review', 'Pending approval'].includes(a.status));
-  rows.sort((a, b) => (b.submittedOn || '').localeCompare(a.submittedOn || ''));
-  const cols = [{h:'Application', txt:a => a.ref, v:a => `<a href="#/d/app/${a.id}">${a.ref}</a>`}, {h:'Applicant', txt:a => company(a.companyId).nameEn, v:a => esc(company(a.companyId).nameEn)}, {h:'Schemes', v:a => esc(a.schemes.join(', '))},
+  rows.sort((a, b) => (b.createdOn || b.submittedOn || '').localeCompare(a.createdOn || a.submittedOn || ''));
+  const cols = [{h:'Application', txt:a => (a.ref || '') + ' ' + (a.project || '') + ' ' + (company(a.companyId).nameEn || ''), v:a => `<a href="#/d/app/${a.id}">${a.ref || '–'}</a>`}, {h:'Project', v:a => esc(a.project || '–')}, {h:'Applicant', txt:a => company(a.companyId).nameEn, v:a => esc(company(a.companyId).nameEn || '–')}, {h:'Schemes', v:a => esc((a.schemes || []).join(', '))},
     {h:'Amount', v:a => a._dvApplied == null && !(a.items || []).length ? '–' : money(appAmt(a))}, {h:'Officer', v:a => esc(a.officer || '–')}, {h:'Risk', v:a => (UI.dvLive && UI.dvLive.on) ? '–' : dot(riskScore(a).band)}, {h:'Status', v:a => a.status ? dot(a.status) : '–'},
     {h:'Pledge date', v:a => { const p = pledgeDate(a); if (!p) return '–'; const d = daysTo(p); return ['Approved', 'Rejected', 'Withdrawn'].includes(a.status) ? fmtD(p) : `${fmtD(p)} <small style="color:${d != null && d <= 7 ? '#C50F1F' : 'var(--u-muted)'}">(${d}d)</small>`; }}];
   const sel = selOf('apps');
   return dShell('apps', C('Assign to…', 'assignDlg', {}, {i:'assign', dis:!sel.length}) + C('Auto-assign (load-balanced)', 'autoAssign', {}, {i:'users'}) + C('Add to committee batch', 'batchNew', {}, {i:'users', dis:!sel.length}) + C('Batch approval', 'batchApprove', {}, {i:'check', dis:!sel.length}) + SEP + C('Refresh', 'refresh', {}, {i:'ref'}) + C('Export to Excel', 'exportViewXlsx', {}, {i:'excel'}),
-    `<div class="u-body">${viewHead('', {select:`<select class="vsel" data-act="appView" aria-label="View">${['My open cases', 'All applications', 'Unassigned', 'Pledge at risk', 'Awaiting review / approval'].map(o => `<option ${o === v ? 'selected' : ''}>${o}</option>`).join('')}</select>`})}${grid('apps', cols, rows, {empty:'No cases in this view.'})}
+    `<div class="u-body">${viewHead('', {select:`<select class="vsel" data-act="appView" aria-label="View">${['My open cases', 'All applications', 'Unassigned', 'Pledge at risk', 'Awaiting review / approval'].map(o => `<option ${o === v ? 'selected' : ''}>${o}</option>`).join('')}</select>`})}${(UI.dvLive && UI.dvLive.err) ? nb('warn', esc(UI.dvLive.err)) : ''}${grid('apps', cols, rows, {empty:'No cases in this view.'})}
     ${nb('info', 'Cases are assigned automatically (round robin or by workload) when submitted. Officers marked unavailable are skipped. Cases with non-pre-approved items or grants over HK$200,000 alert the manager 7 days before the pledge date.')}</div>`); }
 function dApp(id, tab) {
   const a = app(id); if (!a) return dShell('apps', '', '<div class="u-body">Not found</div>'); opsInit(); const coi = S.sec.coi.find(x => x.appRef === a.ref && x.officer === meD()); if (coi) return dShell('apps', C('Back', 'goto', {h:'#/d/apps'}, {i:'back'}), `<div class="u-body">${nb('warn', '🔒 Access restricted. You are excluded from ' + a.ref + ' (conflict of interest). Contact your manager if this is wrong.')}</div>`); tab = tab || 'summary'; const c = company(a.companyId); const r = riskScore(a);
@@ -2013,8 +2049,8 @@ function dPayments() { const rows = S.drs.filter(d => d.pay);
     `<div class="u-body">${viewHead('Payment instructions')}${grid('pay', cols, rows, {empty:'No approved DRs yet. Approve a DR to compile its payment instruction.'})}${nb('info', 'Finance signs off the DR approval package (DR form, approval record, letter, bank statement and machine-check results), sends the bank file and imports the paid list. Applicants then get a bulk “Paid” notice.')}</div>`); }
 
 /* ---------- PAL ---------- */
-function dPalReq() { const cols = [{h:'Ref', txt:p => p.ref, v:p => `<a href="#" data-act="palReqOpen" data-id="${p.id}">${p.ref}</a>`}, {h:'Type', v:p => esc(p.kind)}, {h:'Vendor', v:p => esc(company(p.companyId).nameEn)}, {h:'Item', v:p => esc(p.name)}, {h:'Submitted', v:p => fmtD(p.submittedOn)}, {h:'Status', v:p => dot(p.status)}];
-  return dShell('palreq', C('Run draft purge job', 'purgeRun', {}, {i:'ref'}) + C('Refresh', 'refresh', {}, {i:'ref'}), `<div class="u-body">${viewHead('PAL applications and change requests')}${grid('palreq', cols, S.palApps.filter(p => p.status !== 'Draft'), {noSel:1})}${subgrid('Draft purge log (unsubmitted drafts older than ' + rule('draftMonths') + ' months)', [{h:'Purged', v:x => fmtDT(x.on)}, {h:'Ref', v:x => esc(x.ref)}, {h:'Type', v:x => esc(x.what)}, {h:'Owner', v:x => esc(x.owner)}, {h:'Last edited', v:x => fmtD(x.last)}], S.purgeLog || [])}${nb('info', 'Only the latest submitted version of a request is kept: a resubmission replaces the earlier one. Drafts not submitted within ' + rule('draftMonths') + ' months are purged by a nightly job (period set in Funding Rules).')}</div>`); }
+function dPalReq() { const cols = [{h:'Ref', txt:p => (p.ref || '') + ' ' + (p.name || '') + ' ' + (company(p.companyId).nameEn || ''), v:p => `<a href="#" data-act="palReqOpen" data-id="${p.id}">${p.ref || '–'}</a>`}, {h:'Type', v:p => esc(p.kind || '–')}, {h:'Vendor', v:p => esc(company(p.companyId).nameEn || '–')}, {h:'Item', v:p => esc(p.name || '–')}, {h:'Submitted', v:p => fmtD(p.submittedOn)}, {h:'Status', v:p => dot(p.status)}];
+  return dShell('palreq', C('Run draft purge job', 'purgeRun', {}, {i:'ref'}) + C('Refresh', 'refresh', {}, {i:'ref'}), `<div class="u-body">${viewHead('PAL applications and change requests')}${grid('palreq', cols, S.palApps, {noSel:1, empty:'No PAL applications yet. A portal submission appears here after it is saved to Dataverse.'})}${subgrid('Draft purge log (unsubmitted drafts older than ' + rule('draftMonths') + ' months)', [{h:'Purged', v:x => fmtDT(x.on)}, {h:'Ref', v:x => esc(x.ref)}, {h:'Type', v:x => esc(x.what)}, {h:'Owner', v:x => esc(x.owner)}, {h:'Last edited', v:x => fmtD(x.last)}], S.purgeLog || [])}${nb('info', 'Only the latest submitted version of a request is kept: a resubmission replaces the earlier one. Drafts not submitted within ' + rule('draftMonths') + ' months are purged by a nightly job (period set in Funding Rules).')}</div>`); }
 /* ---------- inspections ---------- */
 function dInspections() { const cols = [{h:'Case', txt:i => app(i.appId).ref, v:i => `<a href="#" data-act="inspOpen" data-id="${i.id}">${app(i.appId).ref}</a>`}, {h:'Applicant', v:i => esc(company(app(i.appId).companyId).nameEn)}, {h:'Method', v:i => esc(i.method)}, {h:'Visit date', v:i => fmtD(i.date)}, {h:'Officer', v:i => esc(i.officer)}, {h:'Result', v:i => (i.result ? dot(i.result) : '–') + (i.locked ? ' <small title="Locked in the audit trail">🔒</small>' : '')}, {h:'Status', v:i => dot(i.status)}];
   return dShell('inspections', C('Run sampling', 'sample', {}, {i:'ref'}) + C('Refresh', 'refresh', {}, {i:'ref'}), `<div class="u-body">${viewHead('Inspections')}${grid('insp', cols, S.inspections, {noSel:1})}${nb('info', 'Sampling rates per scheme are set in CITF Setup › Inspection Sampling (e.g. 5% of approved ACT cases). Officers can add cases manually. Results and photos are kept in immutable storage.')}</div>`); }
@@ -2165,17 +2201,17 @@ const A = {
     UI.err = e; save(); if (Object.keys(e).length) return render(); if (el.dataset.next === '0') { toast('Draft saved'); return go('#/p/citf'); } go('#/p/apply/' + a.id + '/' + el.dataset.next); },
   paPicker(el) { const a = app(el.dataset.id); const list = S.pal.filter(p => p.status === 'Listed' && (!a.schemes.length || a.schemes.includes(p.scheme)));
     modal(`<h2>Pre-approved products and courses</h2><span class="hint">Showing ${esc(a.schemes.join(', ') || 'all schemes')}. Tick two or more to compare side by side.</span>
-    <div class="scroll"><table class="tbl"><thead><tr><th></th><th>PA code</th><th>Item</th><th>Origin</th><th>Approved price</th><th></th></tr></thead><tbody>${list.map(p => `<tr><td><input type="checkbox" name="cmp" data-multi="1" value="${p.id}" aria-label="Compare"></td><td>${p.code}</td><td>${esc(p.name)}</td><td>${esc(p.origin)}</td><td>${money(p.price)}</td><td><button class="btn sm pri" data-act="paAdd" data-id="${a.id}" data-p="${p.id}">Add</button></td></tr>`).join('')}</tbody></table></div>
+    <div class="scroll"><table class="tbl"><thead><tr><th></th><th>PA code</th><th>Item</th><th>Functions</th><th>Origin</th><th>Approved price</th><th></th></tr></thead><tbody>${list.map(p => `<tr><td><input type="checkbox" name="cmp" data-multi="1" value="${p.id}" aria-label="Compare"></td><td>${p.code}</td><td>${esc(p.name)}</td><td style="max-width:260px;font-size:12px">${esc(palFn(p))}</td><td>${esc(p.origin)}</td><td>${money(p.price)}</td><td><button class="btn sm pri" data-act="paAdd" data-id="${a.id}" data-p="${p.id}">Add</button></td></tr>`).join('')}</tbody></table></div>
     <div id="cmpOut"></div><div class="acts"><button class="btn" data-act="paCompare">Compare selected</button><button class="btn" data-act="close">Close</button></div>`, true); },
   paCompare(el) { const ids = formData(el).cmp || []; const ps = S.pal.filter(p => ids.includes(p.id)); if (ps.length < 2) { document.getElementById('cmpOut').innerHTML = '<div class="note warn">Tick at least two items.</div>'; return; }
-    document.getElementById('cmpOut').innerHTML = `<div class="scroll"><table class="tbl"><thead><tr><th></th>${ps.map(p => `<th>${esc(p.name)}</th>`).join('')}</tr></thead><tbody>${[['PA code', p => p.code], ['Scheme', p => p.scheme], ['Approved price', p => money(p.price)], ['Origin', p => p.origin], ['Funding applications', p => p.apps], ['Vendors', p => p.vendors.length]].map(r => `<tr><td><b>${r[0]}</b></td>${ps.map(p => `<td>${esc(r[1](p))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; },
-  paAdd(el) { const a = app(el.dataset.id), p = S.pal.find(x => x.id === el.dataset.p); a.items.push({id:uid('it'), type:'PA', paCode:p.code, product:p.name, model:'', qty:1, unit:p.price, site:a.project, plan:'', aiCheck:'ok', approved:null, scheme:p.scheme, s4:!!p.s4, local:false, rental:false, lowest:true, just:''});
+    document.getElementById('cmpOut').innerHTML = `<div class="scroll"><table class="tbl"><thead><tr><th></th>${ps.map(p => `<th>${esc(p.name)}</th>`).join('')}</tr></thead><tbody>${[['PA code', p => p.code], ['Scheme', p => p.scheme], ['Functions', p => palFn(p)], ['Approved price', p => money(p.price)], ['Origin', p => p.origin], ['Funding applications', p => p.apps], ['Vendors', p => p.vendors.length]].map(r => `<tr><td><b>${r[0]}</b></td>${ps.map(p => `<td>${esc(r[1](p))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; },
+  paAdd(el) { const a = app(el.dataset.id), p = S.pal.find(x => x.id === el.dataset.p); a.items.push({id:uid('it'), type:'PA', paCode:p.code, product:p.name, model:'', qty:1, unit:p.price, functions: palFn(p), site:a.project, plan:'', aiCheck:'ok', approved:null, scheme:p.scheme, s4:!!p.s4, local:false, rental:false, lowest:true, just:''});
     if (!a.schemes.includes(p.scheme)) a.schemes.push(p.scheme); save(); closeModal(); render(); toast(p.name + ' added with the approved price'); },
   npaDlg(el) { modal(`<h2>Non-pre-approved item – Form 1</h2><div class="grid g2">${fld('Product / technology', 'p', '', {req:1})}${fld('Model', 'm', '')}${fld('Manufacturer', 'mf', '')}${fld('Country of origin', 'o', '')}${fld('Quantity', 'q', '1', {type:'number', req:1})}${fld('Unit price (HK$, from quotation)', 'u', '', {type:'number', req:1})}</div>
-    ${fld('Core functions and innovation', 'f', '', {type:'textarea'})}<label class="chk"><input type="checkbox" name="ld"> Locally developed innovative technology / product (funding up to ${Math.round(rule('ratioLocal') * 100)}%, subject to VSC)</label><label class="chk"><input type="checkbox" name="rt"> Rental (funding ${Math.round(rule('ratioRental') * 100)}%)</label><label class="chk"><input type="checkbox" name="sole"> Sole agent product without price comparison – apply at published approved price</label><span class="er" id="npaErr"></span>
+    ${fld('Core functions (what it does on site)', 'f', '', {type:'textarea', req:1, rows:3, hint:'Required. Describe the functions so AI can compare them with listed products.'})}<label class="chk"><input type="checkbox" name="ld"> Locally developed innovative technology / product (funding up to ${Math.round(rule('ratioLocal') * 100)}%, subject to VSC)</label><label class="chk"><input type="checkbox" name="rt"> Rental (funding ${Math.round(rule('ratioRental') * 100)}%)</label><label class="chk"><input type="checkbox" name="sole"> Sole agent product without price comparison – apply at published approved price</label><span class="er" id="npaErr"></span>
     <div class="acts"><button class="btn" data-act="close">Cancel</button><button class="btn pri" data-act="npaSave" data-id="${el.dataset.id}">Add item</button></div>`, true); },
-  npaSave(el) { const d = formData(el); if (!d.p || !+d.u || !+d.q) { document.getElementById('npaErr').textContent = 'Product, quantity and unit price are required'; return; }
-    const a = app(el.dataset.id); const it = {id:uid('it'), type:'NPA', paCode:'', product:d.p, model:d.m, qty:+d.q, unit:+d.u, site:a.project, plan:'', aiCheck:'ok', approved:null, form1:d, local:!!d.ld, rental:!!d.rt, s4:false, lowest:true, just:''}; a.items.push(it); save(); closeModal(); render(); toast('Item added – ' + quotesNeeded(it) + ' quotation(s) needed for ' + money(itemAmt(it))); },
+  npaSave(el) { const d = formData(el); if (!d.p || !+d.u || !+d.q || !String(d.f || '').trim()) { document.getElementById('npaErr').textContent = 'Product, quantity, unit price and core functions are required'; return; }
+    const a = app(el.dataset.id); const it = {id:uid('it'), type:'NPA', paCode:'', product:d.p, model:d.m, qty:+d.q, unit:+d.u, functions:String(d.f || '').trim(), site:a.project, plan:'', aiCheck:'ok', approved:null, form1:d, local:!!d.ld, rental:!!d.rt, s4:false, lowest:true, just:''}; a.items.push(it); save(); closeModal(); render(); toast('Item added – ' + quotesNeeded(it) + ' quotation(s) needed for ' + money(itemAmt(it))); },
   justDlg(el) { const a = app(el.dataset.id), it = a.items.find(i => i.id === el.dataset.it); dlg('Quotation justification – ' + esc(it.product), `<span class="hint">${quotesNeeded(it)} quotation(s) are needed for ${money(itemAmt(it))}. If you cannot provide them, or did not choose the lowest-priced eligible supplier, give full reasons.</span><label class="chk"><input type="checkbox" name="nl" ${it.lowest === false ? 'checked' : ''}> The lowest-priced eligible supplier was not selected</label>${fld('Justification', 'j', it.just, {type:'textarea', req:1})}`, 'justSave', 'Save', {id:a.id, it:it.id}); },
   justSave(el) { const a = app(el.dataset.id), it = a.items.find(i => i.id === el.dataset.it), d = formData(el); it.just = (d.j || '').trim(); it.lowest = !d.nl; save(); closeModal(); render(); toast(it.just ? 'Justification saved – the officer will review it' : 'Justification cleared'); },
   appDetSave(el) { const c = myCo(), d = formData(el); const e = {}; if (!d.mgmtName) e.mgmtName = 'Required'; if (!d.nar1Date) e.nar1Date = 'Required'; if (!d.stmtDate) e.stmtDate = 'Required'; else if ((now() - new Date(d.stmtDate)) / 864e5 > 92) e.stmtDate = 'Must be issued within the last 3 months';
@@ -2209,7 +2245,7 @@ const A = {
     a.status = 'Submitted'; a.submittedOn = now().toISOString(); a.consent = true; log(a, 'Application submitted via portal (snapshot saved; files filed to SharePoint)');
     a.officer = leastLoaded(); log(a, 'Auto-assigned to ' + a.officer + ' (load-balanced)'); a.status = 'Vetting in progress';
     const npa = a.items.filter(i => i.type === 'NPA'); a.ai = {score:84, summary:`${company(a.companyId).type} applying under ${a.schemes.join(', ')} for ${a.items.length} item(s) totalling ${money(appAmt(a))} on ${a.project}. ${npa.length ? npa.length + ' non-pre-approved item(s): ' + npa.map(i => i.product).join(', ') + '. ' : 'All items pre-approved. '}All required documents read; amounts match quotations.`, risks:a.items.some(i => itemAmt(i) > 200000) ? ['Item value above HK$200,000 – manager alert 7 days before pledge'] : []};
-    email('appSubmitted', company(a.companyId).contact.email, {Name:me().name, Ref:a.ref, Pledge:fmtD(pledgeDate(a))}); save(); toast('Submitted · case created in D365 and assigned to ' + a.officer); go('#/p/app/' + a.id); },
+    email('appSubmitted', company(a.companyId).contact.email, {Name:me().name, Ref:a.ref, Pledge:fmtD(pledgeDate(a))}); save(); go('#/p/app/' + a.id); queueDvFunding(a); },
   answer(el) { const a = app(el.dataset.id), d = formData(el); const open = a.queries.filter(q => !q.ans); if (open.some(q => !(d['ans_' + q.id] || '').trim())) { UI.err = {ans:'Answer every query before submitting'}; return render(); }
     open.forEach(q => { q.ans = d['ans_' + q.id]; q.ansOn = now().toISOString(); if (d['file_' + q.id]) q.file = 'supporting_' + q.id + '.pdf'; }); setStatus(a, 'Vetting in progress', 'Applicant answered ' + open.length + ' query(ies); officer alerted'); save(); toast('Answers submitted · status back to Vetting in progress'); render(); },
   letterDlg(el) { const a = app(el.dataset.id); const def = a.status === 'Approved' ? 'Approval letter' : a.status === 'Rejected' ? 'Rejection letter' : 'Request for information letter';
@@ -2235,9 +2271,9 @@ const A = {
     <div class="drop has"><span>📄 catalogue.pdf · spec_sheet.pdf · patent.pdf · price_list.pdf (samples) – AI will read them and prepare a comparison report</span></div><span class="er" id="palErr"></span>
     <div class="acts"><button class="btn" data-act="close">Cancel</button><button class="btn pri" data-act="palNewSave">Submit application</button></div>`, true); },
   palNewSave(el) { const d = formData(el); if (!d.sc || !d.n || !d.p) { document.getElementById('palErr').textContent = 'Category, name and price are required'; return; }
-    S.palApps.push({id:uid('pp'), ref:'PAL-2027-00' + (S.seq.pal++), companyId:myCo().id, name:d.n, scheme:d.sc, price:+d.p, status:'Submitted', submittedOn:now().toISOString(), kind:'New listing', note:d.f}); save(); closeModal(); render(); toast('Application submitted · case created for the PAL Officer'); },
+    const rec = {id:uid('pp'), ref:'PAL-2027-00' + (S.seq.pal++), companyId:myCo().id, name:d.n, scheme:d.sc, price:+d.p, status:'Submitted', submittedOn:now().toISOString(), kind:'New listing', note:d.f}; S.palApps.push(rec); save(); closeModal(); render(); queueDvPal(rec); },
   palChange(el) { const p = S.pal.find(x => x.id === el.dataset.id); dlg('Change or delist ' + esc(p.code), `${fld('Request', 'k', 'Change request', {type:'select', options:['Change request', 'Delisting request'], blank:false})}${fld('New price (HK$)', 'p', p.price, {type:'number'})}${fld('Change details and justification', 'n', '', {type:'textarea', req:1})}<div class="note warn">Delisting removes the item from the CITF website; applicants can no longer select it.</div>`, 'palChangeSave', 'Submit', {id:p.id}); },
-  palChangeSave(el) { const p = S.pal.find(x => x.id === el.dataset.id), d = formData(el); S.palApps.push({id:uid('pp'), ref:'PAL-2027-00' + (S.seq.pal++), companyId:myCo().id, name:p.name, scheme:p.scheme, price:+d.p, palId:p.id, status:'Submitted', submittedOn:now().toISOString(), kind:d.k, note:d.n}); save(); closeModal(); render(); toast(d.k + ' submitted'); },
+  palChangeSave(el) { const p = S.pal.find(x => x.id === el.dataset.id), d = formData(el); const rec = {id:uid('pp'), ref:'PAL-2027-00' + (S.seq.pal++), companyId:myCo().id, name:p.name, scheme:p.scheme, price:+d.p, palId:p.id, status:'Submitted', submittedOn:now().toISOString(), kind:d.k, note:d.n}; S.palApps.push(rec); save(); closeModal(); render(); queueDvPal(rec); },
   rvReply() { const c = myCo(); const mine = S.pal.filter(p => p.vendor === c.id);
     modal(`<h2>Annual review ${S.reviews[0].year} – confirm your items</h2><div class="scroll"><table class="tbl"><thead><tr><th>Item</th><th>Approved price</th><th>Price now</th><th>Spec / channel changed?</th></tr></thead><tbody>${mine.map(p => `<tr><td>${esc(p.name)}</td><td>${money(p.price)}</td><td><input type="number" name="p_${p.id}" value="${p.price}" style="width:120px;height:32px" aria-label="Price"></td><td><select name="s_${p.id}"><option>No change</option><option>Specification updated</option><option>Distribution channel changed</option></select></td></tr>`).join('')}</tbody></table></div>
     <div class="acts"><button class="btn" data-act="close">Cancel</button><button class="btn pri" data-act="rvReplySave">Submit reply</button></div>`, true); },
@@ -2245,7 +2281,7 @@ const A = {
   buddy() { UI.buddy = !UI.buddy; render(); }, buddyQ(el) { UI.buddyChat.push(['u', esc(el.dataset.q)], ['b', buddyAnswer(el.dataset.q)]); render(); },
 
   /* D365 */
-  d365User(el) { UI.d365User = el.value; render(); toast('Signed in as ' + el.value); },
+  d365User(el) { UI.d365User = el.value; try { localStorage.setItem('cicap-d365-user', el.value); } catch (e) {} render(); toast('Signed in as ' + el.value); },
   copilot() { UI.copilot = !UI.copilot; render(); }, copQ(el) { UI.chat.push(['u', esc(el.dataset.q)], ['b', copAnswer(el.dataset.q)]); render(); },
   gSel(el) { const k = el.dataset.k, s = new Set(UI.sel[k] || []); el.checked ? s.add(el.dataset.id) : s.delete(el.dataset.id); UI.sel[k] = [...s]; render(); },
   gSelAll(el) { const k = el.dataset.k; UI.sel[k] = el.checked ? [...document.querySelectorAll(`input[data-act=gSel][data-k="${k}"]`)].map(x => x.dataset.id) : []; render(); },
@@ -2812,7 +2848,7 @@ Object.assign(A, {
   palDeclSave(el) { const p = S.palApps.find(x => x.id === el.dataset.id), d = formData(el); p.decl = {stat:!!d.stat, local:!!d.local, ip:!!d.ip, signer:(d.signer || '').trim(), title:(d.title || '').trim()}; save(); go('#/p/palapp/' + p.id + '/4'); },
   palSubmit(el) { const p = S.palApps.find(x => x.id === el.dataset.id); if (palGaps(p).length) return render();
     p.status = 'Submitted'; p.submittedOn = now().toISOString(); p.name = p.items.length > 1 ? p.items[0].name + ' + ' + (p.items.length - 1) + ' more' : p.items[0].name; p.price = +p.items[0].price; p.note = p.items.map(it => it.functions).join(' | ');
-    email('palAck', me().email, {Name:me().name, Ref:p.ref}); save(); go('#/p/pal'); toast(p.ref + ' submitted · case created for the PAL Officer'); },
+    email('palAck', me().email, {Name:me().name, Ref:p.ref}); save(); go('#/p/pal'); queueDvPal(p); },
   palOpenDraft(el) { go('#/p/palapp/' + el.dataset.id + '/' + (el.dataset.s || 2)); },
 });
 document.addEventListener('change', e => { if (e.target.name === 'local' && e.target.closest('.palsec')) { const b = e.target.closest('form').querySelector('[data-act=palItemSave]'); if (b) { A.palCollect(b); save(); render(); } } });
@@ -2856,7 +2892,15 @@ function palKind(p) { return p.scheme === 'ACT' ? 'product' : /course|training/i
 function vKey(p) { return p.vendor === 'x' ? 'x' + (S.pal.indexOf(p) % 3) : p.vendor; }
 function vName(k) { return k[0] === 'x' && k.length === 2 ? X_VENDORS[+k[1]] : (company(k) || {}).nameEn || k; }
 function vMail(k) { return k[0] === 'x' && k.length === 2 ? 'pal@' + X_VENDORS[+k[1]].toLowerCase().replace(/[^a-z]+/g, '') + '.example.com' : company(k).contact.email; }
-function rv0() { const rv = S.reviews[0]; rv.sched = rv.sched || {start:'2027-01-15', replyDays:21, remindEvery:7, maxRem:2, minMonths:12, auto:true}; rv.items = rv.items || []; rv.invites = rv.invites || {}; rv.replies = rv.replies || {}; rv.recs = rv.recs || {}; rv.log = rv.log || []; if (rv.status === 'Not started') rv.status = 'Scheduled'; return rv; }
+function rv0() {
+  S.reviews = S.reviews || [];
+  if (!S.reviews[0]) S.reviews.push({id:'rv1', year:'2027', status:'Scheduled', items:[], schedule:'2027-01-15'});
+  const rv = S.reviews[0];
+  rv.sched = rv.sched || {start:'2027-01-15', replyDays:21, remindEvery:7, maxRem:2, minMonths:12, auto:true};
+  rv.items = rv.items || []; rv.invites = rv.invites || {}; rv.replies = rv.replies || {}; rv.recs = rv.recs || {}; rv.log = rv.log || [];
+  if (rv.status === 'Not started') rv.status = 'Scheduled';
+  return rv;
+}
 function rvStage(rv) { return {Scheduled:0, Shortlisted:1, 'Invitations ready':2, 'Invitations sent':3, 'Replies closed':4, 'Report drafted':5, 'Submitted to committee':6}[rv.status] ?? 0; }
 function rvLog(rv, t) { rv.log.unshift({on:now().toISOString(), t}); }
 function palStats(p) { const i = S.pal.indexOf(p), k = palKind(p), real = S.apps.flatMap(a => a.items.filter(it => it.paCode === p.code).map(it => ({a, it}))).filter(x => !preSubmit(x.a));
@@ -2974,10 +3018,12 @@ const PAL_SAFETY = {'PA-ACT-0412':'4S – Smart Site Safety System', 'PA-ACT-044
 const DL_STAGES = ['Received', 'Case handler assessment', 'Reviewer review', 'Committee', 'Decision'];
 const CR_FIELDS = [['spec', 'Technical specification / functions'], ['price', 'Unit price (HK$)'], ['channel', 'Distribution channel (authorised suppliers)']];
 function palInit() { S.pal.forEach(p => { p.tech = p.tech || PAL_TECH[p.code] || 'Other'; p.safety = (p.safety && p.safety !== 'General') ? p.safety : (PAL_SAFETY[p.code] || (p.scheme === 'ACT' ? 'General' : 'Not applicable'));
-  p.list = p.scheme === 'ACT' ? 'ACT products' : /course|training/i.test(p.name) ? 'BIM training courses' : 'BIM software';
+  p.list = p.list || (p.scheme === 'ACT' ? 'ACT products' : /course|training/i.test(p.name || '') ? 'BIM training courses' : (p.scheme ? 'BIM software' : 'Other'));
+  p.functions = palFn(p);
   p.spec = p.spec || ({'PA-ACT-0412':'4K camera, edge AI for PPE and exclusion zones, IP67, 4G.', 'PA-ACT-0398':'Robotic total station, ±2 mm layout accuracy, BIM model import.'}[p.code] || 'As listed in the approved data sheet.');
-  p.channel = p.channel || (p.vendors || []).join(', '); p.web = p.web || {on:addDays(now(), -2), state:p.status === 'Listed' ? 'Published' : 'Removed'}; });
-  S.palApps.forEach(r => { if (r.kind === 'Change request' && !r.proposed) { const it = S.pal.find(p => r.name && p.name.startsWith(r.name.split(' v')[0].slice(0, 14))) || S.pal[0]; r.palId = r.palId || it.id;
+  p.channel = p.channel || (p.vendors || []).join(', '); if (p.apps == null || p.apps === '') p.apps = 0;
+  if (!p.web || p.web.state == null) p.web = {on:p.listedOn || addDays(now(), -2), state:/listed/i.test(String(p.status || '')) ? 'Published' : 'Removed'}; });
+  S.palApps.forEach(r => { if (r._live) return; if (r.kind === 'Change request' && !r.proposed) { const it = S.pal.find(p => r.name && p.name.startsWith(r.name.split(' v')[0].slice(0, 14))) || S.pal[0]; if (!it) return; r.palId = r.palId || it.id;
     r.approvedSnap = {spec:it.spec, price:it.price, channel:it.channel}; r.proposed = {spec:'New model SE-500: 4K camera, edge AI for PPE, exclusion zones and fall detection, IP67, 5G.', price:r.price, channel:it.channel}; r.changes = ['spec', 'price']; r.just = r.note; } });
   S.webLog = S.webLog || []; S.purgeLog = S.purgeLog || []; (S.palApps || []).forEach(r => { r.queries = r.queries || []; }); }
 function corr(r, type, kind) { r.corr = r.corr || []; const no = 'CITF/PAL/' + kind + '/2027/' + String(r.corr.length + 1 + S.palApps.indexOf(r) * 3).padStart(4, '0'); r.corr.push({type, no, on:now().toISOString()}); return no; }
@@ -3013,12 +3059,12 @@ async function saveFile(name, data) { let dl = null; try { dl = window.claude &&
   try { const u = URL.createObjectURL(new Blob([data])), a = document.createElement('a'); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); toast('Downloaded ' + name); } catch (e) { toast('Download not available in this preview', true); } }
 
 /* ---------- D365: PAL items dashboard ---------- */
-function dPal() { if (!(UI.dvLive && UI.dvLive.on)) palInit(); const F = UI.pf = UI.pf || {list:'', tech:'', origin:'', safety:'', status: inCrmShell() ? '' : 'Listed', seg:'tech'};
+function dPal() { palInit(); const F = UI.pf = UI.pf || {list:'', tech:'', origin:'', safety:'', status: inCrmShell() ? '' : 'Listed', seg:'tech'};
   const all = S.pal, rows = all.filter(p => (!F.list || p.list === F.list) && (!F.tech || p.tech === F.tech) && (!F.origin || p.origin === F.origin) && (!F.safety || p.safety === F.safety) && (!F.status || p.status === F.status));
   const uniq = k => [...new Set(all.map(p => p[k]))].sort(), opt = (k, l) => `<label class="u-qf"><span>${l}</span><select data-act="pfF" data-k="${k}"><option value="">All</option>${uniq(k).map(v => `<option ${F[k] === v ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select></label>`;
   const segs = {}; rows.forEach(p => { const k = p[F.seg]; segs[k] = segs[k] || {n:0, apps:0}; segs[k].n++; segs[k].apps += p.apps; }); const mx = Math.max(1, ...Object.values(segs).map(s => s.apps));
   const lastWeb = S.webLog[0];
-  const cols = [{h:'PA code', txt:p => p.code + p.name, v:p => esc(p.code)}, {h:'Item', wrap:1, v:p => esc(p.name) + '<br><small style="color:var(--u-muted)">' + esc(p.list) + '</small>'}, {h:'Core technology', v:p => esc(p.tech)}, {h:'Origin', v:p => esc(p.origin)}, {h:'Safety classification', v:p => esc(p.safety)}, {h:'Price / fee', v:p => money(p.price)}, {h:'Funding apps', v:p => p.apps}, {h:'Status', v:p => dot(p.status)}, {h:'CITF website', v:p => `<small>${p.web.state === 'Published' ? '✓ Published' : '– Removed'} ${fmtD(p.web.on)}</small>`}];
+  const cols = [{h:'PA code', txt:p => p.code + p.name, v:p => esc(p.code)}, {h:'Item', wrap:1, v:p => esc(p.name) + '<br><small style="color:var(--u-muted)">' + esc(p.list) + '</small>'}, {h:'Functions', wrap:1, txt:p => palFn(p), v:p => '<small>' + esc(palFn(p)) + '</small>'}, {h:'Core technology', v:p => esc(p.tech)}, {h:'Origin', v:p => esc(p.origin)}, {h:'Safety classification', v:p => esc(p.safety)}, {h:'Price / fee', v:p => money(p.price)}, {h:'Funding apps', v:p => p.apps}, {h:'Status', v:p => dot(p.status)}, {h:'CITF website', v:p => { const w = p.web || {}; return `<small>${w.state === 'Published' ? '✓ Published' : '– Removed'} ${fmtD(w.on)}</small>`; }}];
   return dShell('pal', C('Sync to CITF website', 'webSync', {}, {i:'globe'}) + C('Export full list (Excel)', 'palExport', {}, {i:'excel'}) + C('Preview public list', 'webPreview', {}, {i:'globe'}) + C('Refresh', 'refresh', {}, {i:'ref'}),
     `<div class="u-body">${viewHead('Pre-approved List')}
     <div class="u-kpis" style="margin-bottom:12px"><div class="u-kpi"><small>Listed items</small><b>${all.filter(p => p.status === 'Listed').length}</b></div><div class="u-kpi"><small>Delisted</small><b>${all.filter(p => p.status === 'Delisted').length}</b></div><div class="u-kpi"><small>Funding applications (shown)</small><b>${sum(rows, p => p.apps)}</b></div><div class="u-kpi"><small>Pending requests</small><b>${S.palApps.filter(r => !['Draft', 'Approved', 'Rejected', 'Withdrawn'].includes(r.status)).length}</b></div><div class="u-kpi"><small>Website last synced</small><b style="font-size:15px">${lastWeb ? fmtDT(lastWeb.on) : '–'}</b></div></div>
@@ -3067,9 +3113,9 @@ Object.assign(A, {
   pfF(el) { UI.pf[el.dataset.k] = el.value; render(); },
   webSync() { palInit(); webPush(S.pal, 'Manual full sync by ' + meD()); save(); render(); toast(S.pal.filter(p => p.status === 'Listed').length + ' listed items published to the CITF website (AEM API)'); },
   webPreview() { palInit(); modal(`<h2>CITF website – Pre-approved List (public view)</h2><span class="hint">What the public sees on the CITF website after the last sync (${S.webLog[0] ? fmtDT(S.webLog[0].on) : 'not yet synced'}).</span>
-    ${['ACT products', 'BIM software', 'BIM training courses'].map(l => `<h3>${l}</h3><table class="tbl" style="font-size:13px"><thead><tr><th>PA code</th><th>Item</th><th>Origin</th><th>Approved price / fee</th><th>Authorised suppliers</th></tr></thead><tbody>${S.pal.filter(p => p.list === l && p.web.state === 'Published').map(p => `<tr><td>${esc(p.code)}</td><td>${esc(p.name)}${/4S/.test(p.safety) ? ' <span class="pill info">4S</span>' : ''}</td><td>${esc(p.origin)}</td><td>${money(p.price)}</td><td>${esc(p.channel)}</td></tr>`).join('') || '<tr><td colspan="5">–</td></tr>'}</tbody></table>`).join('')}<div class="acts"><button class="btn" data-act="close">Close</button></div>`, true); },
-  palExport() { palInit(); const hdr = ['PA code', 'Item', 'Core technology', 'Origin', 'Safety classification', 'Approved price / fee (HK$)', 'Authorised suppliers', 'Funding applications', 'Listed since', 'Status'];
-    const sheets = ['ACT products', 'BIM software', 'BIM training courses'].map(l => [l.replace('BIM training courses', 'BIM training'), [hdr].concat(S.pal.filter(p => p.list === l).map(p => [p.code, p.name, p.tech, p.origin, p.safety, p.price, p.channel, p.apps, p.listedOn, p.status]))]);
+    ${['ACT products', 'BIM software', 'BIM training courses'].map(l => `<h3>${l}</h3><table class="tbl" style="font-size:13px"><thead><tr><th>PA code</th><th>Item</th><th>Functions</th><th>Origin</th><th>Approved price / fee</th><th>Authorised suppliers</th></tr></thead><tbody>${S.pal.filter(p => p.list === l && p.web && p.web.state === 'Published').map(p => `<tr><td>${esc(p.code)}</td><td>${esc(p.name)}${/4S/.test(p.safety) ? ' <span class="pill info">4S</span>' : ''}</td><td style="max-width:280px">${esc(palFn(p))}</td><td>${esc(p.origin)}</td><td>${money(p.price)}</td><td>${esc(p.channel)}</td></tr>`).join('') || '<tr><td colspan="6">–</td></tr>'}</tbody></table>`).join('')}<div class="acts"><button class="btn" data-act="close">Close</button></div>`, true); },
+  palExport() { palInit(); const hdr = ['PA code', 'Item', 'Functions', 'Core technology', 'Origin', 'Safety classification', 'Approved price / fee (HK$)', 'Authorised suppliers', 'Funding applications', 'Listed since', 'Status'];
+    const sheets = ['ACT products', 'BIM software', 'BIM training courses'].map(l => [l.replace('BIM training courses', 'BIM training'), [hdr].concat(S.pal.filter(p => p.list === l).map(p => [p.code, p.name, palFn(p), p.tech, p.origin, p.safety, p.price, p.channel, p.apps, p.listedOn, p.status]))]);
     saveFile('CITF_Pre-approved_List_' + now().toISOString().slice(0, 10) + '.xlsx', xlsx(sheets)); },
   palChange(el) { palInit(); const p = S.pal.find(x => x.id === el.dataset.id); if (!el.dataset.k) UI.crDraft = null; modal(palChangeForm(p, el.dataset.k || 'Change request'), true); },
   palChangeSave(el) { const p = S.pal.find(x => x.id === el.dataset.id), k = el.dataset.k, d = formData(el), er = document.getElementById('crErr'), c = myCo();
@@ -4026,7 +4072,7 @@ function initPaneMode() {
     try { document.documentElement.classList.add('citf-pane'); document.body.classList.add('citf-pane'); } catch (e) {}
     var route = dataParamToRoute(d) || '#/d/dash';
     CUR = route;
-    try { history.replaceState(null, '', route); } catch (e4) {}
+    applyHash(route);
   }
   return UI.paneMode;
 }
@@ -4114,13 +4160,18 @@ const DV_KEY_ENTITY = {
 function mkFundingItem(o) {
   return Object.assign({ id: uid('it'), type: 'PA', paCode: '', product: '', model: '', qty: 1, unit: 0, site: '', plan: '', aiCheck: 'ok', approved: null, local: false, rental: false, s4: false, lowest: true, just: '' }, o || {});
 }
+function dvPage(page) {
+  const entities = (page && (page.entities || page.value)) || [];
+  return { entities: entities, nextLink: (page && (page.nextLink || page['@odata.nextLink'])) || null };
+}
 async function dvRetrieve(entity, query) {
+  const absolute = typeof query === 'string' && /^https?:\/\//i.test(query);
   const x = dvBindXrm();
-  if (x) return await x.WebApi.retrieveMultipleRecords(entity, query);
+  if (x) return dvPage(await x.WebApi.retrieveMultipleRecords(entity, absolute ? query : (query || '')));
   const base = dvClientUrl();
   if (!base) throw new Error('No Dataverse client URL');
   const set = DV_ENTITY_SET[entity] || (entity.endsWith('s') ? entity : entity + 's');
-  const url = base + '/api/data/v9.2/' + set + (query || '');
+  const url = absolute ? query : (base + '/api/data/v9.2/' + set + (query || ''));
   const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
   const timer = ctrl ? setTimeout(function () { try { ctrl.abort(); } catch (e0) {} }, 20000) : null;
   let res;
@@ -4144,11 +4195,24 @@ async function dvRetrieve(entity, query) {
   if (!res.ok) throw new Error('Web API ' + res.status + ' for ' + set + (text ? (': ' + text.slice(0, 120)) : ''));
   let data;
   try { data = JSON.parse(text); } catch (e) { throw new Error('Web API non-JSON for ' + set); }
-  return { entities: data.value || [] };
+  return dvPage(data);
+}
+async function dvRetrieveAll(entity, query, cap) {
+  cap = cap || 5000;
+  const all = [];
+  let q = query || '';
+  for (let n = 0; n < 15 && all.length < cap; n++) {
+    const page = await dvRetrieve(entity, q);
+    const ents = page.entities || [];
+    for (let i = 0; i < ents.length && all.length < cap; i++) all.push(ents[i]);
+    if (!page.nextLink || !ents.length) break;
+    q = page.nextLink;
+  }
+  return { entities: all };
 }
 async function dvRetrieveKey(k, query) {
   try {
-    return await dvRetrieve(DV_KEY_ENTITY[k], query);
+    return await dvRetrieveAll(DV_KEY_ENTITY[k], query, k === 'items' ? 8000 : 5000);
   } catch (e) {
     console.warn('dv', k, e);
     return { entities: [], __err: String(e && e.message || e) };
@@ -4161,22 +4225,178 @@ function dvApplySignedInUser(x) {
     if (name) UI.d365User = name;
   } catch (e) {}
 }
+let dvSeq = 0;
+function dvClient() {
+  try { if (typeof dvBindXrm === 'function') { const x = dvBindXrm(); if (x && x.WebApi) return x; } } catch (e0) {}
+  try { if (typeof dvXrm === 'function') { const x = dvXrm(); if (x && x.WebApi) return x; } } catch (e1) {}
+  return null;
+}
+function dvPortalUser() {
+  const u = window.CITF_PORTAL_USER || {};
+  const clean = v => String(v || '').replace(/[{}]/g, '').trim();
+  return { contactId: clean(u.contactId), accountId: clean(u.accountId), accountName: u.accountName || '' };
+}
+function dvCanWrite() {
+  if (dvClient()) return true;
+  try {
+    if (document.querySelector("input[name='__RequestVerificationToken']")) return true;
+    if (window.shell && typeof window.shell.getTokenDeferred === 'function') return true;
+  } catch (e) {}
+  return false;
+}
+function dvToken() {
+  return new Promise(function (resolve) {
+    try {
+      const input = document.querySelector("input[name='__RequestVerificationToken']");
+      if (input && input.value) { resolve(input.value); return; }
+    } catch (e0) {}
+    try {
+      if (window.shell && typeof window.shell.getTokenDeferred === 'function') {
+        window.shell.getTokenDeferred().done(function (t) { resolve(t || ''); }).fail(function () { resolve(''); });
+        return;
+      }
+    } catch (e1) {}
+    resolve('');
+  });
+}
+function dvGuid(raw) {
+  const m = String(raw || '').match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
+  return m ? m[0] : '';
+}
+async function dvWrite(method, setName, id, body) {
+  const logical = { cicapos_fundingapplications:'cicapos_fundingapplication', cicapos_fundingitems:'cicapos_fundingitem', cicapos_palapplications:'cicapos_palapplication', cicapos_fundingschemes:'cicapos_fundingscheme' }[setName] || setName;
+  const x = dvClient();
+  if (x) {
+    if (method === 'POST') { const created = await x.WebApi.createRecord(logical, body); return dvGuid(created && created.id); }
+    await x.WebApi.updateRecord(logical, id, body);
+    return id;
+  }
+  const token = await dvToken();
+  const headers = { 'Content-Type':'application/json; charset=utf-8', Accept:'application/json', 'OData-MaxVersion':'4.0', 'OData-Version':'4.0', Prefer:'return=representation' };
+  if (method !== 'POST') headers['If-Match'] = '*';
+  if (token) headers['__RequestVerificationToken'] = token;
+  const res = await fetch('/_api/' + setName + (id ? '(' + id + ')' : ''), { method: method === 'POST' ? 'POST' : 'PATCH', headers, credentials:'same-origin', body: JSON.stringify(body) });
+  const text = await res.text();
+  if (!res.ok) throw new Error('D365 ' + res.status + (text ? ': ' + text.replace(/\s+/g, ' ').slice(0, 220) : ''));
+  if (method !== 'POST') return id;
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch (e) { data = null; }
+  return dvGuid((data && (data[logical + 'id'] || data.id)) || res.headers.get('entityid') || res.headers.get('OData-EntityId') || res.headers.get('Location'));
+}
+async function dvSchemeMap() {
+  const map = {};
+  try {
+    const x = dvClient();
+    let rows = [];
+    if (x) {
+      const page = await x.WebApi.retrieveMultipleRecords('cicapos_fundingscheme', '?$select=cicapos_fundingschemeid,cicapos_code&$top=50');
+      rows = page.entities || [];
+    } else if (dvCanWrite()) {
+      const token = await dvToken();
+      const headers = { Accept:'application/json', 'OData-MaxVersion':'4.0', 'OData-Version':'4.0' };
+      if (token) headers['__RequestVerificationToken'] = token;
+      const res = await fetch('/_api/cicapos_fundingschemes?$select=cicapos_fundingschemeid,cicapos_code&$top=50', { headers, credentials:'same-origin' });
+      if (res.ok) { const data = await res.json(); rows = data.value || []; }
+    }
+    rows.forEach(s => { const code = s.cicapos_code || ''; if (code && s.cicapos_fundingschemeid) map[code] = s.cicapos_fundingschemeid; });
+  } catch (e) { console.warn('schemes', e); }
+  return map;
+}
+function dvSchemeId(map, code) {
+  const c = code === 'BIMT' ? 'BIM' : (code || '');
+  return map[c] || map.BIM || map.ACT || Object.values(map)[0] || '';
+}
+function queueDvFunding(a) {
+  dvPushFunding(a).then(function (id) {
+    if (id) { a._dvId = id; save(); toast('Submitted · ' + (a.project || a.ref) + ' is in D365. Open Funding Applications and refresh.'); }
+  }).catch(function (e) { console.warn(e); toast('Saved in this browser, but D365 did not take it: ' + (e && e.message || e), true); });
+}
+function queueDvPal(p) {
+  dvPushPal(p).then(function (id) {
+    if (id) { p._dvId = id; save(); toast((p.ref || p.name || 'PAL application') + ' is in D365. Open PAL Requests and refresh.'); }
+  }).catch(function (e) { console.warn(e); toast('Saved in this browser, but D365 did not take it: ' + (e && e.message || e), true); });
+}
+async function dvPushFunding(a) {
+  if (a._dvId) return a._dvId;
+  if (!dvCanWrite()) throw new Error('this page is not connected to D365');
+  const who = dvPortalUser();
+  if (!who.accountId) throw new Error('sign in on the portal with a company account first (applicant is required)');
+  const schemes = await dvSchemeMap();
+  let pledge = null;
+  try { pledge = pledgeDate(a); } catch (e) { pledge = null; }
+  if (!pledge) { const d = new Date(); d.setDate(d.getDate() + 30); pledge = d.toISOString(); }
+  const body = {
+    cicapos_projectname: a.project || a.ref || 'Funding application',
+    cicapos_objective: a.objective || '',
+    cicapos_status: 542400000,
+    cicapos_amountapplied: appAmt(a) || 0,
+    cicapos_pledgedate: String(pledge).slice(0, 10),
+    'cicapos_applicantid@odata.bind': '/accounts(' + who.accountId + ')'
+  };
+  if (who.contactId) body['cicapos_contactid@odata.bind'] = '/contacts(' + who.contactId + ')';
+  if (a.submittedOn) body.cicapos_submittedon = new Date(a.submittedOn).toISOString();
+  const id = await dvWrite('POST', 'cicapos_fundingapplications', null, body);
+  if (!id) throw new Error('D365 did not return an application id');
+  for (const it of (a.items || [])) {
+    const sid = dvSchemeId(schemes, it.scheme || (a.schemes || [])[0]);
+    if (!sid) throw new Error('the application was saved as a draft, but no funding scheme exists for its items');
+    const item = {
+      cicapos_name: it.product || 'Item',
+      cicapos_quantity: +it.qty || 1,
+      cicapos_unitprice: +it.unit || 0,
+      cicapos_itemtype: it.type === 'NPA' ? 542400002 : 542400000,
+      cicapos_islowestquote: it.lowest !== false,
+      'cicapos_fundingapplicationid@odata.bind': '/cicapos_fundingapplications(' + id + ')',
+      'cicapos_schemeid@odata.bind': '/cicapos_fundingschemes(' + sid + ')'
+    };
+    if (it.just) item.cicapos_justification = it.just;
+    await dvWrite('POST', 'cicapos_fundingitems', null, item);
+  }
+  if ((a.items || []).length) await dvWrite('PATCH', 'cicapos_fundingapplications', id, { cicapos_status: 542400001 });
+  a._dvId = id;
+  return id;
+}
+async function dvPushPal(p) {
+  if (p._dvId) return p._dvId;
+  if (!dvCanWrite()) throw new Error('this page is not connected to D365');
+  const who = dvPortalUser();
+  if (!who.accountId) throw new Error('sign in on the portal with a company account first (applicant is required)');
+  const schemes = await dvSchemeMap();
+  const sid = dvSchemeId(schemes, p.scheme);
+  if (!sid) throw new Error('no funding scheme is available in D365');
+  const body = {
+    cicapos_productname: p.name || p.ref || 'PAL application',
+    cicapos_kind: /change|delist/i.test(p.kind || '') ? 542400001 : 542400000,
+    cicapos_proposedprice: +p.price || 0,
+    cicapos_note: (/delist/i.test(p.kind || '') ? 'Delisting request. ' : '') + (p.note || ''),
+    cicapos_status: 542400001,
+    'cicapos_applicantid@odata.bind': '/accounts(' + who.accountId + ')',
+    'cicapos_schemeid@odata.bind': '/cicapos_fundingschemes(' + sid + ')'
+  };
+  if (p.submittedOn) body.cicapos_submittedon = new Date(p.submittedOn).toISOString();
+  const id = await dvWrite('POST', 'cicapos_palapplications', null, body);
+  if (!id) throw new Error('D365 did not return a PAL application id');
+  p._dvId = id;
+  return id;
+}
 async function dvHydrate(opts) {
   opts = opts || {};
+  const seq = ++dvSeq;
   // Wait for parent Xrm — Safari iframe often gets it a few seconds late
   var xrm = await dvWaitForXrm(opts.waitMs || 18000);
+  if (seq !== dvSeq) return false;
   dvApplySignedInUser(xrm);
   if (!dvAvailable()) { UI.dvLive.on = false; UI.dvLive.err = 'No Dataverse client URL / Xrm'; return false; }
   try {
     UI.dvLive.err = 'Loading from Dataverse…';
     const q = {
-      apps: '?$select=cicapos_fundingapplicationid,cicapos_name,cicapos_status,cicapos_submittedon,cicapos_pledgedate,cicapos_approvedgrant,cicapos_amountapplied,cicapos_projectname,_cicapos_casehandlerid_value,_cicapos_applicantid_value&$top=500&$orderby=cicapos_submittedon desc',
+      apps: '?$select=cicapos_fundingapplicationid,cicapos_name,cicapos_status,cicapos_submittedon,cicapos_pledgedate,cicapos_approvedgrant,cicapos_amountapplied,cicapos_projectname,createdon,_cicapos_casehandlerid_value,_cicapos_applicantid_value&$orderby=createdon desc',
       cos: '?$select=cicapos_companyregistrationid,cicapos_name,cicapos_legalname,cicapos_legalnamezh,cicapos_brnumber,cicapos_brexpiry,cicapos_companytype,cicapos_status,cicapos_submittedon,cicapos_contactname,cicapos_contactemail,cicapos_contactmobile,cicapos_registeredaddress,cicapos_website,_cicapos_casehandlerid_value&$top=500',
       drs: '?$select=cicapos_disbursementrequestid,cicapos_name,cicapos_status,cicapos_submittedon,cicapos_claimedamount,cicapos_instalmenttype,_cicapos_fundingapplicationid_value&$top=500',
       items: '?$select=cicapos_fundingitemid,cicapos_name,cicapos_approvedamount,cicapos_unitprice,cicapos_quantity,_cicapos_fundingapplicationid_value,_cicapos_schemeid_value&$top=5000',
       schemes: '?$select=cicapos_fundingschemeid,cicapos_code,cicapos_name&$top=50',
       pal: '?$select=cicapos_preapprovedproductid,cicapos_name,cicapos_code,cicapos_status,cicapos_unitprice,cicapos_origin,cicapos_listedon,_cicapos_schemeid_value&$top=500',
-      palApps: '?$select=cicapos_palapplicationid,cicapos_name,cicapos_status,cicapos_submittedon&$top=500',
+      palApps: '?$select=cicapos_palapplicationid,cicapos_name,cicapos_productname,cicapos_status,cicapos_kind,cicapos_proposedprice,cicapos_note,cicapos_submittedon,createdon,_cicapos_applicantid_value,_cicapos_schemeid_value&$orderby=createdon desc',
       tickets: '?$select=cicapos_casequeryid,cicapos_name,cicapos_question,cicapos_answer,cicapos_status,cicapos_askedon,cicapos_duedate,_cicapos_fundingapplicationid_value&$top=500',
       pays: '?$select=cicapos_paymentid,cicapos_name,cicapos_status,cicapos_amount,cicapos_paidon,_cicapos_disbursementrequestid_value&$top=200',
       insp: '?$select=cicapos_inspectionid,cicapos_name,cicapos_status,cicapos_scheduledon,_cicapos_fundingapplicationid_value&$top=200',
@@ -4203,6 +4423,16 @@ async function dvHydrate(opts) {
     const keys = Object.keys(q);
     // ensure all keys exist
     keys.forEach(function (k) { if (!bag[k]) bag[k] = []; });
+    let appsErr = errs.find(function (e) { return e.indexOf('apps:') === 0; }) || '';
+    if (appsErr) {
+      try {
+        const retry = await dvRetrieveAll(DV_KEY_ENTITY.apps, '?$select=cicapos_fundingapplicationid,cicapos_name,cicapos_status,createdon,_cicapos_casehandlerid_value,_cicapos_applicantid_value&$orderby=createdon desc');
+        bag.apps = retry.entities || [];
+        appsErr = '';
+      } catch (e2) {
+        appsErr = 'Applications did not load: ' + String(e2 && e2.message || e2);
+      }
+    }
 
     const schemes = {};
     bag.schemes.forEach(s => { schemes[s.cicapos_fundingschemeid] = s.cicapos_code || s.cicapos_name || '—'; });
@@ -4236,7 +4466,7 @@ async function dvHydrate(opts) {
       if (coId && !companies[coId]) companies[coId] = { id: coId, nameEn: applicantName, nameTc: '', address: '', status: '', type: '', br: '', contact: { name: '', email: '', phone: '', mobile: '', title: '' }, docs: [], history: [], shareholders: [], sites: [], ents: {}, bank: null, ai: { flags: [] }, checklist: {}, _live: true };
       return {
         id, ref: a.cicapos_name || '', companyId: coId, schemes: schemesOnApp, project: a.cicapos_projectname || '',
-        status: st, submittedOn: a.cicapos_submittedon || null, officer, priority: null, checklist: {}, queries: [], docs: [], history: [],
+        status: st, submittedOn: a.cicapos_submittedon || null, createdOn: a.createdon || null, officer, priority: null, checklist: {}, queries: [], docs: [], history: [],
         items: its.map(i => mkFundingItem({ product: i.cicapos_name || '', qty: i.cicapos_quantity == null ? null : +i.cicapos_quantity, unit: i.cicapos_unitprice == null ? null : +i.cicapos_unitprice, approved: i.cicapos_approvedamount == null ? null : +i.cicapos_approvedamount, type: null, paCode: null, aiCheck: null, lowest: null })),
         decision: null,
         _dvApplied: a.cicapos_amountapplied == null ? null : +a.cicapos_amountapplied,
@@ -4254,16 +4484,30 @@ async function dvHydrate(opts) {
       lines: [{ itemId: null, claim: d.cicapos_claimedamount == null ? null : +d.cicapos_claimedamount }], docs: [], history: [], queries: [], _live: true
     }));
 
-    const pal = bag.pal.map(p => ({
-      id: p.cicapos_preapprovedproductid, code: p.cicapos_code || p.cicapos_name, name: p.cicapos_name || p.cicapos_code,
-      scheme: schemes[p._cicapos_schemeid_value] || '', price: p.cicapos_unitprice == null ? null : +p.cicapos_unitprice, origin: p.cicapos_origin || '',
-      status: dvFmt(p,'cicapos_status') || '', apps: null, listedOn: p.cicapos_listedon ? String(p.cicapos_listedon).slice(0,10) : '', vendors: [], channel: '', tech: '', safety: '', list: '', webState: '', _live: true
-    }));
-    const palApps = bag.palApps.map(r => ({
-      id: r.cicapos_palapplicationid, ref: r.cicapos_name || '', companyId: null, name: r.cicapos_name || '', scheme: '', price: null,
-      status: dvFmt(r,'cicapos_status') || DV_PAL_ST[dvOpt(r,'cicapos_status')] || '', submittedOn: r.cicapos_submittedon || null,
-      kind: '', items: [], decl: {}, queries: [], history: [], _live: true
-    }));
+    const pal = bag.pal.map(p => {
+      const st = dvFmt(p,'cicapos_status') || '';
+      const listedOn = p.cicapos_listedon ? String(p.cicapos_listedon).slice(0,10) : '';
+      return {
+        id: p.cicapos_preapprovedproductid, code: p.cicapos_code || p.cicapos_name, name: p.cicapos_name || p.cicapos_code,
+        scheme: schemes[p._cicapos_schemeid_value] || '', price: p.cicapos_unitprice == null ? null : +p.cicapos_unitprice, origin: p.cicapos_origin || '',
+        status: st, apps: 0, listedOn, vendors: [], channel: '', tech: '', safety: '', list: '',
+        web: { on: listedOn || null, state: /listed/i.test(st) ? 'Published' : 'Removed' }, _live: true
+      };
+    });
+    const PAL_KIND = {542400000:'New listing', 542400001:'Change request'};
+    const palApps = bag.palApps.map(r => {
+      const coId = r._cicapos_applicantid_value || null;
+      const applicantName = r['_cicapos_applicantid_value@OData.Community.Display.V1.FormattedValue'] || '';
+      if (coId && !companies[coId]) companies[coId] = { id: coId, nameEn: applicantName, nameTc: '', address: '', status: '', type: '', br: '', contact: { name: '', email: '', phone: '', mobile: '', title: '' }, docs: [], history: [], shareholders: [], sites: [], ents: {}, bank: null, ai: { flags: [] }, checklist: {}, _live: true };
+      const kindLabel = r['cicapos_kind@OData.Community.Display.V1.FormattedValue'] || PAL_KIND[dvOpt(r,'cicapos_kind')] || '';
+      return {
+        id: r.cicapos_palapplicationid, ref: r.cicapos_name || '', companyId: coId, name: r.cicapos_productname || r.cicapos_name || '',
+        scheme: schemes[r._cicapos_schemeid_value] || '', price: r.cicapos_proposedprice == null ? null : +r.cicapos_proposedprice,
+        status: r['cicapos_status@OData.Community.Display.V1.FormattedValue'] || DV_PAL_ST[dvOpt(r,'cicapos_status')] || '',
+        submittedOn: r.cicapos_submittedon || r.createdon || null,
+        kind: kindLabel, note: r.cicapos_note || '', items: [], decl: {}, queries: [], history: [], _live: true
+      };
+    });
 
     // Tickets / case queries → S.tickets shape used by Q&A
     const tickets = bag.tickets.map(t => {
@@ -4320,8 +4564,9 @@ async function dvHydrate(opts) {
       });
     }
 
+    if (seq !== dvSeq) return false;
     S.companies = companies;
-    S.apps = apps;
+    if (!appsErr) S.apps = apps;
     S.drs = drs;
     S.pal = pal;
     S.palApps = palApps;
@@ -4329,17 +4574,18 @@ async function dvHydrate(opts) {
     S.inspections = inspections;
     S.batches = batches;
     S.emails = [];
-    S.reviews = [];
+    if (!S.reviews || !S.reviews.length) S.reviews = [{id:'rv1', year:'2027', status:'Scheduled', items:[], schedule:'2027-01-15'}];
     S.team = [...new Set(apps.map(a => a.officer).filter(Boolean))].map(n => ({name:n, avail:'Available', until:'', cap:8, queues:['Funding']}));
 
-    const gotAny = apps.length || Object.keys(companies).length || drs.length || bag.schemes.length || bag.items.length || pal.length || tickets.length;
+    const shownApps = appsErr ? (S.apps || []) : apps;
+    const gotAny = shownApps.length || Object.keys(companies).length || drs.length || bag.schemes.length || bag.items.length || pal.length || tickets.length;
     const via = dvBindXrm() ? 'Xrm.WebApi' : 'fetch';
-    if (!gotAny && errs.length) {
-      UI.dvLive = { on: false, asof: null, err: via + ' · ' + errs.slice(0, 2).join('; '), counts: {} };
+    if (appsErr || (!gotAny && errs.length)) {
+      UI.dvLive = { on: false, asof: null, err: appsErr || (via + ' · ' + errs.slice(0, 2).join('; ')), counts: { apps: shownApps.length } };
       return false;
     }
-    UI.dvLive = { on: true, asof: now().toISOString(), err: null, counts: { apps: apps.length, companies: Object.keys(companies).length, drs: drs.length, items: bag.items.length, pal: pal.length, tickets: tickets.length } };
-    if (!opts.silent) toast('Operation Platform data loaded from Dataverse · ' + apps.length + ' apps · ' + tickets.length + ' tickets');
+    UI.dvLive = { on: true, asof: now().toISOString(), err: null, counts: { apps: shownApps.length, companies: Object.keys(companies).length, drs: drs.length, items: bag.items.length, pal: pal.length, tickets: tickets.length } };
+    if (!opts.silent) toast('Operation Platform data loaded from Dataverse · ' + shownApps.length + ' apps · ' + tickets.length + ' tickets');
     return true;
   } catch (e) {
     UI.dvLive = { on: false, asof: null, err: String(e && e.message || e), counts: {} };
@@ -4349,7 +4595,14 @@ async function dvHydrate(opts) {
   }
 }
 
-load(); compTick(true); rvTick(false); palInit(); purgeDrafts(false); opsInit(); calcInit(); trackInit();
+try { load(); } catch (eLoad) { S = emptyStore(); }
+try { compTick(true); } catch (e0) {}
+try { rvTick(false); } catch (e1) {}
+try { palInit(); } catch (e2) {}
+try { purgeDrafts(false); } catch (e3) {}
+try { opsInit(); } catch (e4) {}
+try { calcInit(); } catch (e5) {}
+try { trackInit(); } catch (e6) {}
 try { document.body.classList.add('citf-flow', 'citf-proto'); } catch (e) {}
 try { initPaneMode(); scheduleNavIconPatch(); } catch (e) {}
 try {
@@ -4382,37 +4635,35 @@ try {
   }
 })();
 if (!CUR) CUR = curHash() || DEFAULT_ROUTE;
-try { history.replaceState(null, '', CUR); } catch (e) {}
-if (!inCrmShell()) render();
 try {
   if (UI.paneMode) {
     var d2 = getWrDataParam();
     CUR = dataParamToRoute(d2) || CUR || '#/d/dash';
-    try { history.replaceState(null, '', CUR); } catch (e3) {}
   } else if (/WebResources|d365ops/i.test(location.href)) {
     if (!CUR || CUR.indexOf('#/d/') !== 0) CUR = '#/d/dash';
   }
 } catch (e4) {}
+applyHash(CUR);
+try { render(); } catch (eR) { console.error('CITF first paint', eR); try { hideCitfBoot(); } catch (eH) {} }
 (function ensureLiveData() {
   var tries = 0;
-  UI.dvLive.err = 'Connecting to Dataverse…';
-  if (!inCrmShell()) render();
+  UI.dvLive.err = UI.dvLive.err || 'Connecting to Dataverse…';
   function attempt() {
     tries++;
-    scheduleNavIconPatch();
-    dvHydrate({ silent: true, waitMs: tries === 1 ? 18000 : 8000 }).then(function (ok) {
-      render();
+    try { scheduleNavIconPatch(); } catch (eN) {}
+    dvHydrate({ silent: true, waitMs: tries === 1 ? 8000 : 5000 }).then(function (ok) {
+      try { render(); } catch (eP) { console.error(eP); }
       if (ok) return;
       if (tries < 3) setTimeout(attempt, 1200);
     }).catch(function (e) {
       UI.dvLive.on = false;
       UI.dvLive.err = String(e && e.message || e);
       console.warn('CITF dvHydrate', e);
-      render();
+      try { render(); } catch (eP) {}
       if (tries < 3) setTimeout(attempt, 1200);
     });
   }
-  setTimeout(attempt, 200);
+  setTimeout(attempt, 50);
 })();
 
 

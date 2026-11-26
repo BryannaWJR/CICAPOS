@@ -7,6 +7,37 @@
 (function (global) {
   "use strict";
 
+  var S2T = "㐷傌㐹㑶㐽偑㑇㑳㑈倲㑔㑯㑩儸㓥劏㓰劃㔉劚㖊噚㖞喎㘎㘚㚯㜄㛀媰㛣㜏㛤孋㟆㠏㟥嵾㡎幓㤘㥮㤽懤㥪慺㧏掆㧐㩳㧑撝㧟擓㧰擽㨫㩜㭎棡㭏椲㭤樢㭴樫㱩殰㱮殨㲿瀇㳔濧㳕灡㳠澾㳡濄㳽瀰㴋潚㶉鸂㶶燶㶽煱㺍獱㻅璯䀥䁻䁖瞜䂵碽䃅磾䅉稏䅟穇䇲筴䉤籔䌶䊷䌷紬䌸縳䌹絅䌺䋙䌻䋚䌼綐䌽綵䌾䋻䌿䋹䍀繿䍁繸䍠䍦䎬䎱䏝膞䓓薵䓕薳䓖藭䓨罃䗖螮䙌䙡䙓襬䜣訢䜤鿁䜧䜀䜩讌䝙貙䞍䝼䞐賰䟢躎䥺釾䥽鏺䥾䥱䦂䥇䦃鐯䦅鐥䦆钁䦶䦛䦷䦟䩄靦䯄騧䯅䯀䲝䱽䲟鮣䲠鰆䲡鰌䲢鰧䲣䱷䴓鳾䴔鵁䴕鴷䴖鶄䴗鶪䴘鷉䴙鸊䶮龑万萬与與丑醜专專业業丛叢东東丝絲丢丟两兩严嚴丧喪个個丰豐临臨为為丽麗举舉么麼义義乌烏乐樂乔喬习習乡鄉书書买買乱亂争爭于於亏虧云雲亘亙亚亞产產亩畝亲親亵褻亸嚲亿億仅僅仆僕从從仑侖仓倉仪儀们們价價众眾优優伙夥会會伛傴伞傘伟偉传傳伡俥伣俔伤傷伥倀伦倫伧傖伪偽伫佇体體余餘佣傭佥僉侠俠侣侶侥僥侦偵侧側侨僑侩儈侪儕侬儂侭儘俣俁俦儔俨儼俩倆俪儷俫倈俭儉债債倾傾偬傯偻僂偾僨偿償傤儎傥儻傧儐储儲傩儺儿兒兖兗党黨兰蘭关關兴興兹茲养養兽獸冁囅内內冈岡册冊写寫军軍农農冯馮冲衝决決况況冻凍净淨凄悽准準凉涼减減凑湊凛凜几幾凤鳳凫鳧凭憑凯凱凶兇击擊凿鑿刍芻划劃刘劉则則刚剛创創删刪别別刬剗刭剄刹剎刽劊刾㓨刿劌剀剴剂劑剐剮剑劍剥剝剧劇劝勸办辦务務劢勱动動励勵劲勁劳勞势勢勋勳勚勩匀勻匦匭匮匱区區医醫华華协協单單卖賣占佔卢盧卤滷卫衞却卻卺巹厂廠厅廳历歷厉厲压壓厌厭厍厙厐龎厕廁厘釐厢廂厣厴厦廈厨廚厩廄厮廝县縣参參叆靉叇靆双雙发發变變叙敍叠疊叶葉号號叹嘆叽嘰吁籲后後吓嚇吕呂吗嗎吨噸听聽启啓吴吳呐吶呒嘸呓囈呕嘔呖嚦呗唄员員呙咼呛嗆呜嗚咏詠咙嚨咛嚀咝噝咤吒咨諮咸鹹响響哑啞哒噠哓嘵哔嗶哕噦哗譁哙噲哜嚌哝噥哟喲唛嘜唝嗊唠嘮唡啢唢嗩唤喚啧嘖啬嗇啭囀啮齧啯嘓啰囉啴嘽啸嘯喂餵喷噴喽嘍喾嚳嗫囁嗳噯嘘噓嘤嚶嘱囑噜嚕嚣囂团團园園围圍囵圇国國图圖圆圓圣聖圹壙场場坏壞块塊坚堅坛壇坜壢坝壩坞塢坟墳坠墜垄壟垅壠垆壚垒壘垦墾垩堊垫墊垭埡垯墶垱壋垲塏垴堖埘塒埙壎埚堝堑塹堕墮塆壪墙牆壮壯声聲壳殼壶壺壸壼处處备備复復够夠头頭夸誇夹夾夺奪奁奩奂奐奋奮奖獎奥奧妆妝妇婦妈媽妩嫵妪嫗妫媯姗姍姹奼娄婁娅婭娆嬈娇嬌娈孌娱娛娲媧娴嫺婳嫿婴嬰婵嬋婶嬸媭嬃嫒嬡嫔嬪嫱嬙嬷嬤孙孫学學孪孿宁寧宝寶实實宠寵审審宪憲宫宮宽寬宾賓寝寢对對寻尋导導寿壽将將尔爾尘塵尝嘗尧堯尴尷尸屍尽盡层層屃屓屉屜届屆属屬屡屢屦屨屿嶼岁歲岂豈岖嶇岗崗岘峴岚嵐岛島岩巖岭嶺岳嶽岽崬岿巋峃嶨峄嶧峡峽峣嶢峤嶠峥崢峦巒峰峯崂嶗崃崍崄嶮崭嶄嵘嶸嵚嶔嵝嶁巅巔巩鞏巯巰币幣帅帥师師帏幃帐帳帘簾帜幟带帶帧幀帮幫帱幬帻幘帼幗幂冪并並广廣庄莊庆慶床牀庐廬庑廡库庫应應庙廟庞龐废廢庼廎廪廩开開异異弃棄弑弒张張弥彌弪弳弯彎弹彈强強归歸当當录錄彟彠彦彥彨彲彻徹征徵径徑徕徠忆憶忏懺忧憂忾愾怀懷态態怂慫怃憮怄慪怅悵怆愴怜憐总總怼懟怿懌恋戀恒恆恳懇恶惡恸慟恹懨恺愷恻惻恼惱恽惲悫愨悬懸悭慳悮悞悯憫惊驚惧懼惨慘惩懲惫憊惬愜惭慚惮憚惯慣愤憤愦憒愿願慑懾慭憖懑懣懒懶懔懍戆戇戋戔戏戲戗戧战戰戬戩戯戱扑撲托託执執扩擴扪捫扫掃扬揚扰擾抚撫抛拋抟摶抠摳抡掄抢搶护護报報担擔拟擬拢攏拣揀拥擁拦攔拧擰拨撥择擇挂掛挚摯挛攣挜掗挝撾挞撻挟挾挠撓挡擋挢撟挣掙挤擠挥揮挦撏捞撈损損捡撿换換捣搗据據掳擄掴摑掷擲掸撣掺摻掼摜揽攬揿撳搀攙搁擱搂摟搄揯搅攪携攜摄攝摅攄摆擺摇搖摈擯摊攤撄攖撑撐撵攆撷擷撸擼撺攛擜㩵擞擻攒攢敌敵敛斂敩斆数數斋齋斓斕斗鬥斩斬断斷无無旧舊时時旷曠旸暘昙曇昵暱昼晝昽曨显顯晋晉晒曬晓曉晔曄晕暈晖暉暂暫暧曖术術朴樸机機杀殺杂雜权權杠槓条條来來杨楊杩榪杰傑极極构構枞樅枢樞枣棗枥櫪枧梘枨棖枪槍枫楓枭梟柜櫃柠檸柽檉栀梔栅柵标標栈棧栉櫛栊櫳栋棟栌櫨栎櫟栏欄树樹栖棲栗慄样樣栾欒桠椏桡橈桢楨档檔桤榿桥橋桦樺桧檜桨槳桩樁桪樳梦夢梼檮梾棶梿槤检檢棂欞椁槨椝槼椟櫝椠槧椢槶椤欏椫樿椭橢椮槮楼樓榄欖榇櫬榈櫚榉櫸榝樧槚檟槛檻槟檳槠櫧横橫樯檣樱櫻橥櫫橱櫥橹櫓橼櫞檩檁欢歡欤歟欧歐歼殲殁歿殇殤残殘殒殞殓殮殚殫殡殯殴毆毁毀毂轂毕畢毙斃毡氈毵毿氇氌气氣氢氫氩氬汇匯汉漢汤湯汹洶沟溝没沒沣灃沤漚沥瀝沦淪沧滄沨渢沩溈沪滬泞濘泪淚泶澩泷瀧泸瀘泺濼泻瀉泼潑泽澤泾涇洁潔洒灑洼窪浃浹浅淺浆漿浇澆浈湞浉溮浊濁测測浍澮济濟浏瀏浐滻浑渾浒滸浓濃浔潯浕濜涂塗涌湧涛濤涝澇涞淶涟漣涠潿涡渦涢溳涣渙涤滌润潤涧澗涨漲涩澀淀澱渊淵渌淥渍漬渎瀆渐漸渑澠渔漁渖瀋渗滲游遊湾灣湿濕溁濚溃潰溅濺溆漵溇漊滗潷滚滾滞滯滟灩滠灄满滿滢瀅滤濾滥濫滦灤滨濱滩灘滪澦潆瀠潇瀟潋瀲潍濰潜潛潴瀦澛瀂澜瀾濑瀨濒瀕灏灝灭滅灯燈灵靈灾災灿燦炀煬炉爐炖燉炜煒炝熗点點炼煉炽熾烁爍烂爛烃烴烛燭烟煙烦煩烧燒烨燁烩燴烫燙烬燼热熱焕煥焖燜焘燾熏燻爱愛爷爺牍牘牦犛牵牽牺犧犊犢状狀犷獷犸獁犹猶狈狽狝獮狞獰独獨狭狹狮獅狯獪狰猙狱獄狲猻猃獫猎獵猕獼猡玀猪豬猫貓猬蝟献獻獭獺玑璣玙璵玚瑒玛瑪玮瑋环環现現玱瑲玺璽珐琺珑瓏珰璫珲琿琎璡琏璉琐瑣琼瓊瑶瑤瑷璦瑸璸璎瓔瓒瓚瓮甕瓯甌电電画畫畅暢畴疇疖癤疗療疟瘧疠癘疡瘍疬癧疭瘲疮瘡疯瘋疱皰疴痾痈癰痉痙痒癢痖瘂痨癆痪瘓痫癇瘅癉瘆瘮瘗瘞瘘瘻瘪癟瘫癱瘾癮瘿癭癞癩癣癬癫癲皑皚皱皺皲皸盏盞盐鹽监監盖蓋盗盜盘盤眍瞘眦眥眬矓睁睜睐睞睑瞼瞆瞶瞒瞞瞩矚矫矯矶磯矾礬矿礦砀碭码碼砖磚砗硨砚硯砜碸砺礪砻礱砾礫础礎硁硜硕碩硖硤硗磽硙磑硚礄确確硵磠硷礆碍礙碛磧碜磣碱鹼礼禮祃禡祎禕祢禰祯禎祷禱祸禍禀稟禄祿禅禪离離秃禿秆稈种種积積称稱秽穢秾穠稆穭稣穌稳穩穑穡穞穭穷窮窃竊窍竅窎窵窑窯窜竄窝窩窥窺窦竇窭窶竖豎竞競笃篤笋筍笔筆笕筧笺箋笼籠笾籩筑築筚篳筛篩筜簹筝箏筹籌筼篔签籤筿篠简簡箓籙箦簀箧篋箨籜箩籮箪簞箫簫篑簣篓簍篮籃篯籛篱籬簖籪籁籟籴糴类類籼秈粜糶粝糲粤粵粪糞粮糧糁糝糇餱糍餈紧緊絷縶縆緪纟糹纠糾纡紆红紅纣紂纤纖纥紇约約级級纨紈纩纊纪紀纫紉纬緯纭紜纮紘纯純纰紕纱紗纲綱纳納纴紝纵縱纶綸纷紛纸紙纹紋纺紡纻紵纼紖纽紐纾紓线線绀紺绁紲绂紱练練组組绅紳细細织織终終绉縐绊絆绋紼绌絀绍紹绎繹经經绐紿绑綁绒絨结結绔絝绕繞绖絰绗絎绘繪给給绚絢绛絳络絡绝絕绞絞统統绠綆绡綃绢絹绣繡绤綌绥綏绦絛继繼绨綈绩績绪緒绫綾绬緓续續绮綺绯緋绰綽绱鞝绲緄绳繩维維绵綿绶綬绷繃绸綢绹綯绺綹绻綣综綜绽綻绾綰绿綠缀綴缁緇缂緙缃緗缄緘缅緬缆纜缇緹缈緲缉緝缊緼缋繢缌緦缍綞缎緞缏緶缐線缑緱缒縋缓緩缔締缕縷编編缗緡缘緣缙縉缚縛缛縟缜縝缝縫缞縗缟縞缠纏缡縭缢縊缣縑缤繽缥縹缦縵缧縲缨纓缩縮缪繆缫繅缬纈缭繚缮繕缯繒缰繮缱繾缲繰缳繯缴繳缵纘罂罌网網罗羅罚罰罢罷罴羆羁羈羟羥羡羨群羣翘翹翙翽翚翬耢耮耧耬耸聳耻恥聂聶聋聾职職聍聹联聯聩聵聪聰肃肅肠腸肤膚肮骯肴餚肾腎肿腫胀脹胁脅胆膽胜勝胧朧胨腖胪臚胫脛胶膠脉脈脍膾脏髒脐臍脑腦脓膿脔臠脚腳脶腡脸臉腊臘腌醃腘膕腭齶腻膩腼靦腾騰膑臏膻羶臜臢舆輿舣艤舰艦舱艙舻艫艰艱艳豔艺藝节節芈羋芗薌芜蕪芦蘆苁蓯苇葦苈藶苋莧苌萇苍蒼苎薴苏蘇苹蘋范範茎莖茏蘢茑蔦茔塋茕煢茧繭荆荊荐薦荙薘荚莢荛蕘荜蓽荝萴荞蕎荟薈荠薺荡蕩荣榮荤葷荥滎荦犖荧熒荨蕁荩藎荪蓀荫蔭荬蕒荭葒荮葤药藥莅蒞莱萊莲蓮莳蒔莴萵莶薟获獲莸蕕莹瑩莺鶯莼蓴萚蘀萝蘿萤螢营營萦縈萧蕭萨薩蒇蕆蒉蕢蒋蔣蒌蔞蒏醟蓝藍蓟薊蓠蘺蓣蕷蓥鎣蓦驀蔂虆蔷薔蔹蘞蔺藺蔼藹蕰薀蕲蘄蕴蘊薮藪藓蘚蘖櫱虏虜虑慮虚虛虫蟲虬虯虮蟣虱蝨虽雖虾蝦虿蠆蚀蝕蚁蟻蚂螞蚃蠁蚕蠶蚝蠔蚬蜆蛊蠱蛎蠣蛏蟶蛮蠻蛰蟄蛱蛺蛲蟯蛳螄蛴蠐蜗蝸蜡蠟蝇蠅蝈蟈蝉蟬蝎蠍蝼螻蝾蠑螀螿螨蟎蟏蠨衅釁衔銜补補衬襯衮袞袄襖袅嫋袆褘袜襪袭襲袯襏装裝裆襠裈褌裢褳裣襝裤褲裥襉褛褸褴襤襕襴见見观觀觃覎规規觅覓视視觇覘览覽觉覺觊覬觋覡觌覿觍覥觎覦觏覯觐覲觑覷觞觴触觸觯觶訚誾詟讋誉譽誊謄讠訁计計订訂讣訃认認讥譏讦訐讧訌讨討让讓讪訕讫訖讬託训訓议議讯訊记記讱訒讲講讳諱讴謳讵詎讶訝讷訥许許讹訛论論讻訩讼訟讽諷设設访訪诀訣证證诂詁诃訶评評诅詛识識诇詗诈詐诉訴诊診诋詆诌謅词詞诎詘诏詔诐詖译譯诒詒诓誆诔誄试試诖詿诗詩诘詰诙詼诚誠诛誅诜詵话話诞誕诟詬诠詮诡詭询詢诣詣诤諍该該详詳诧詫诨諢诩詡诪譸诫誡诬誣语語诮誚误誤诰誥诱誘诲誨诳誑说説诵誦诶誒请請诸諸诹諏诺諾读讀诼諑诽誹课課诿諉谀諛谁誰谂諗调調谄諂谅諒谆諄谇誶谈談谉讅谊誼谋謀谌諶谍諜谎謊谏諫谐諧谑謔谒謁谓謂谔諤谕諭谖諼谗讒谘諮谙諳谚諺谛諦谜謎谝諞谞諝谟謨谠讜谡謖谢謝谣謠谤謗谥諡谦謙谧謐谨謹谩謾谪謫谫譾谬謬谭譚谮譖谯譙谰讕谱譜谲譎谳讞谴譴谵譫谶讖豮豶贝貝贞貞负負贠貟贡貢财財责責贤賢败敗账賬货貨质質贩販贪貪贫貧贬貶购購贮貯贯貫贰貳贱賤贲賁贳貰贴貼贵貴贶貺贷貸贸貿费費贺賀贻貽贼賊贽贄贾賈贿賄赀貲赁賃赂賂赃贓资資赅賅赆贐赇賕赈賑赉賚赊賒赋賦赌賭赍齎赎贖赏賞赐賜赑贔赒賙赓賡赔賠赕賧赖賴赗賵赘贅赙賻赚賺赛賽赜賾赝贗赞贊赟贇赠贈赡贍赢贏赣贛赪赬赵趙赶趕趋趨趱趲趸躉跃躍跄蹌跖蹠跞躒践踐跶躂跷蹺跸蹕跹躚跻躋踌躊踪蹤踬躓踯躑蹑躡蹒蹣蹰躕蹿躥躏躪躜躦躯軀车車轧軋轨軌轩軒轪軑轫軔转轉轭軛轮輪软軟轰轟轱軲轲軻轳轤轴軸轵軹轶軼轷軤轸軫轹轢轺軺轻輕轼軾载載轾輊轿轎辀輈辁輇辂輅较較辄輒辅輔辆輛辇輦辈輩辉輝辊輥辋輞辌輬辍輟辎輜辏輳辐輻辑輯辒輼输輸辔轡辕轅辖轄辗輾辘轆辙轍辚轔辞辭辟闢辩辯辫辮边邊辽遼达達迁遷过過迈邁运運还還这這进進远遠违違连連迟遲迩邇迳逕迹跡适適选選逊遜递遞逦邐逻邏遗遺遥遙邓鄧邝鄺邬鄔邮郵邹鄒邺鄴邻鄰郁鬱郏郟郐鄶郑鄭郓鄆郦酈郧鄖郸鄲酂酇酝醞酦醱酱醬酽釅酾釃酿釀采採释釋鉴鑑銮鑾錾鏨钅釒钆釓钇釔针針钉釘钊釗钋釙钌釕钍釷钎釺钏釧钐釤钑鈒钒釩钓釣钔鍆钕釹钖鍚钗釵钘鈃钙鈣钚鈈钛鈦钜鉅钝鈍钞鈔钠鈉钡鋇钢鋼钣鈑钤鈐钥鑰钦欽钧鈞钨鎢钩鈎钪鈧钫鈁钬鈥钭鈄钮鈕钯鈀钰鈺钱錢钲鉦钳鉗钴鈷钵缽钶鈳钷鉕钸鈽钹鈸钺鉞钻鑽钼鉬钽鉭钾鉀钿鈿铀鈾铁鐵铂鉑铃鈴铄鑠铅鉛铆鉚铇鉋铈鈰铉鉉铊鉈铋鉍铌鈮铍鈹铎鐸铏鉶铐銬铑銠铒鉺铓鋩铔錏铕銪铖鋮铗鋏铘鋣铙鐃铚銍铛鐺铜銅铝鋁铞銱铟銦铠鎧铡鍘铢銖铣銑铤鋌铥銩铦銛铧鏵铨銓铩鎩铪鉿铫銚铬鉻铭銘铮錚铯銫铰鉸铱銥铲鏟铳銃铴鐋铵銨银銀铷銣铸鑄铹鐒铺鋪铻鋙铼錸铽鋱链鏈铿鏗销銷锁鎖锂鋰锃鋥锄鋤锅鍋锆鋯锇鋨锈鏽锉銼锊鋝锋鋒锌鋅锍鋶锎鐦锏鐧锐鋭锑銻锒鋃锓鋟锔鋦锕錒锖錆锗鍺锘鍩错錯锚錨锛錛锜錡锝鍀锞錁锟錕锠錩锡錫锢錮锣鑼锤錘锥錐锦錦锧鑕锨鍁锩錈锪鍃锫錇锬錟锭錠键鍵锯鋸锰錳锱錙锲鍥锳鍈锴鍇锵鏘锶鍶锷鍔锸鍤锹鍬锺鍾锻鍛锼鎪锽鍠锾鍰锿鎄镀鍍镁鎂镂鏤镃鎡镄鐨镅鎇镆鏌镇鎮镈鎛镉鎘镊鑷镋钂镌鐫镍鎳镎鎿镏鎦镐鎬镑鎊镒鎰镓鎵镔鑌镕鎔镖鏢镗鏜镘鏝镙鏍镚鏰镛鏞镜鏡镝鏑镞鏃镟鏇镠鏐镡鐔镢钁镣鐐镤鏷镥鑥镦鐓镧鑭镨鐠镩鑹镪鏹镫鐙镬鑊镭鐳镮鐶镯鐲镰鐮镱鐿镲鑔镳鑣镴鑞镵鑱镶鑲长長门門闩閂闪閃闫閆闬閈闭閉问問闯闖闰閏闱闈闲閒闳閎间間闵閔闶閌闷悶闸閘闹鬧闺閨闻聞闼闥闽閩闾閭闿闓阀閥阁閣阂閡阃閫阄鬮阅閲阆閬阇闍阈閾阉閹阊閶阋鬩阌閿阍閽阎閻阏閼阐闡阑闌阒闃阓闠阔闊阕闋阖闔阗闐阘闒阙闕阚闞阛闤队隊阳陽阴陰阵陣阶階际際陆陸陇隴陈陳陉陘陕陝陦隯陧隉陨隕险險随隨隐隱隶隸隽雋难難雇僱雏雛雠讎雳靂雾霧霁霽霉黴霡霢霭靄靓靚靔靝静靜靥靨鞑韃鞒鞽鞯韉鞲韝韦韋韧韌韨韍韩韓韪韙韫韞韬韜韵韻页頁顶頂顷頃顸頇项項顺順须須顼頊顽頑顾顧顿頓颀頎颁頒颂頌颃頏预預颅顱领領颇頗颈頸颉頡颊頰颋頲颌頜颍潁颎熲颏頦颐頤频頻颒頮颓頹颔頷颕頴颖穎颗顆题題颙顒颚顎颛顓颜顏额額颞顳颟顢颠顛颡顙颢顥颣纇颤顫颥顬颦顰颧顴风風飏颺飐颭飑颮飒颯飓颶飔颸飕颼飖颻飗飀飘飄飙飆飚飈飞飛飨饗餍饜饣飠饤飣饥飢饦飥饧餳饨飩饩餼饪飪饫飫饬飭饭飯饮飲饯餞饰飾饱飽饲飼饳飿饴飴饵餌饶饒饷餉饸餄饹餎饺餃饻餏饼餅饽餑饾餖饿餓馀餘馁餒馂餕馃餜馄餛馅餡馆館馇餷馈饋馉餶馊餿馋饞馌饁馍饃馎餺馏餾馐饈馑饉馒饅馓饊馔饌馕饢马馬驭馭驮馱驯馴驰馳驱驅驲馹驳駁驴驢驵駔驶駛驷駟驸駙驹駒驺騶驻駐驼駝驽駑驾駕驿驛骀駘骁驍骂罵骃駰骄驕骅驊骆駱骇駭骈駢骉驫骊驪骋騁验驗骍騂骎駸骏駿骐騏骑騎骒騍骓騅骔騌骕驌骖驂骗騙骘騭骙騤骚騷骛騖骜驁骝騮骞騫骟騸骠驃骡騾骢驄骣驏骤驟骥驥骦驦骧驤髅髏髋髖髌髕鬓鬢鬶鬹魇魘魉魎鱼魚鱽魛鱾魢鱿魷鲀魨鲁魯鲂魴鲃䰾鲄魺鲅鮁鲆鮃鲇鮎鲈鱸鲉鮋鲊鮓鲋鮒鲌鮊鲍鮑鲎鱟鲏鮍鲐鮐鲑鮭鲒鮚鲓鮳鲔鮪鲕鮞鲖鮦鲗鰂鲘鮜鲙鱠鲚鱭鲛鮫鲜鮮鲝鮺鲞鯗鲟鱘鲠鯁鲡鱺鲢鰱鲣鰹鲤鯉鲥鰣鲦鰷鲧鯀鲨鯊鲩鯇鲪鮶鲫鯽鲬鯒鲭鯖鲮鯪鲯鯕鲰鯫鲱鯡鲲鯤鲳鯧鲴鯝鲵鯢鲶鯰鲷鯛鲸鯨鲹鰺鲺鯴鲻鯔鲼鱝鲽鰈鲾鰏鲿鱨鳀鯷鳁鰛鳂鰃鳃鰓鳄鱷鳅鰍鳆鰒鳇鰉鳈鰁鳉鱂鳊鯿鳋鰠鳌鰲鳍鰭鳎鰨鳏鰥鳐鰩鳑鰟鳒鰜鳓鰳鳔鰾鳕鱈鳖鱉鳗鰻鳘鰵鳙鱅鳚䲁鳛鰼鳜鱖鳝鱔鳞鱗鳟鱒鳠鱯鳡鱤鳢鱧鳣鱣鳤䲘鸟鳥鸠鳩鸡雞鸢鳶鸣鳴鸤鳲鸥鷗鸦鴉鸧鶬鸨鴇鸩鴆鸪鴣鸫鶇鸬鸕鸭鴨鸮鴞鸯鴦鸰鴒鸱鴟鸲鴝鸳鴛鸴鷽鸵鴕鸶鷥鸷鷙鸸鴯鸹鴰鸺鵂鸻鴴鸼鵃鸽鴿鸾鸞鸿鴻鹀鵐鹁鵓鹂鸝鹃鵑鹄鵠鹅鵝鹆鵒鹇鷳鹈鵜鹉鵡鹊鵲鹋鶓鹌鵪鹍鵾鹎鵯鹏鵬鹐鵮鹑鶉鹒鶊鹓鵷鹔鷫鹕鶘鹖鶡鹗鶚鹘鶻鹙鶖鹚鷀鹛鶥鹜鶩鹝鷊鹞鷂鹟鶲鹠鶹鹡鶺鹢鷁鹣鶼鹤鶴鹥鷖鹦鸚鹧鷓鹨鷚鹩鷯鹪鷦鹫鷲鹬鷸鹭鷺鹮䴉鹯鸇鹰鷹鹱鸌鹲鸏鹳鸛鹴鸘鹾鹺麦麥麸麩麹麴麺麪黄黃黉黌黡黶黩黷黪黲黾黽鼋黿鼌鼂鼍鼉鼹鼴齐齊齑齏齿齒龀齔龁齕龂齗龃齟龄齡龅齙龆齠龇齜龈齦龉齬龊齪龋齲龌齷龙龍龚龔龛龕龟龜鿎䃮鿏䥑鿒鿓鿔鎶拐枴户戶";
+  var S2T_MAP = null;
+  function toTraditional(text) {
+    if (text == null || text === "") return text;
+    var s = String(text)
+      .replace(/里面/g, "裡面").replace(/这里/g, "這裡")
+      .replace(/那里/g, "那裡").replace(/哪里/g, "哪裡");
+    if (!S2T_MAP) {
+      S2T_MAP = {};
+      for (var i = 0; i + 1 < S2T.length; i += 2) S2T_MAP[S2T.charAt(i)] = S2T.charAt(i + 1);
+    }
+    var out = "";
+    for (var k = 0; k < s.length; k++) {
+      var ch = s.charAt(k);
+      out += S2T_MAP[ch] || ch;
+    }
+    return out;
+  }
+  function traditionalizeAi(res) {
+    if (!res) return res;
+    if (res.notes) res.notes = toTraditional(res.notes);
+    if (res.issues && res.issues.forEach) res.issues.forEach(function (i) { if (i && i.message) i.message = toTraditional(i.message); });
+    var f = res.fields;
+    if (f) {
+      if (f.summary) f.summary = toTraditional(f.summary);
+      if (f.note) f.note = toTraditional(f.note);
+      if (f.risksJson) f.risksJson = toTraditional(f.risksJson);
+    }
+    return res;
+  }
+
   var ACTIONS = {
     Prefill: "prefill",
     ValidateUpload: "validate_upload",
@@ -38,11 +69,237 @@
   }
 
   function hasBenefit(t) {
-    return /benefit|improv|reduc|sav|safer|safety|productiv|efficien|cut |lower|enhance|quality|incident/i.test(t || "");
+    return /benefit|improv|reduc|sav|safer|safety|productiv|efficien|cut |lower|enhance|quality|incident|cost-?effect|效益|节省|降低|减少|提升|安全/i.test(t || "");
   }
 
   function hasImplement(t) {
-    return /implement|deploy|install|monitor|train|use |using|cover|apply|roll.?out|operate|site|automat|tying|zone|crane|camera|survey|licence|license/i.test(t || "");
+    return /implement|deploy|install|monitor|train|use |using|cover|apply|roll.?out|operate|site|automat|tying|zone|crane|camera|survey|licence|license|实施|安装|部署|监测|培训/i.test(t || "");
+  }
+
+  function planHasEnoughDetail(t) {
+    var s = String(t || "").trim();
+    var cjk = (s.match(/[\u4e00-\u9fff]/g) || []).length;
+    var west = (s.replace(/[\u4e00-\u9fff]/g, " ").match(/\S+/g) || []).length;
+    return west >= 8 || cjk >= 16;
+  }
+
+  function hasPlanAction(t) {
+    return /\b(install|deploy|monitor|cover|alert|train|automat|operat|implement|apply|using|use |survey|tying|roll.?out)\b|安装|部署|监测|用于|使用|覆盖|培训|绑扎|巡查|在本工程|在地盘|在工地/i.test(t || "");
+  }
+
+  function hasObjective(t) {
+    return /aim|objective|goal|purpose|propos|intend|seek|will |install|deploy|adopt|introduc|apply for|\bcut\b|automat|monitor|improv|reduc|cover |目标|旨在|为了|拟在|申请/i.test(t || "");
+  }
+
+  var INDOOR_PROJECT = /indoor|interior|\bfit-?out\b|fitout|plant[- ]?room|basement|\blobby\b|office renovation|办公室装修|辦公室裝修|室内|室內|内装|內裝|机房|機房|课室|課室/i;
+  var OUTDOOR_PROJECT = /outdoor|open[- ]air|tower[- ]?crane|excavation|site formation|foundation works|reclamation|viaduct|sports park|open site|civil works|室外|戶外|户外|天秤|塔吊|地基|外墙|外牆/i;
+  var INDOOR_ITEM = /\bindoor\b|plant[- ]?room|mep module|mep cassette|integrated riser|indoor air|interior finish|office fit-?out|hvac|\bahu\b|classroom|lobby|室内装修|室內裝修|机房|機房|室内|室內/i;
+  var OUTDOOR_ITEM = /\bdrone|\buav\b|unmanned aerial|tower[- ]?crane|lifting monitor|site survey|\boutdoor\b|podium|excavation|facade|外墙|外牆|无人机|無人機/i;
+
+  function parseItems(values) {
+    try { return JSON.parse((values && values.itemsJson) || "[]") || []; } catch (e) { return []; }
+  }
+  function hasNpaValues(values) {
+    return parseItems(values).some(function (it) {
+      return String((it && it.type) || "") === "NPA" || (!(it && it.paCode) && String((it && it.type) || "") !== "PA");
+    });
+  }
+  function cleanSummaryText(text) {
+    var s = String(text || "");
+    s = s.replace(/\[\s*\{[\s\S]*?\}\s*\]/g, " ");
+    s = s.replace(/\{[^{}]{6,}\}/g, " ");
+    s = s.replace(/[\[\]{}]+/g, " ");
+    s = s.replace(/"[A-Za-z][A-Za-z0-9_]*"\s*:/g, " ");
+    return s.split(/\n+/).map(function (line) {
+      line = String(line || "").replace(/\s+/g, " ").replace(/^[\]\},;:\s]+/, "").replace(/\s*Items:\s*$/, "").trim();
+      line = line.replace(/\s*AI text analysis completed[^.。]*[.。]?/gi, "").replace(/\s*a CIC officer still reviews[^.。]*[.。]?/gi, "").trim();
+      if (line.length < 8) return "";
+      if (/^[\[\{]|itemsJson|palJson/.test(line)) return "";
+      if (/AI text analysis completed|officer still reviews|AI analysis (is |was )?(ok|complete)/i.test(line)) return "";
+      return line;
+    }).filter(Boolean).join("\n");
+  }
+  function summarizeData(current) {
+    var o = {};
+    Object.keys(current || {}).forEach(function (k) {
+      if (k === "itemsJson" || k === "palJson" || k === "fileBase64") return;
+      o[k] = current[k];
+    });
+    return o;
+  }
+
+  function firstCue(text, re) {
+    var m = String(text || "").match(re);
+    return m ? String(m[0]).replace(/\s+/g, " ").trim() : "";
+  }
+
+  function assessSetting(values) {
+    var workText = String((values && values.objective) || "");
+    var indoorEv = firstCue(workText, INDOOR_PROJECT);
+    var outdoorEv = firstCue(workText, OUTDOOR_PROJECT);
+    var tc = String((values && values.lang) || "") === "TC";
+    var setting = indoorEv && outdoorEv ? "mixed" : indoorEv ? "indoor" : outdoorEv ? "outdoor" : "unspecified";
+    var risks = [];
+    if (setting === "indoor" || setting === "outdoor") {
+      parseItems(values).forEach(function (it, i) {
+        var blob = [(it && it.product) || "", (it && (it.functions || it.f)) || "", (it && it.plan) || ""].join(" ");
+        var itemIn = INDOOR_ITEM.test(blob);
+        var itemOut = OUTDOOR_ITEM.test(blob);
+        var place = itemIn && !itemOut ? "indoor" : itemOut && !itemIn ? "outdoor" : "";
+        if (place && place !== setting) {
+          var name = (it && (it.product || it.name)) || (tc ? "項目" : "item");
+          risks.push(tc
+            ? "項目 " + (i + 1) + " " + name + " 屬於" + (place === "indoor" ? "室內" : "室外") + "設備，不符合" + (setting === "indoor" ? "室內" : "室外") + "需要"
+            : "Item " + (i + 1) + " " + name + " is " + place + " equipment and does not meet " + setting + " needs");
+        }
+      });
+    }
+    var evidence = setting === "indoor" ? indoorEv : outdoorEv;
+    var where = setting === "indoor" ? "室內" : "室外";
+    var sentence;
+    if (tc && setting === "mixed") sentence = "工程同時涉及室內（" + indoorEv + "）和室外（" + outdoorEv + "）。請確認每一項物品對應相應部分。";
+    else if (tc && setting === "unspecified") sentence = "項目目標和物品功能沒有說明是室內還是室外，因此未判斷物品是否符合室內或室外需要。";
+    else if (tc && risks.length) sentence = "工程屬" + where + "，依據目標及物品功能中的「" + evidence + "」判斷。所申請物品並非全部符合" + where + "需要。";
+    else if (tc) sentence = "工程屬" + where + "，依據目標及物品功能中的「" + evidence + "」判斷。所申請物品符合" + where + "使用需要。";
+    else if (setting === "mixed") sentence = "Project setting is mixed: the objective mentions both indoor (" + indoorEv + ") and outdoor (" + outdoorEv + ") work. Confirm each item is for the matching part.";
+    else if (setting === "unspecified") sentence = "Project setting is unspecified: the objective and item functions do not say whether the work is indoor or outdoor, so item suitability was not judged.";
+    else if (risks.length) sentence = "Project setting is " + setting + ", judged from the objective and item functions (" + evidence + "). Requested items do not all suit " + setting + " use.";
+    else sentence = "Project setting is " + setting + ", judged from the objective and item functions (" + evidence + "). Requested items suit " + setting + " use.";
+    return { setting: setting, sentence: sentence, risks: risks };
+  }
+
+  function applyPalCompare(fields, values) {
+    fields = fields || {};
+    var items = parseItems(values);
+    var pal = [];
+    try { pal = JSON.parse((values && values.palJson) || "[]") || []; } catch (e) { pal = []; }
+    function tokens(s) { return String(s || "").toLowerCase().match(/[a-z0-9\u4e00-\u9fff]{4,}/g) || []; }
+    function similar(it) {
+      var t = tokens(((it && (it.product || it.name)) || "") + " " + ((it && (it.functions || it.f)) || ""));
+      if (!t.length) return null;
+      var best = null, bestN = 0;
+      for (var i = 0; i < pal.length; i++) {
+        var blob = String((pal[i].code || "") + " " + (pal[i].name || "") + " " + (pal[i].functions || "")).toLowerCase();
+        var hits = t.filter(function (w) { return blob.indexOf(w) >= 0; });
+        if (hits.length > bestN && hits.length >= Math.min(2, t.length)) { bestN = hits.length; best = pal[i]; }
+      }
+      return best;
+    }
+    function moneyTip(n) {
+      var x = Number(n);
+      if (!isFinite(x) || x <= 0) return "price not stated";
+      return "HK$" + Math.round(x).toLocaleString("en-HK");
+    }
+    function clip(s, n) {
+      s = String(s || "").replace(/\s+/g, " ").trim();
+      if (!s) return "functions not stated";
+      return s.length > n ? s.slice(0, n - 1) + "…" : s;
+    }
+    function needScore(text) {
+      var need = String((values && values.objective) || "") + " " + String((values && values.project) || "");
+      var hay = need.toLowerCase();
+      var t = tokens(text);
+      return t.filter(function (w) { return hay.indexOf(w) >= 0; }).length;
+    }
+    function priceWinner(npaName, npaN, listedName, palN) {
+      var a = Number(npaN), b = Number(palN);
+      if (!isFinite(a) || a <= 0 || !isFinite(b) || b <= 0) return "Unit prices could not both be compared.";
+      if (a < b) return "NPA “" + npaName + "” is more cost-effective (" + moneyTip(a) + " vs listed " + moneyTip(b) + ").";
+      if (b < a) return "Listed " + listedName + " is more cost-effective (" + moneyTip(b) + " vs NPA " + moneyTip(a) + ").";
+      return "Unit prices are similar (" + moneyTip(a) + ").";
+    }
+    function fnWinner(npaName, npaFn, listedName, palFn) {
+      var ns = needScore(npaFn), ps = needScore(palFn);
+      if (ps > ns) return "Listed " + listedName + " functions better match this project’s need.";
+      if (ns > ps) return "NPA “" + npaName + "” functions better match this project’s need.";
+      return "Functions are similar for this project’s need.";
+    }
+    var npa = 0, tips = [];
+    items.forEach(function (it) {
+      var product = (it && (it.product || it.name)) || "";
+      var isNpa = String((it && it.type) || "") === "NPA" || (!(it && it.paCode) && String((it && it.type) || "") !== "PA");
+      if (!product || !isNpa) return;
+      npa++;
+      var hit = similar(it);
+      var npaFn = clip(it.functions || it.f, 80);
+      var npaPx = moneyTip(it.unit || it.price);
+      if (hit) {
+        var listed = String((hit.code ? hit.code + " " : "") + (hit.name || "")).trim();
+        tips.push("Function and price comparison: NPA “" + product + "” (" + npaPx + "; " + npaFn + ") vs listed " + listed + " (" + moneyTip(hit.price) + "; " + clip(hit.functions, 80) + "). " + priceWinner(product, it.unit || it.price, listed, hit.price) + " " + fnWinner(product, (it.functions || it.f || "") + " " + (it.plan || "") + " " + product, listed, (hit.functions || "") + " " + listed));
+      } else {
+        tips.push("Function and price comparison: NPA “" + product + "” (" + npaPx + "; " + npaFn + ") — no close listed product was found by function, so a price and function comparison against the Pre-approved List could not be made.");
+      }
+    });
+    if (!npa) return fields;
+    var summary = String(fields.summary || "").split(/\n/).filter(function (l) {
+      return !/Function and price comparison|compared by function/i.test(l);
+    }).join("\n").trim();
+    if (summary && !/[.。]$/.test(summary) && !/\n$/.test(summary)) summary += ".";
+    fields.summary = (summary ? summary + "\n" : "") + tips.join("\n");
+    var risks = [];
+    try { risks = JSON.parse(fields.risksJson || "[]"); } catch (e) { risks = []; }
+    if (!Array.isArray(risks)) risks = [];
+    risks = risks.filter(function (r) {
+      return !/Function and price comparison|close listed|no alternative/i.test(String((r && (r.text || r.message)) || ""));
+    });
+    tips.forEach(function (t) { risks.push({ severity: "tip", text: t }); });
+    fields.risksJson = JSON.stringify(risks);
+    return fields;
+  }
+
+  function stripSettingLines(text) {
+    return String(text || "").replace(/\r\n/g, "\n").split("\n").filter(function (raw) {
+      var line = String(raw || "").trim();
+      if (!line) return false;
+      return !/work setting is|Project setting is|工程屬|工程属|Requested items (suit|do not all suit)|does not meet indoor|does not meet outdoor|不符合室內需要|不符合室外需要/i.test(line);
+    }).join("\n");
+  }
+
+  function applySetting(fields, values) {
+    fields = fields || {};
+    var a = assessSetting(values || {});
+    fields.setting = a.setting;
+    fields.summary = stripSettingLines(fields.summary);
+    var risks = [];
+    try { risks = JSON.parse(fields.risksJson || "[]"); } catch (e) { risks = []; }
+    if (!Array.isArray(risks)) risks = [];
+    risks = risks.filter(function (r) {
+      var t = String((r && (r.text || r.message)) || "");
+      if (/does not meet indoor needs|does not meet outdoor needs|不符合室內需要|不符合室外需要|close listed product|~ PA-/i.test(t)
+          && !/unspecified|does not say whether|does not cover|criteria/i.test(t)) return false;
+      return true;
+    });
+    if (a.setting === "unspecified" && !risks.some(function (r) { return /unspecified|does not say whether/i.test(String((r && r.text) || "")); })) {
+      risks.push({ severity: "warn", text: a.sentence || "Project setting is unspecified: the objective and item functions do not say whether the work is indoor or outdoor." });
+    }
+    fields.risksJson = JSON.stringify(risks);
+    var fit = String(fields.summary || "");
+    if (!/suit .+ use|does not all suit|Items vs objective|不符合.+需要|符合.+使用需要/i.test(fit)) {
+      fit = fit.trim();
+      if (fit && !/[.。]$/.test(fit)) fit += ".";
+      fields.summary = (fit ? fit + "\n" : "") + a.sentence;
+      fit = fields.summary;
+    }
+    (a.risks || []).forEach(function (line) {
+      if (!line || fit.indexOf(line) >= 0) return;
+      fit = String(fields.summary || "").trim();
+      if (fit && !/[.。]$/.test(fit)) fit += ".";
+      fields.summary = (fit ? fit + "\n" : "") + line + (/[.。]$/.test(line) ? "" : ".");
+      fit = fields.summary;
+    });
+    fields = applyPalCompare(fields, values);
+    if (fields.summary) fields.summary = cleanSummaryText(fields.summary);
+    if (!hasNpaValues(values)) {
+      fields.summary = String(fields.summary || "").split(/\n/).filter(function (l) {
+        return !/Function and price comparison|no alternative is needed|close listed product/i.test(l);
+      }).join("\n");
+      var kept = [];
+      try { kept = JSON.parse(fields.risksJson || "[]"); } catch (e3) { kept = []; }
+      fields.risksJson = JSON.stringify((kept || []).filter(function (x) {
+        return !/Function and price|close listed|no alternative/i.test(String((x && (x.text || x.message)) || ""));
+      }));
+    }
+    return fields;
   }
 
   function shaLite(s) {
@@ -100,6 +357,8 @@
         functions: "Watches the work area 24/7; detects missing helmets and vests and people inside crane or plant exclusion zones; alerts the supervisor’s phone and the site speaker within 2 seconds; keeps a daily safety log.",
         innovation: "On-device vision model tuned for Hong Kong construction PPE and tower-crane exclusion zones.",
         merits: "Supports CITF Smart Site Safety System objectives by reducing struck-by incidents and providing auditable alerts.",
+        obj: "Safety, Productivity",
+        jobsJson: "[{\"project\":\"Kai Tak Sports Park\",\"client\":\"Harbour Build Engineering Limited\",\"year\":\"2025\",\"contact\":\"Carmen Lau, Project Manager\"}]",
         price: "86000",
         unit: "per set",
         launch: "2024-03-01"
@@ -161,23 +420,69 @@
 
   function validateFunding(values) {
     var issues = [];
-    var objective = values.objective || "";
-    if (!String(objective).trim()) {
-      issues.push({ field: "objective", code: "missing", message: "Project objective and expected benefits are missing", severity: "error" });
-    } else {
-      var w = words(objective);
-      if (w > OBJECTIVE_MAX) issues.push({ field: "objective", code: "too_long", message: "Project objective is over 250 words (now " + w + ") – AI quality check", severity: "error" });
-      else if (w < OBJECTIVE_MIN) issues.push({ field: "objective", code: "too_brief", message: "Project objective is too brief (minimum 12 words, now " + w + ") – describe benefits and implementation (AI quality check)", severity: "error" });
-      else if (!hasBenefit(objective) || !hasImplement(objective)) issues.push({ field: "objective", code: "weak_content", message: "Project objective should cover expected benefits and how you will implement (AI quality check)", severity: "error" });
-    }
     var items = [];
     try { items = JSON.parse(values.itemsJson || "[]"); } catch (e) { items = []; }
     items.forEach(function (it, i) {
       var plan = (it && it.plan) || "";
-      if (!String(plan).trim()) issues.push({ field: "item:" + (i + 1) + ".plan", code: "plan_missing", message: "Item " + (i + 1) + ": implementation plan is missing", severity: "error" });
-      else if (!/\d/.test(plan)) issues.push({ field: "item:" + (i + 1) + ".plan", code: "plan_no_quantity", message: "Item " + (i + 1) + ": implementation plan has no quantitative detail (e.g. number of workers, floors, area or expected savings) – AI quality check", severity: "error" });
+      var n = i + 1;
+      if (!String(plan).trim()) issues.push({ field: "item:" + n + ".plan", code: "plan_missing", message: "Item " + n + ": implementation plan is missing", severity: "error" });
     });
     return issues;
+  }
+
+  function mergeFundingIssues(model, values) {
+    var hard = validateFunding(values);
+    var hardCodes = {};
+    hard.forEach(function (h) { hardCodes[h.code] = 1; });
+    var factual = { plan_missing: 1 };
+    var items = [];
+    try { items = JSON.parse((values && values.itemsJson) || "[]"); } catch (e) { items = []; }
+    var plansFilled = items.length > 0 && items.every(function (it) { return String((it && it.plan) || "").trim(); });
+    function schemeCodes(raw) {
+      var u = String(raw || "").toUpperCase();
+      return ["MIMEP", "MIC", "MPD", "STB", "BIM", "ACT"].filter(function (c) {
+        return new RegExp("\\b" + c + "\\b").test(u);
+      });
+    }
+    function coversBenefitHow(obj) {
+      var t = String(obj || "");
+      if (t.replace(/\s/g, "").length < 40) return false;
+      return /減少|降低|縮短|缩短|节省|節省|benefit|reduc|shorten|\bcut\b|improv|約\s*\d+|\d+\s*%|\d+\s*天/.test(t)
+        && /安裝|部署|实施|實施|install|deploy|覆蓋|覆盖|層|层|區|区/.test(t);
+    }
+    function drop(issue) {
+      if (!issue) return true;
+      var code = String(issue.code || "");
+      var field = String(issue.field || "");
+      var sch = String((values && values.schemes) || "").trim();
+      if (code === "weak_content" && coversBenefitHow(values && values.objective)) return true;
+      if (code === "scheme_mismatch") {
+        var msg = issue.message || "";
+        if (/Data\.schemes|scheme_mismatch|應發出|应发出/i.test(msg)) return true;
+        var selected = schemeCodes(sch);
+        var extra = schemeCodes(msg).filter(function (c) { return selected.indexOf(c) < 0; });
+        if (selected.length && extra.length && /未有提及|未提及|未涵蓋|未涵盖|不涵蓋|不涵盖|does not (mention|cover|include)|not mention|已選計劃|已选计划|selected scheme/i.test(msg)) return true;
+        if (selected.indexOf("ACT") >= 0 && extra.indexOf("STB") >= 0 && /機器人|机器人|robot|綁扎|绑扎|自動化|自动化/i.test(msg)) return true;
+      }
+      if (code === "scheme_mismatch" || code === "work_setting" || code === "plan_too_brief" || code === "plan_no_quantity" || code === "plan_weak" || code === "too_brief" || code === "too_long" || code === "weak_content") return false;
+      if (sch && field === "schemes" && /missing|required|empty|缺少/.test(code + " " + (issue.message || ""))) return true;
+      if (!/\bMPD\b/i.test(sch) && field === "mpdDate") return true;
+      var blob = (code + " " + (issue.message || "")).toLowerCase();
+      if (code && factual[code] && !hardCodes[code]) return true;
+      if (plansFilled && /plan_missing|plan is missing/.test(blob) && !/quantitative|too brief|plan_weak|plan_too_brief|数量|数字|过短|不是实施方案/.test(blob)) return true;
+      return false;
+    }
+    var merged = [];
+    (model || []).forEach(function (issue) {
+      if (drop(issue)) return;
+      if (merged.some(function (x) { return x.field === issue.field && x.code === issue.code && x.message === issue.message; })) return;
+      merged.push(issue);
+    });
+    hard.forEach(function (h) {
+      if (h && String(h.field || "") === "objective") return;
+      if (!merged.some(function (i) { return i.field === h.field && i.code === h.code; })) merged.push(h);
+    });
+    return merged;
   }
 
   function validateQuotation(fields) {
@@ -189,6 +494,67 @@
       return [{ field: "amount", code: "mismatch", message: "Quotation shows HK$" + amount.toLocaleString("en-HK") + "; form shows HK$" + formAmount.toLocaleString("en-HK"), severity: "error" }];
     }
     return [];
+  }
+
+  function detectDocKind(fileName, text) {
+    var name = String(fileName || "");
+    if (/nar1|annual.?return|周年/i.test(name)) return "nar1";
+    if (/business.?reg|(^|[^a-z0-9])br([^a-z0-9]|$)|商业登记|商業登記/i.test(name)) return "br";
+    if (/quotat|报价|報價/i.test(name)) return "quotation";
+    var body = String(text || "");
+    if (!body.trim()) return "";
+    if (/NAR1|ANNUAL RETURN|share capital|company secretary/i.test(body)) return "nar1";
+    if (/BUSINESS REGISTRATION CERTIFICATE|商业登记证|商業登記證/i.test(body)) return "br";
+    if (/\bQUOTATION\b|unit price|total amount/i.test(body)) return "quotation";
+    return "";
+  }
+
+  function expectedDocKind(slot) {
+    var s = String(slot || "");
+    if (/nar1|annual return/i.test(s)) return "nar1";
+    if (/shareholder.?br|business registration|\bbr\b/i.test(s)) return "br";
+    if (/quotation/i.test(s)) return "quotation";
+    return "";
+  }
+
+  function docKindLabel(kind) {
+    if (kind === "nar1") return "NAR1 (Annual Return)";
+    if (kind === "br") return "Business Registration Certificate";
+    if (kind === "quotation") return "Quotation";
+    return kind;
+  }
+
+  function validateDocSlot(slot, fileName, text) {
+    var expected = expectedDocKind(slot);
+    var detected = detectDocKind(fileName, text);
+    if (!expected || !detected || expected === detected) return [];
+    return [{ field: "docType", code: "wrong_type", message: "This file looks like a " + docKindLabel(detected) + ", not " + (slot || docKindLabel(expected)) + ". Please swap or upload the correct document (AI quality check)", severity: "error" }];
+  }
+
+  function validateSignedForm(fileName, text, expected) {
+    expected = expected || {};
+    var blob = String(fileName || "") + "\n" + String(text || "");
+    var issues = [];
+    var unsignedSig = /\[\[UNSIGNED-SIGNATURE\]\]|UNSIGNED-SIGNATURE|Signature:\s*_{4,}/i.test(blob);
+    var unsignedChop = /\[\[UNSIGNED-CHOP\]\]|UNSIGNED-CHOP|Company chop:\s*_{4,}/i.test(blob);
+    var namedSigned = /-signed(\.pdf)?$/i.test(String(fileName || ""));
+    var signedEvidence = namedSigned || /\[\[SIGNED\]\]|signed by|has been signed|已签署|已簽署|electronic signature/i.test(blob);
+    var chopEvidence = namedSigned || /\[\[CHOPPED\]\]|chop applied|company stamp|已盖章|已蓋章|公司印章/i.test(blob);
+    if (unsignedSig || !signedEvidence) issues.push({ field: "signature", code: "missing_signature", message: "No signature detected on the uploaded application form (AI quality check)", severity: "error" });
+    if (unsignedChop || !chopEvidence) issues.push({ field: "chop", code: "missing_chop", message: "No company chop detected on the uploaded application form (AI quality check)", severity: "error" });
+    var refer = String(expected.ref || "");
+    if (refer && blob.toLowerCase().indexOf(refer.toLowerCase()) < 0) {
+      issues.push({ field: "form", code: "form_mismatch", message: "Uploaded file does not match the generated application form (reference " + refer + " missing) (AI quality check)", severity: "error" });
+    }
+    var company = String(expected.company || "");
+    if (company && blob.toLowerCase().indexOf(company.toLowerCase()) < 0) {
+      issues.push({ field: "form", code: "form_mismatch", message: "Uploaded file does not match the generated application form (applicant name missing) (AI quality check)", severity: "error" });
+    }
+    var grantDigits = String(expected.grant || "").replace(/[^\d]/g, "");
+    if (grantDigits.length >= 4 && blob.indexOf(grantDigits) < 0) {
+      issues.push({ field: "form", code: "form_mismatch", message: "Uploaded file does not match the generated application form (grant amount missing) (AI quality check)", severity: "error" });
+    }
+    return issues;
   }
 
   function localExecute(req) {
@@ -235,12 +601,17 @@
         if (current.formAmount) fields.formAmount = String(current.formAmount);
         issues = validateQuotation(fields);
         notes = issues.length ? "Quotation flagged" : "Quotation matches the form";
+      } else if (/signed_application_form|signed and chopped/i.test(String(req.docType || ""))) {
+        issues = validateSignedForm(req.fileName, req.documentText, current);
+        notes = issues.length ? issues[0].message : "Signed form matches the generated application and chop/signature are present";
       } else {
         fields = demoPrefill(SCHEMAS.supporting_doc, req.docType);
         if (String(fields.readable) === "false") {
           issues = [{ field: "readable", code: "blurred", message: fields.note, severity: "error" }];
         }
         notes = fields.note;
+        issues = issues.concat(validateDocSlot(req.docType, req.fileName, req.documentText || ""));
+        if (issues.length) notes = issues[0].message;
       }
     } else if (action === ACTIONS.Suggest) {
       var q = String(current.query || req.documentText || "").toLowerCase();
@@ -251,14 +622,22 @@
       fields = { suggestionsJson: JSON.stringify(suggestions) };
       notes = "Demo suggestions";
     } else if (action === ACTIONS.Summarize) {
+      if (current.listingKind === "pal") {
+        fields = {
+          summary: "1. " + (current.company || "Vendor") + " applies to list under " + (current.category || "PAL") + ".\n2. Items: " + (current.itemsPlain || "as listed") + ".",
+          score: "86",
+          risksJson: "[]"
+        };
+      } else {
       var nWords = words(current.objective || "");
       fields = {
-        summary: "Applicant submitted a " + (current.schemes || "CITF") + " funding application for " + (current.project || "the nominated site")
-          + ". Objective (" + nWords + " words) is checked against the 12–250 word range. Items: " + (current.itemsJson || "[]")
-          + ". AI text analysis completed on submit; a CIC officer still reviews the case.",
+        summary: "1. Applicant submitted a " + (current.schemes || "CITF") + " funding application for " + (current.project || "the nominated site") + ".\n"
+          + "2. Objective (" + nWords + " words) describes the work and expected benefits.\n"
+          + "3. Items: " + (current.itemsPlain || "as listed") + ".",
         score: "82",
         risksJson: "[]"
       };
+      }
       notes = fields.summary;
     } else {
       return Promise.reject(new Error("Unsupported AI action: " + action));
@@ -281,8 +660,8 @@
     company_registration: ["br", "branch", "brExpiry", "nameEn", "nameTc", "address", "staff", "bankName", "bankAcct", "bankHolder", "stmtDate", "shareholdersJson", "mgName", "mgTitle"],
     citf_site: ["no", "n", "emp", "val", "s", "e"],
     funding_application: ["objective", "itemsJson"],
-    pal_product: ["name", "model", "version", "spec", "mf", "mfCountry", "origin", "local", "functions", "innovation", "merits", "price", "unit", "launch"],
-    pal_course: ["name", "model", "version", "spec", "mf", "origin", "local", "functions", "innovation", "merits", "price", "unit", "launch"],
+    pal_product: ["name", "model", "version", "spec", "mf", "mfCountry", "origin", "local", "functions", "innovation", "merits", "obj", "jobsJson", "price", "unit", "launch"],
+    pal_course: ["name", "model", "version", "spec", "mf", "origin", "local", "functions", "innovation", "merits", "obj", "jobsJson", "price", "unit", "launch"],
     quotation_check: ["supplier", "product", "unitPrice", "qty", "amount", "formAmount"],
     supporting_doc: ["docType", "readable", "note"],
     pal_annual_reply: ["change", "just", "price"]
@@ -338,7 +717,9 @@
         model: cfg.model,
         temperature: 0,
         messages: [
-          { role: "system", content: systemPrompt },
+          { role: "system", content: (function (p) {
+            return p + " Portal language is English. Every issue.message, notes, summary and each risks text MUST be English. JSON keys and issue codes stay English. Extracted field values stay as printed on the document.";
+          })(systemPrompt) },
           { role: "user", content: userPrompt }
         ]
       })
@@ -365,15 +746,22 @@
     return new Blob([arr], { type: mime });
   }
 
-  function ocrExtract(cfg, fileBase64, fileName) {
+  function ocrExtract(cfg, fileBase64, fileName, attempt) {
     if (!cfg.ocrApiKey) return Promise.reject(new Error("NOVA_OCR_API_KEY (sk-) missing – required for document prefill"));
+    attempt = attempt || 0;
     var blob = dataUrlToBlob(fileBase64);
     var fd = new FormData();
     fd.append("file", blob, fileName || "upload.pdf");
     fd.append("fileInfo", JSON.stringify({ apiKey: cfg.ocrApiKey, callbackFlag: "0" }));
     return fetch(cfg.ocrBaseUrl + "/callOcrFileParse", { method: "POST", body: fd }).then(function (r) {
       return r.text().then(function (t) {
+        var busy = r.status === 429 || r.status === 503 || /"code"\s*:\s*"?429/.test(t);
+        if (busy && attempt < 4) {
+          return new Promise(function (resolve) { setTimeout(resolve, 1000 * Math.pow(2, attempt)); })
+            .then(function () { return ocrExtract(cfg, fileBase64, fileName, attempt + 1); });
+        }
         if (!r.ok) throw new Error("D.Nova OCR HTTP " + r.status + ": " + t.slice(0, 240));
+        if (/"code"\s*:\s*"?429/.test(t)) throw new Error("D.Nova OCR is busy (code 429). Wait a few seconds and click Replace.");
         var text = tryOcrText(t);
         if (text) return text;
         var id = (t.match(/"(?:fileId|file_id|taskId|task_id|id)"\s*:\s*"?([^",}\s]+)/) || [])[1];
@@ -422,8 +810,36 @@
     return t.replace(/\s+/g, " ").trim();
   }
 
+  function extractPdfText(dataUrlOrB64) {
+    try {
+      var raw = String(dataUrlOrB64 || "");
+      var b64 = raw.indexOf(",") >= 0 ? raw.split(",")[1] : raw;
+      if (!b64) return "";
+      var bin = atob(b64);
+      if (bin.slice(0, 4) !== "%PDF") return "";
+      var out = [], re = /\((?:\\.|[^\\)])*\)\s*Tj/g, m;
+      while ((m = re.exec(bin))) {
+        var inner = m[0];
+        var close = inner.lastIndexOf(")");
+        inner = inner.slice(1, close).replace(/\\n/g, "\n").replace(/\\r/g, "").replace(/\\t/g, "\t").replace(/\\\(/g, "(").replace(/\\\)/g, ")").replace(/\\\\/g, "\\");
+        out.push(inner);
+      }
+      return out.join("\n");
+    } catch (e) { return ""; }
+  }
+
+  function prepareDocument(req) {
+    if (req.documentText && String(req.documentText).trim()) return Promise.resolve(req);
+    if (!req.fileBase64) return Promise.resolve(req);
+    var text = extractPdfText(req.fileBase64);
+    if (text && text.replace(/\s+/g, "").length >= 20) req.documentText = text.slice(0, 20000);
+    return Promise.resolve(req);
+  }
+
   function resolveDocumentText(cfg, req) {
     if (req.documentText && String(req.documentText).trim()) return Promise.resolve({ text: String(req.documentText), usedOcr: false });
+    var embedded = extractPdfText(req.fileBase64 || "");
+    if (embedded && embedded.trim()) return Promise.resolve({ text: embedded, usedOcr: false });
     var pageUrl = (req.currentValues && (req.currentValues.pageUrl || req.currentValues.url)) || "";
     if (pageUrl) {
       return fetch(String(pageUrl), { credentials: "omit" }).then(function (r) {
@@ -455,24 +871,37 @@
       return chatCompletions(
         cfg,
         "Return JSON only with pass and issues array for CITF quality checking.",
-        "Count words in the project objective. If fewer than 12 words use code too_brief; if more than 250 words use code too_long. The filled objective MUST sit in that min/max range. Also check benefits/implementation and that each item plan has a quantitative detail. Data: " + JSON.stringify(current)
+        "If Data.lang is SC write every issue.message in Simplified Chinese; if TC Traditional Chinese; else English. Judge project text with language understanding only — never English space word-count. If Data.schemes already lists ACT/BIM/STB/MiC/MiMEP/MPD, do not emit any issue on field schemes. Do not require the objective to name the scheme code. On-site robots (rebar-tying, welding, inspection), cameras and smart site safety belong to ACT. STB is off-site prefabricated steel cages, not on-site rebar robots. Never write Data.schemes or scheme_mismatch in the message. Empty project name → field project code missing. Empty objective → field objective code missing. Emit mpdDate issues only when schemes includes MPD. otherFund None/無 is valid. Ignore empty itemsJson on this step. Judge whether the project objective is too short or too long. Do not count Chinese as one word (no spaces). English about 12–250 words; Chinese about 40–800 characters of real content. If clearly too short use too_brief; if clearly too long use too_long. Also check benefits/implementation (weak_content). Do not emit weak_content when the text already says what will be done, a quantified benefit, and how/where. Mixed indoor and outdoor in one objective is valid. Each item plan must be a real implementation plan: how the item will be used on this project, where, with at least one number. Reject random typing, slogans or short fragments (plan_too_brief / plan_weak). Only Data.schemes are selected; ACT/BIM/STB/MiC/MiMEP/MPD here are vocabulary, not ticked boxes. Do not require unselected schemes in the objective. If Data.schemes is only ACT and the work is cameras/sensors/smart site safety, do not emit scheme_mismatch. If content clearly does not belong to a selected scheme, add scheme_mismatch. From the project objective and item plans, judge indoor, outdoor, mixed or unspecified. Do not treat the word site in the project title as outdoor. Return JSON key setting and add issue code work_setting (warn) on field objective. Do not emit too_brief for a substantial Chinese or English paragraph that already states what will be done, the benefit, and how. Data: " + JSON.stringify(current)
       ).then(function (raw) {
         var parsed = {};
         try { parsed = JSON.parse(raw); } catch (e) { parsed = {}; }
-        var issues = Array.isArray(parsed.issues) ? parsed.issues : [];
-        var hard = validateFunding(current);
-        hard.forEach(function (h) {
-          if (!issues.some(function (i) { return i.field === h.field && i.code === h.code; })) issues.push(h);
-        });
+        var issues = mergeFundingIssues(Array.isArray(parsed.issues) ? parsed.issues : [], current);
+        var setting = String(parsed.setting || "").trim();
+        if (setting && !issues.some(function (i) { return i && i.code === "work_setting"; })) {
+          issues.push({ field: "objective", code: "work_setting", severity: "warn", message: "AI judges the project objective as " + setting + " work." });
+        }
         return {
           pass: !issues.some(function (i) { return i.severity === "error"; }),
           source: "nova-compatible",
           model: cfg.model,
-          fields: current,
+          fields: Object.assign({}, current, setting ? { setting: setting } : {}),
           issues: issues,
           notes: issues.length ? "AI quality issues found" : "AI completeness check passed",
           contentHash: hash
         };
+      });
+    }
+
+    if (action === ACTIONS.ValidateUpload && String(req.docType || "").toLowerCase() === "blurred") {
+      var blurNote = "Image is blurred – text cannot be read. Please upload a clearer copy.";
+      return Promise.resolve({
+        pass: false,
+        source: "nova-compatible",
+        model: cfg.model,
+        fields: { docType: "blurred", readable: "false", note: blurNote },
+        issues: [{ field: "readable", code: "blurred", message: blurNote, severity: "error" }],
+        notes: blurNote,
+        contentHash: hash
       });
     }
 
@@ -494,10 +923,15 @@
     }
 
     if (action === ACTIONS.Summarize) {
+      var palListing = current.listingKind === "pal";
       return chatCompletions(
         cfg,
-        "Return JSON only with summary, score and risks for a CITF funding submission.",
-        "Write a 120-180 word factual submission summary. JSON {summary, score, risks:[]}. Data: " + JSON.stringify(current)
+        palListing
+          ? "Return JSON only with summary, score and risks for a CITF PAL listing submission."
+          : "Return JSON only with summary, score and risks for a CITF funding submission.",
+        palListing
+          ? "Write a CITF Pre-approved List listing summary as 4-8 numbered lines (1. 2. 3.), each one short sentence on its own line. JSON {summary, score, risks:[{severity:'warn|error', text}]}. English only. Cover category, vendor, each product name/model/price, local development, functions/innovation, CITF merits, job references, declarations and files. Be factual. Do not give recommendations, advice or next steps. Never copy JSON, square brackets or curly braces into the summary. This is a vendor listing, not a funding application — do not discuss indoor/outdoor site work or grant amounts. Do not invent products or prices. Data: " + JSON.stringify(summarizeData(current))
+          : "Write a factual English submission summary as 4-8 numbered lines (1. 2. 3.), each one short sentence on its own line. JSON {summary, score, setting:'indoor|outdoor|mixed|unspecified', risks:[{severity:'warn|error|tip', text}]}. Do not put Warn inside summary text. Do not give recommendations, advice or next steps. Never copy JSON, square brackets, curly braces or field keys into the summary. Use Data.itemsPlain for items in ordinary English. Do not mention AI analysis, that analysis is complete or OK, or that a CIC officer still reviews the case. Judge indoor vs outdoor from the project objective, then say whether each requested item fits that indoor or outdoor setting. If an item is indoor but the objective is outdoor (or the reverse), name the item. Warn only if setting is unspecified or the text does not cover selected scheme/category criteria. " + (hasNpaValues(current) ? "Data.hasNpa is true. For each NPA item write a line starting with Function and price comparison: vs the closest listed product; state which unit price is more cost-effective and whose functions better match this project's need; put the same text in risks with severity tip. " : "Data.hasNpa is false. All items are pre-approved. Do not mention PAL comparison, alternatives, or Function and price comparison. ") + "Data: " + JSON.stringify(summarizeData(current))
       ).then(function (raw) {
         var parsed = {};
         try { parsed = JSON.parse(raw); } catch (e) { parsed = {}; }
@@ -508,6 +942,7 @@
           fields: {
             summary: parsed.summary || "",
             score: String(parsed.score || 80),
+            setting: parsed.setting || "",
             risksJson: JSON.stringify(parsed.risks || [])
           },
           issues: [],
@@ -524,11 +959,15 @@
       var system = action === ACTIONS.ValidateUpload && schemaKey === SCHEMAS.quotation_check
         ? "Extract quotation supplier, product, qty, unit price and total amount. Return JSON only."
         : action === ACTIONS.ValidateUpload
-          ? "Assess document readability for CITF upload checks. Return JSON with docType, readable (true/false), note."
+          ? "Identify the actual CITF document kind. Return JSON: detectedKind (nar1|br|quotation|other), readable (true/false), note. Do not copy the claimed slot if the text is a different document. " + (current.lang === "TC" ? "Write note in Traditional Chinese." : current.lang === "SC" ? "Write note in Simplified Chinese." : "Write note in English.")
           : "You extract CITF portal form fields. Return a flat JSON object only.";
       var user = action === ACTIONS.ValidateUpload && schemaKey !== SCHEMAS.quotation_check
-        ? "Document type: " + (req.docType || schemaKey) + "\nText sample:\n" + String(doc.text).slice(0, 4000)
-        : "Extract fields. Return ONLY JSON with keys: " + keys.join(", ") + ". Empty string if unknown.\nDocument:\n" + String(doc.text).slice(0, 12000)
+        ? "Claimed slot: " + (req.docType || schemaKey) + "\nFile name: " + (req.fileName || "") + "\nText sample:\n" + String(doc.text).slice(0, 4000)
+        : "Extract fields. Return ONLY JSON with keys: " + keys.join(", ") + ". Empty string if unknown. "
+          + (schemaKey === SCHEMAS.pal_product || schemaKey === SCHEMAS.pal_course
+            ? "Always fill merits. obj is comma-separated CITF objectives (Productivity, Safety, Quality, Environmental performance, Cost-effectiveness, Industry capability (manpower)). jobsJson is a JSON array with at least one {project,client,year,contact} from the document. "
+            : "")
+          + "\nDocument:\n" + String(doc.text).slice(0, 12000)
           + (schemaKey === SCHEMAS.quotation_check ? "\nForm amount to compare: " + (current.formAmount || "") : "");
 
       return chatCompletions(cfg, system, user).then(function (raw) {
@@ -536,7 +975,10 @@
         try { fields = JSON.parse(raw); } catch (e) { fields = {}; }
         var issues = [];
         var notes = "Document read (" + (doc.usedOcr ? "nova-ocr+llm" : "nova-compatible") + ")";
-        if (action === ACTIONS.ValidateUpload && schemaKey === SCHEMAS.quotation_check) {
+        if (action === ACTIONS.ValidateUpload && /signed_application_form|signed and chopped/i.test(String(req.docType || ""))) {
+          issues = validateSignedForm(req.fileName, doc.text, current);
+          notes = issues.length ? issues[0].message : "Signed form matches the generated application and chop/signature are present";
+        } else if (action === ACTIONS.ValidateUpload && schemaKey === SCHEMAS.quotation_check) {
           if (current.formAmount) fields.formAmount = String(current.formAmount);
           issues = validateQuotation(fields);
           notes = issues.length ? "Quotation flagged" : "Quotation matches the form";
@@ -545,7 +987,8 @@
           if (String(fields.readable) === "false") {
             issues = [{ field: "readable", code: "blurred", message: fields.note || "Unreadable", severity: "error" }];
           }
-          notes = fields.note || notes;
+          issues = issues.concat(validateDocSlot(req.docType, req.fileName, doc.text || fields.detectedKind || ""));
+          notes = issues.length ? issues[0].message : (fields.note || notes);
         }
         return {
           pass: !issues.some(function (i) { return i.severity === "error"; }),
@@ -576,7 +1019,50 @@
     });
   }
 
+  function readCreatedJob(url, id, token) {
+    var select = "cicapos_pass,cicapos_source,cicapos_model,cicapos_fieldsjson,cicapos_issuesjson,cicapos_notes,cicapos_contenthash";
+    var headers = {
+      Accept: "application/json",
+      "OData-MaxVersion": "4.0",
+      "OData-Version": "4.0"
+    };
+    if (token) headers["__RequestVerificationToken"] = token;
+    var paths = [
+      url + "(" + id + ")?$select=" + select,
+      url + "(guid'" + id + "')?$select=" + select,
+      url + "?$filter=cicapos_aiassistjobid eq " + id + "&$select=" + select + "&$top=1"
+    ];
+    function next(i) {
+      if (i >= paths.length) return Promise.reject(new Error("AI job read HTTP 403"));
+      return fetch(paths[i], { method: "GET", headers: headers, credentials: "same-origin" }).then(function (result) {
+        return result.text().then(function (body) {
+          if (result.ok && body && body.trim()) {
+            var data = JSON.parse(body);
+            if (data && data.value && data.value.length) return data.value[0];
+            return data;
+          }
+          if (i + 1 < paths.length) return next(i + 1);
+          throw new Error("AI job read HTTP " + result.status + (body ? " " + body.slice(0, 180) : ""));
+        });
+      });
+    }
+    return next(0);
+  }
+
   function liveExecute(req) {
+    if (String(req.action || "").toLowerCase() === ACTIONS.ValidateUpload
+        && String(req.docType || "").toLowerCase() === "blurred") {
+      var liveBlur = "Image is blurred – text cannot be read. Please upload a clearer copy.";
+      return Promise.resolve({
+        pass: false,
+        source: "nova-compatible",
+        model: null,
+        fields: { docType: "blurred", readable: "false", note: liveBlur },
+        issues: [{ field: "readable", code: "blurred", message: liveBlur, severity: "error" }],
+        notes: liveBlur,
+        contentHash: req.contentHash || ""
+      });
+    }
     // Power Pages Web API cannot call unbound actions (404). Write a job row;
     // a pre-create plugin calls D.Nova and returns the result on the same record.
     var payload = {
@@ -586,7 +1072,7 @@
       cicapos_doctype: req.docType || "",
       cicapos_documenttext: req.documentText || "",
       cicapos_filename: req.fileName || "",
-      cicapos_filebase64: req.fileBase64 || "",
+      cicapos_filebase64: req.documentText ? "" : (req.fileBase64 || ""),
       cicapos_currentvaluesjson: JSON.stringify(req.currentValues || {}),
       cicapos_contenthash: req.contentHash || ""
     };
@@ -616,33 +1102,18 @@
       if (!r.ok) return r.text().then(function (t) { throw new Error("AI API HTTP " + r.status + (t ? " " + t.slice(0, 180) : "")); });
       return r.text().then(function (text) {
         if (text.trim()) return JSON.parse(text);
-        // Power Pages may return 204 with entityid even when representation is requested.
-        var identity = r.headers.get("entityid") || r.headers.get("OData-EntityId") || "";
+        // Power Pages often returns 204 for large file creates even when representation is requested.
+        var identity = r.headers.get("entityid") || r.headers.get("OData-EntityId") || r.headers.get("Location") || "";
         var match = identity.match(/(?:^|\(|\{)([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:$|\)|\})/i);
         if (!match) throw new Error("AI job create returned no result or record ID (HTTP " + r.status + ").");
-        var select = "cicapos_pass,cicapos_source,cicapos_model,cicapos_fieldsjson,cicapos_issuesjson,cicapos_notes,cicapos_contenthash";
-        return portalToken().then(function (token) {
-          var headers = { Accept: "application/json" };
-          if (token) headers["__RequestVerificationToken"] = token;
-          return fetch(url + "(" + match[1] + ")?$select=" + select, {
-            method: "GET", headers: headers, credentials: "same-origin"
-          });
-        }).then(function (result) {
-          if (!result.ok) return result.text().then(function (body) {
-            throw new Error("AI job read HTTP " + result.status + (body ? " " + body.slice(0, 180) : ""));
-          });
-          return result.text().then(function (body) {
-            if (!body.trim()) throw new Error("AI job read returned an empty response (HTTP " + result.status + ").");
-            return JSON.parse(body);
-          });
-        });
+        return portalToken().then(function (token) { return readCreatedJob(url, match[1], token); });
       });
     }).then(function (data) {
       var fields = {};
       var issues = [];
       try { fields = JSON.parse(data.cicapos_fieldsjson || data.fieldsjson || "{}"); } catch (e1) {}
       try { issues = JSON.parse(data.cicapos_issuesjson || data.issuesjson || "[]"); } catch (e2) {}
-      return {
+      return applyDocSlot(req, {
         pass: !!(data.cicapos_pass != null ? data.cicapos_pass : data.pass),
         source: data.cicapos_source || data.source || "nova",
         model: data.cicapos_model || data.model || null,
@@ -650,8 +1121,24 @@
         issues: issues,
         notes: data.cicapos_notes || data.notes || "",
         contentHash: data.cicapos_contenthash || data.contentHash || ""
-      };
+      });
     });
+  }
+
+  function applyDocSlot(req, res) {
+    if (!res || String(req.action || "").toLowerCase() !== ACTIONS.ValidateUpload) return res;
+    if (req.schemaKey === SCHEMAS.quotation_check) return res;
+    if (/signed_application_form|signed and chopped/i.test(String(req.docType || ""))) return res;
+    var extra = validateDocSlot(req.docType, req.fileName, req.documentText || "");
+    if (!extra.length) return res;
+    res.issues = (res.issues || []).concat(extra.filter(function (e) {
+      return !(res.issues || []).some(function (i) { return i && i.code === e.code; });
+    }));
+    if (res.issues.some(function (i) { return i && i.severity !== "warn"; })) {
+      res.pass = false;
+      res.notes = extra[0].message;
+    }
+    return res;
   }
 
   function isPortalHost() {
@@ -665,8 +1152,21 @@
     return /failed to fetch|load failed|networkerror|access-control|cors|not allowed by access-control/i.test(msg);
   }
 
+  var uploadChain = Promise.resolve();
   function assist(req) {
     req = req || {};
+    req.currentValues = Object.assign({}, req.currentValues || {});
+    req.currentValues.lang = "EN";
+    function decorateSummary(res) {
+      if (req.currentValues.lang === "TC") traditionalizeAi(res);
+      if (!res || String(req.action || "").toLowerCase() !== ACTIONS.Summarize) return res;
+      if ((req.currentValues || {}).listingKind !== "pal")
+        res.fields = applySetting(res.fields || {}, req.currentValues || {});
+      if (res.fields && res.fields.summary) res.notes = res.fields.summary;
+      return res;
+    }
+    function run() {
+    return prepareDocument(req).then(function () {
     var forceDemo = /(?:^|[?&])ai=demo(?:&|$)/.test(location.search || "") || global.CITF_AI_DEMO === true;
     if (forceDemo) return localExecute(req);
 
@@ -708,41 +1208,57 @@
       }).catch(fail);
     }
     return viaApi().catch(fail);
+    });
+    }
+    if (req.fileBase64) {
+      var job = uploadChain.then(run, run);
+      uploadChain = job.then(function () {}, function () {});
+      return job.then(decorateSummary);
+    }
+    return run().then(decorateSummary);
   }
 
-  /** Open a file picker and return { fileName, fileBase64 (data URL), mime } or null if cancelled. */
+  function readPickedFile(file) {
+    return new Promise(function (resolve, reject) {
+      if (!file) { resolve(null); return; }
+      var reader = new FileReader();
+      reader.onload = function () {
+        resolve({ fileName: file.name, fileBase64: String(reader.result || ""), mime: file.type || "" });
+      };
+      reader.onerror = function () { reject(reader.error || new Error("read failed")); };
+      reader.readAsDataURL(file);
+    });
+  }
+
   function pickFile(accept) {
     return new Promise(function (resolve, reject) {
       var input = document.createElement("input");
       input.type = "file";
       input.accept = accept || ".pdf,.png,.jpg,.jpeg,.tif,.tiff,.bmp,.webp";
-      input.style.display = "none";
+      input.style.cssText = "position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;";
       document.body.appendChild(input);
-      var done = false;
-      function cleanup() {
+      var settled = false;
+      function finish(err, value) {
+        if (settled) return;
+        settled = true;
+        try { window.removeEventListener("focus", onFocus); } catch (e0) {}
         if (input.parentNode) input.parentNode.removeChild(input);
+        if (err) reject(err);
+        else resolve(value);
+      }
+      function onFocus() {
+        setTimeout(function () {
+          if (settled) return;
+          if (input.files && input.files[0]) return;
+          finish(null, null);
+        }, 500);
       }
       input.onchange = function () {
-        done = true;
         var file = input.files && input.files[0];
-        cleanup();
-        if (!file) { resolve(null); return; }
-        var reader = new FileReader();
-        reader.onload = function () {
-          resolve({ fileName: file.name, fileBase64: String(reader.result || ""), mime: file.type || "" });
-        };
-        reader.onerror = function () { reject(reader.error || new Error("read failed")); };
-        reader.readAsDataURL(file);
+        if (!file) { finish(null, null); return; }
+        readPickedFile(file).then(function (payload) { finish(null, payload); }, function (err) { finish(err); });
       };
-      // Some browsers fire focus back without change when cancelled.
-      setTimeout(function () {
-        window.addEventListener("focus", function onFocus() {
-          window.removeEventListener("focus", onFocus);
-          setTimeout(function () {
-            if (!done) { cleanup(); resolve(null); }
-          }, 400);
-        }, { once: true });
-      }, 0);
+      window.addEventListener("focus", onFocus);
       input.click();
     });
   }
@@ -754,16 +1270,21 @@
   // Live OCR+Chat is the default (no local demo unless ?ai=demo).
   if (global.CITF_AI_LIVE == null) global.CITF_AI_LIVE = true;
 
+  global.toTraditional = toTraditional;
   global.CitfAi = {
     ACTIONS: ACTIONS,
     SCHEMAS: SCHEMAS,
     assist: assist,
     pickFile: pickFile,
+    readFile: readPickedFile,
     novaConfig: novaConfig,
     saveNovaConfig: saveNovaConfig,
     words: words,
     issueMessages: issueMessages,
     validateFundingLocal: validateFunding,
+    mergeFundingIssues: mergeFundingIssues,
+    validateDocSlot: validateDocSlot,
+    validateSignedForm: validateSignedForm,
     clearCache: function () { cache = Object.create(null); }
   };
 })(typeof window !== "undefined" ? window : globalThis);

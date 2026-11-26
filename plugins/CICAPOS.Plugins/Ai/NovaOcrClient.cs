@@ -43,42 +43,58 @@ public sealed class NovaOcrClient : INovaOcrClient
         var fileInfoJson = "{\"apiKey\":" + Quote(_config.OcrApiKey!) + ",\"callbackFlag\":\"0\"}";
         var body = BuildMultipart(boundary, fileName ?? "upload.pdf", fileBytes, fileInfoJson);
 
-        using (var req = new HttpRequestMessage(HttpMethod.Post, uploadUrl))
+        string uploadRaw = "";
+        for (var attempt = 0; ; attempt++)
         {
+            using var req = new HttpRequestMessage(HttpMethod.Post, uploadUrl);
             req.Content = new ByteArrayContent(body);
             req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data; boundary=" + boundary);
-            var uploadRaw = Encoding.UTF8.GetString(_send(req));
-            EnsureSuccess(uploadRaw);
-            var text = TryExtractText(uploadRaw);
+            try
+            {
+                uploadRaw = Encoding.UTF8.GetString(_send(req));
+            }
+            catch (Exception ex) when (IsBusy(ex.Message) && attempt < 4)
+            {
+                Thread.Sleep(1000 * (1 << attempt));
+                continue;
+            }
+            if (IsBusy(uploadRaw) && attempt < 4)
+            {
+                Thread.Sleep(1000 * (1 << attempt));
+                continue;
+            }
+            break;
+        }
+        EnsureSuccess(uploadRaw);
+        var text = TryExtractText(uploadRaw);
+        if (text != null && !string.IsNullOrWhiteSpace(text))
+            return text;
+
+        var id = TryExtractId(uploadRaw);
+        if (id == null || string.IsNullOrWhiteSpace(id))
+            throw new InvalidOperationException("D.Nova OCR upload did not return fileId/taskId or text: " + Truncate(uploadRaw, 300));
+
+        for (var i = 0; i < 30; i++)
+        {
+            Thread.Sleep(1000);
+            var statusUrl = baseUrl + "/queryStatus/" + Uri.EscapeDataString(id);
+            using var poll = new HttpRequestMessage(HttpMethod.Post, statusUrl);
+            poll.Content = new StringContent("{}", Encoding.UTF8, "application/json");
+            var statusRaw = Encoding.UTF8.GetString(_send(poll));
+            EnsureSuccess(statusRaw);
+            text = TryExtractText(statusRaw);
             if (text != null && !string.IsNullOrWhiteSpace(text))
                 return text;
-
-            var id = TryExtractId(uploadRaw);
-            if (id == null || string.IsNullOrWhiteSpace(id))
-                throw new InvalidOperationException("D.Nova OCR upload did not return fileId/taskId or text: " + Truncate(uploadRaw, 300));
-
-            for (var i = 0; i < 30; i++)
+            var st = FirstMatch(statusRaw, "\"(?:status|state|taskStatus|message)\"\\s*:\\s*\"?([^\",}\\s]+)");
+            if (IsFailed(st))
+                throw new InvalidOperationException("D.Nova OCR failed: " + Truncate(statusRaw, 300));
+            if (IsDone(st) || AiJson.ParseObject(statusRaw).GetValueOrDefault("processStatus") == "9")
             {
-                Thread.Sleep(1000);
-                var statusUrl = baseUrl + "/queryStatus/" + Uri.EscapeDataString(id);
-                using var poll = new HttpRequestMessage(HttpMethod.Post, statusUrl);
-                poll.Content = new StringContent("{}", Encoding.UTF8, "application/json");
-                var statusRaw = Encoding.UTF8.GetString(_send(poll));
-                EnsureSuccess(statusRaw);
-                text = TryExtractText(statusRaw);
-                if (text != null && !string.IsNullOrWhiteSpace(text))
-                    return text;
-                var st = FirstMatch(statusRaw, "\"(?:status|state|taskStatus|message)\"\\s*:\\s*\"?([^\",}\\s]+)");
-                if (IsFailed(st))
-                    throw new InvalidOperationException("D.Nova OCR failed: " + Truncate(statusRaw, 300));
-                if (IsDone(st) || AiJson.ParseObject(statusRaw).GetValueOrDefault("processStatus") == "9")
-                {
-                    // Completion supplies the download task ID, which can differ from the upload ID.
-                    return DownloadMarkdown(baseUrl, TryExtractId(statusRaw) ?? id);
-                }
+                // Completion supplies the download task ID, which can differ from the upload ID.
+                return DownloadMarkdown(baseUrl, TryExtractId(statusRaw) ?? id);
             }
-            throw new InvalidOperationException("D.Nova OCR timed out waiting for text (fileId=" + id + ").");
         }
+        throw new InvalidOperationException("D.Nova OCR timed out waiting for text (fileId=" + id + ").");
     }
 
     string DownloadMarkdown(string baseUrl, string taskId)
@@ -105,11 +121,22 @@ public sealed class NovaOcrClient : INovaOcrClient
         return text;
     }
 
+    public static bool IsBusy(string? rawOrMessage)
+    {
+        var s = rawOrMessage ?? "";
+        if (Regex.IsMatch(s, @"\b(429|503)\b")) return true;
+        if (Regex.IsMatch(s, @"too many requests|rate limit|ocr is busy", RegexOptions.IgnoreCase)) return true;
+        var code = AiJson.ParseObject(s).GetValueOrDefault("code");
+        return code == "429" || code == "503";
+    }
+
     static void EnsureSuccess(string raw)
     {
         var code = AiJson.ParseObject(raw).GetValueOrDefault("code");
         if (!string.IsNullOrEmpty(code) && code != "200" && code != "0")
-            throw new InvalidOperationException("D.Nova OCR rejected request (code " + code + ").");
+            throw new InvalidOperationException(code == "429"
+                ? "D.Nova OCR is busy (code 429). Wait a few seconds and click Replace."
+                : "D.Nova OCR rejected request (code " + code + ").");
     }
 
     static byte[] BuildMultipart(string boundary, string fileName, byte[] fileBytes, string fileInfoJson)

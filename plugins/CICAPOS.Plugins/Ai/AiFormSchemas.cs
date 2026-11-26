@@ -77,6 +77,8 @@ public static class AiFormSchemas
                 F("functions", "Core functions", "textarea", true),
                 F("innovation", "Innovation", "textarea"),
                 F("merits", "Merits against CITF objectives", "textarea"),
+                F("obj", "CITF objectives (comma-separated)"),
+                F("jobsJson", "Job references JSON [{project,client,year,contact}]"),
                 F("price", "Selling price (HK$)", "number", true),
                 F("unit", "Unit"),
                 F("launch", "First launch date", "date")
@@ -98,6 +100,8 @@ public static class AiFormSchemas
                 F("functions", "Learning outcomes", "textarea", true),
                 F("innovation", "Innovation", "textarea"),
                 F("merits", "Merits against CITF objectives", "textarea"),
+                F("obj", "CITF objectives (comma-separated)"),
+                F("jobsJson", "Job references JSON [{project,client,year,contact}]"),
                 F("price", "Price per participant (HK$)", "number", true),
                 F("unit", "Unit"),
                 F("launch", "First launch date", "date")

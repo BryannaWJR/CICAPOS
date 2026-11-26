@@ -49,6 +49,8 @@ public static class AiDemoCatalog
                 ["functions"] = "Watches the work area 24/7; detects missing helmets and vests and people inside crane or plant exclusion zones; alerts the supervisor’s phone and the site speaker within 2 seconds; keeps a daily safety log.",
                 ["innovation"] = "On-device vision model tuned for Hong Kong construction PPE and tower-crane exclusion zones.",
                 ["merits"] = "Supports CITF Smart Site Safety System objectives by reducing struck-by incidents and providing auditable alerts.",
+                ["obj"] = "Safety, Productivity",
+                ["jobsJson"] = "[{\"project\":\"Kai Tak Sports Park\",\"client\":\"Harbour Build Engineering Limited\",\"year\":\"2025\",\"contact\":\"Carmen Lau, Project Manager\"}]",
                 ["price"] = "86000",
                 ["unit"] = "per set",
                 ["launch"] = "2024-03-01"
@@ -65,6 +67,8 @@ public static class AiDemoCatalog
                 ["functions"] = "Participants can read and navigate federated models, check quantities, raise issues in a CDE and use models in site inspections.",
                 ["innovation"] = "Uses the participant’s own live project models in labs.",
                 ["merits"] = "Over 300 engineers trained; 92% pass rate; employers report faster model-based inspections.",
+                ["obj"] = "Industry capability (manpower), Productivity",
+                ["jobsJson"] = "[{\"project\":\"In-house training\",\"client\":\"Harbour Build Engineering Limited\",\"year\":\"2025\",\"contact\":\"HR Manager\"}]",
                 ["price"] = "7800",
                 ["unit"] = "per participant",
                 ["launch"] = "2023-09-01"

@@ -33,6 +33,11 @@ static class AiPortalDeploy
         var html = File.ReadAllText(htmlPath);
         html = InjectNovaBootstrap(html);
         UpdateFlowPage(service, html);
+        PublishLanguage(service);
+
+        // 2b) CIC Operation Platform web resource + sitemap cache-bust
+        UploadD365Ops(service);
+        TryBumpSitemap(service);
 
         // 3) Publish Dataverse customizations
         try
@@ -47,6 +52,89 @@ static class AiPortalDeploy
 
         Console.WriteLine("AI portal deploy done. Open /flow/ and hard-refresh (Cmd+Shift+R).");
         Console.WriteLine("Site: https://site-9m48j.powerappsportals.com/flow/");
+        Console.WriteLine("D365 ops: CIC Operation Platform → Funding Applications, Ctrl+F5.");
+    }
+
+    static void UploadD365Ops(ServiceClient service)
+    {
+        var path = new[]
+        {
+            Path.GetFullPath("solution/CICAPOS/src/WebResources/cicapos_d365ops.html"),
+            Path.GetFullPath("../solution/CICAPOS/src/WebResources/cicapos_d365ops.html"),
+            Path.GetFullPath("../../solution/CICAPOS/src/WebResources/cicapos_d365ops.html")
+        }.FirstOrDefault(File.Exists);
+        if (path == null)
+        {
+            Console.WriteLine("cicapos_d365ops.html not found — skip WR upload.");
+            return;
+        }
+
+        var content = Convert.ToBase64String(File.ReadAllBytes(path));
+        var wrId = Guid.Parse("a5100001-e2e1-4111-8111-6045bd5910d5");
+        Entity? row = null;
+        try { row = service.Retrieve("webresource", wrId, new ColumnSet("name")); }
+        catch { /* lookup by name */ }
+        if (row == null)
+        {
+            var q = new QueryExpression("webresource")
+            {
+                ColumnSet = new ColumnSet("name"),
+                TopCount = 1
+            };
+            q.Criteria.AddCondition("name", ConditionOperator.Equal, "cicapos_d365ops.html");
+            row = service.RetrieveMultiple(q).Entities.FirstOrDefault();
+        }
+        if (row == null)
+        {
+            wrId = service.Create(new Entity("webresource")
+            {
+                ["name"] = "cicapos_d365ops.html",
+                ["displayname"] = "CITF Operation Platform UI",
+                ["webresourcetype"] = new OptionSetValue(1),
+                ["content"] = content
+            });
+            Console.WriteLine("Created web resource cicapos_d365ops.html " + wrId);
+            return;
+        }
+        service.Update(new Entity("webresource", row.Id) { ["content"] = content });
+        Console.WriteLine("Updated web resource cicapos_d365ops.html (" + new FileInfo(path).Length + " bytes).");
+    }
+
+    static void TryBumpSitemap(ServiceClient service)
+    {
+        try
+        {
+            var q = new QueryExpression("sitemap")
+            {
+                ColumnSet = new ColumnSet("sitemapxml", "sitemapname"),
+                TopCount = 5
+            };
+            q.Criteria.AddCondition("sitemapname", ConditionOperator.Equal, "cicapos_CICCRMAPP");
+            var row = service.RetrieveMultiple(q).Entities.FirstOrDefault();
+            if (row == null)
+            {
+                Console.WriteLine("Sitemap cicapos_CICCRMAPP not found — skip v=25.");
+                return;
+            }
+            var xml = row.GetAttributeValue<string>("sitemapxml") ?? "";
+            if (xml.Contains("&amp;v=25") || xml.Contains("&v=25") || xml.Contains("v=25"))
+            {
+                Console.WriteLine("Sitemap already at v=25.");
+                return;
+            }
+            var next = xml.Replace("&amp;v=24", "&amp;v=25").Replace("&v=24", "&v=25").Replace("v=24", "v=25");
+            if (next == xml)
+            {
+                Console.WriteLine("Sitemap has no v=24 token — skip.");
+                return;
+            }
+            service.Update(new Entity("sitemap", row.Id) { ["sitemapxml"] = next });
+            Console.WriteLine("Updated sitemap cache-bust to v=25.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Sitemap bump skipped: " + ex.Message);
+        }
     }
 
     static string FindFlowHtml()
@@ -97,6 +185,91 @@ static class AiPortalDeploy
     }
 
     static string JsStr(string s) => "\"" + (s ?? "").Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "").Replace("\n", "\\n") + "\"";
+
+    public static void PublishLanguage(ServiceClient service)
+    {
+        var htmlPath = FindFlowHtml();
+        UpdateFlowPage(service, InjectNovaBootstrap(File.ReadAllText(htmlPath)));
+        TryUpdateHeader(service);
+        TryUpdateHome(service);
+    }
+
+    static void TryUpdateHeader(ServiceClient service)
+    {
+        var headerPath = new[]
+        {
+            Path.GetFullPath("portal/cic-portal-app---site-9m48j/web-templates/header/Header.webtemplate.source.html"),
+            Path.GetFullPath("../portal/cic-portal-app---site-9m48j/web-templates/header/Header.webtemplate.source.html")
+        }.FirstOrDefault(File.Exists);
+        if (headerPath == null) return;
+        var source = File.ReadAllText(headerPath);
+        try
+        {
+            var id = Guid.Parse("8dfd6458-7b97-472a-bf62-6be999edbc06");
+            service.Update(new Entity("adx_webtemplate", id) { ["adx_source"] = source });
+            Console.WriteLine("Updated Header web template (adx_webtemplate).");
+            return;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Header adx_webtemplate skip: " + ex.Message);
+        }
+        try
+        {
+            var q = new QueryExpression("powerpagecomponent")
+            {
+                ColumnSet = new ColumnSet("content", "name"),
+                TopCount = 5
+            };
+            q.Criteria.AddCondition("name", ConditionOperator.Equal, "Header");
+            var row = service.RetrieveMultiple(q).Entities.FirstOrDefault();
+            if (row == null) return;
+            var raw = row.GetAttributeValue<string>("content") ?? "{}";
+            JsonObject node;
+            try { node = JsonNode.Parse(raw)!.AsObject(); }
+            catch { node = new JsonObject(); }
+            node["source"] = source;
+            service.Update(new Entity("powerpagecomponent", row.Id)
+            {
+                ["content"] = node.ToJsonString(new JsonSerializerOptions { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping })
+            });
+            Console.WriteLine("Updated Header powerpagecomponent.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Header update skipped: " + ex.Message);
+        }
+    }
+
+    static void TryUpdateHome(ServiceClient service)
+    {
+        var homePath = new[]
+        {
+            Path.GetFullPath("portal/cic-portal-app---site-9m48j/web-pages/home/content-pages/Home.en-US.webpage.copy.html"),
+            Path.GetFullPath("../portal/cic-portal-app---site-9m48j/web-pages/home/content-pages/Home.en-US.webpage.copy.html")
+        }.FirstOrDefault(File.Exists);
+        if (homePath == null) return;
+        var html = File.ReadAllText(homePath);
+        try
+        {
+            var id = Guid.Parse("165c3e75-3900-436f-a522-7be187441c9e");
+            var page = service.Retrieve("powerpagecomponent", id, new ColumnSet("content", "name"));
+            var raw = page.GetAttributeValue<string>("content") ?? "{}";
+            JsonObject node;
+            try { node = JsonNode.Parse(raw)!.AsObject(); }
+            catch { node = new JsonObject(); }
+            node["copy"] = html;
+            service.Update(new Entity("powerpagecomponent", id)
+            {
+                ["content"] = node.ToJsonString(new JsonSerializerOptions { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping })
+            });
+            Console.WriteLine("Updated Home webpage copy (" + html.Length + " chars HTML).");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Home page update skipped: " + ex.Message);
+        }
+    }
 
     static void UpdateFlowPage(ServiceClient service, string html)
     {

@@ -145,6 +145,7 @@ public sealed class AiAssistPlugin : IPlugin
         target["cicapos_issuesjson"] = response.IssuesJson ?? "[]";
         target["cicapos_notes"] = Truncate(response.Notes ?? "", 4000);
         target["cicapos_contenthash"] = response.ContentHash ?? "";
+        target["cicapos_filebase64"] = "";
     }
 
     static string Truncate(string text, int max)
