@@ -1,0 +1,16 @@
+adx_append: true
+adx_appendto: true
+adx_create: false
+adx_delete: false
+adx_entitylogicalname: activitypointer
+adx_entityname: activitypointer
+adx_entitypermission_webrole:
+- 5eb0973d-1e19-40b0-8a0b-e9b07cd67dfc
+- b4cdd773-d6e1-f111-84ea-6045bd5918b8
+- ccc02cfa-5698-4d2e-a0dd-c213f9847d93
+- cba98d1d-be5f-4bb2-894e-1a05f9d97015
+- a5100001-e2e1-4111-8111-6045bd5912f1
+adx_entitypermissionid: a8c5e2f6-1b74-4d9e-9a88-6f4b2e7d025c
+adx_read: true
+adx_scope: 756150000
+adx_write: false

@@ -1,4 +1,15 @@
 <link rel="stylesheet" href="/citf-portal.css" />
+<style>.demo{display:none!important}</style>
+{% assign citf_path = request.path | default: page.url | default: page.partialurl | downcase %}
+{% if citf_path contains 'internal' %}
+<script>document.documentElement.classList.add("citf-internal");</script>
+<style>
+  html.citf-internal > body > header.p-head,
+  html.citf-internal > body > a.skip,
+  html.citf-internal .footer { display: none !important; }
+  html.citf-internal #app header.p-head { display: block !important; }
+</style>
+{% endif %}
 
 <div id="citf-page-boot" aria-live="polite" aria-busy="true"><div class="spin" aria-hidden="true"></div><div>Loading…</div></div>
 <script>
@@ -38,8 +49,7 @@
 <header class="p-head" role="banner">
   <div class="in">
     <a class="logo" href="/">
-      <span class="mark">LOGO</span>
-      <span class="logo-text"><b>CIC Company Portal</b><small>CITF Application Portal &amp; Pre-approved List · Power Pages</small></span>
+      <span class="logo-text"><b>CITF portal</b><small>Funding applications &amp; Pre-approved List</small></span>
     </a>
     {% assign path = request.path | default: page.url | default: page.partialurl | downcase %}
     {% assign tab = 'home' %}
@@ -62,7 +72,7 @@
         <a href="{% if homeurl %}/{{ homeurl }}{% endif %}{{ website.sign_out_url_substitution }}">Sign out</a>
       {% else %}
         <a href="/" {% if tab == 'home' %}class="on" aria-current="page"{% endif %}>Sign in</a>
-        <a href="/company-registration/" data-nav="reg" {% if tab == 'reg' %}class="on" aria-current="page"{% endif %}>Register company</a>
+        <a href="/flow/#/p/register" data-nav="reg" {% if tab == 'reg' %}class="on" aria-current="page"{% endif %}>Register company</a>
       {% endif %}
     </nav>
   </div>

@@ -360,18 +360,20 @@ public static class AiQuality
         data.Remove("itemsJson");
         data.Remove("palJson");
         var palRule = hasNpa
-            ? "Data.hasNpa is true. For each non-pre-approved item, compare it with the closest Pre-approved List product. State which unit price is more cost-effective, and whose functions better match this project's need (from the objective and the item plan). Start that line with 'Function and price comparison:'. Put the same text in risks with severity tip. Do not use warn for a PAL match. "
+            ? "Data.hasNpa is true. For each non-pre-approved item, compare it with the project objective and its indoor or outdoor setting, and with the closest listed product. Use listed product functions only to judge the match; do not quote those function texts. State which unit price is more cost-effective and whose functions better match the project objective. Start that line with 'Function and price comparison:'. Put the same text in risks with severity tip. Do not use warn for a PAL match. "
             : "Data.hasNpa is false. All items are pre-approved. Do not mention PAL comparison, alternatives, Function and price comparison, or close listed products. ";
         return "Write a CITF funding application submission summary for CIC officers. "
-            + "Return ONLY JSON: {\"summary\":\"4-8 numbered lines (1. 2. 3.) each one short sentence covering scheme, site, objective, indoor/outdoor judgment, items and amounts\",\"score\":integer 0-100,\"setting\":\"indoor|outdoor|mixed|unspecified\",\"risks\":[{\"severity\":\"warn|error|tip\",\"text\":\"short flag\"}]}. Put each point on its own line. Do not inline the word Warn in the summary; put flags only in risks. "
-            + "Do not give recommendations, advice or next steps. Be factual from the data. Do not invent documents or PAL codes. "
-            + "Never copy JSON, square brackets, curly braces, itemsJson, palJson or field keys such as plan/product/paCode into the summary. Use Data.itemsPlain for item names in ordinary English. "
+            + "Return ONLY JSON: {\"summary\":\"4-8 numbered lines\",\"score\":integer 0-100,\"setting\":\"indoor|outdoor|mixed|unspecified\",\"risks\":[{\"severity\":\"warn|error|tip\",\"text\":\"short flag\"}]}. "
+            + "Each numbered point (1. 2. 3.) MUST be a single ordinary sentence on its own line, with a newline after it. Never put 1. and 2. in the same paragraph. Do not use labels such as Scheme:, Site:, Objective:, Setting:, Items: or Amount:. "
+            + "Do not inline the word Warn in the summary; put flags only in risks. "
+            + "Do not give recommendations, advice or next steps. Be factual from the data. Do not invent documents, PAL codes, quantities, unit prices, durations or months — copy those only from Data and Data.itemsPlain. "
+            + "Never copy JSON, square brackets, curly braces, itemsJson, palJson or field keys such as plan/product/paCode into the summary. Use Data.itemsPlain for item names, quantities and plans in ordinary English. "
             + "Do not mention AI analysis, that analysis is complete or OK, or that a CIC officer still reviews the case. "
             + "Use severity warn only when the input is not detailed enough. "
-            + "Judge indoor vs outdoor from the project objective and from item functions and implementation plans (how and where the equipment is used). "
+            + "Judge indoor vs outdoor from how the work is done: the project objective and item functions/plans. NM-B / Romex electrical cable is indoor-rated building wire, not outdoor civil or tower-crane equipment. "
             + "Never use the project title, contract number, PWP number, or the words Site / New Town / Extension alone as proof of outdoor work. "
-            + "Write one numbered line: indoor, outdoor or mixed, with evidence from the objective or item functions/plans; then whether each item fits. If an item is indoor but the objective is outdoor (or the reverse), name the item. "
-            + "Put that judgment in JSON key setting. "
+            + "Do not write the indoor/outdoor verdict in the numbered scheme/objective/items lines; it is added separately. Put the judgment in JSON key setting. "
+            + "If an item is indoor-rated but the objective is outdoor (or the reverse), name the item. "
             + "Add a warn risk only when the input is not detailed enough: setting is unspecified (no indoor/outdoor evidence), or the text does not cover the selected scheme/category criteria. "
             + palRule
             + PortalLanguageInstruction(values)
@@ -404,11 +406,19 @@ public static class AiQuality
             var code = map.GetValueOrDefault("paCode") ?? "";
             var type = map.GetValueOrDefault("type") ?? "";
             var plan = (map.GetValueOrDefault("plan") ?? "").Trim();
+            var functions = (map.GetValueOrDefault("functions") ?? map.GetValueOrDefault("f") ?? "").Trim();
+            var qty = (map.GetValueOrDefault("qty") ?? "").Trim();
+            var unit = (map.GetValueOrDefault("unit") ?? map.GetValueOrDefault("price") ?? "").Trim();
             var kind = type.Equals("NPA", StringComparison.OrdinalIgnoreCase)
                 || (string.IsNullOrWhiteSpace(code) && !type.Equals("PA", StringComparison.OrdinalIgnoreCase))
                 ? "non-pre-approved" : "pre-approved " + (string.IsNullOrWhiteSpace(code) ? "item" : code);
-            var line = name + " (" + kind + ")";
-            if (!string.IsNullOrWhiteSpace(plan)) line += ": " + plan;
+            var line = name + " (" + kind;
+            if (!string.IsNullOrWhiteSpace(qty)) line += ", qty " + qty;
+            if (!string.IsNullOrWhiteSpace(unit) && Regex.IsMatch(unit, @"\d")) line += ", unit HK$" + Regex.Replace(unit, @"[^\d.]", "");
+            line += ")";
+            if (kind.StartsWith("non-pre-approved", StringComparison.Ordinal) && !string.IsNullOrWhiteSpace(functions))
+                line += "; functions: " + functions;
+            if (!string.IsNullOrWhiteSpace(plan)) line += "; plan: " + plan;
             parts.Add(line);
         }
         return parts.Count == 0 ? "No items listed" : string.Join("; ", parts);
@@ -417,6 +427,7 @@ public static class AiQuality
     public static string SanitizeSummaryText(string? text)
     {
         var s = text ?? "";
+        s = Regex.Replace(s, @"(?<!\n)\s+(?=\d{1,2}\.\s)", "\n");
         s = Regex.Replace(s, @"\[\s*\{[\s\S]*?\}\s*\]", " ");
         s = Regex.Replace(s, @"\{[^{}]{6,}\}", " ");
         s = Regex.Replace(s, @"[\[\]{}]+", " ");
@@ -432,6 +443,7 @@ public static class AiQuality
             line = Regex.Replace(line, @"\s*a CIC officer still reviews[^.。]*[.。]?", "", RegexOptions.IgnoreCase).Trim();
             if (line.Length < 8) continue;
             if (Regex.IsMatch(line, @"^[\[\{]|itemsJson|palJson|""paCode""")) continue;
+            if (Regex.IsMatch(line, @"^\d+\.\s*Setting\s*:", RegexOptions.IgnoreCase)) continue;
             if (Regex.IsMatch(line, @"AI text analysis completed|officer still reviews|AI analysis (is |was )?(ok|complete)", RegexOptions.IgnoreCase)) continue;
             kept.Add(line);
         }
@@ -489,6 +501,8 @@ public static class AiQuality
 
         var tc = IsTraditional(values);
         var risks = new List<string>();
+        var mismatch = 0;
+        var unclear = 0;
         if (setting is "indoor" or "outdoor")
         {
             var index = 0;
@@ -497,17 +511,26 @@ public static class AiQuality
                 index++;
                 var map = AiJson.ParseObject(item.Value);
                 var blob = (map.GetValueOrDefault("product") ?? "") + " " + (map.GetValueOrDefault("functions") ?? "")
-                    + " " + (map.GetValueOrDefault("plan") ?? "");
+                    + " " + (map.GetValueOrDefault("f") ?? "") + " " + (map.GetValueOrDefault("plan") ?? "");
                 var itemIndoor = IndoorItemCue.IsMatch(blob);
                 var itemOutdoor = OutdoorItemCue.IsMatch(blob);
                 var place = itemIndoor && !itemOutdoor ? "indoor" : itemOutdoor && !itemIndoor ? "outdoor" : "";
+                var name = map.GetValueOrDefault("product");
+                if (string.IsNullOrWhiteSpace(name)) name = tc ? "項目" : "item";
+                name = name.Trim();
                 if (place.Length > 0 && !string.Equals(place, setting, StringComparison.OrdinalIgnoreCase))
                 {
-                    var name = map.GetValueOrDefault("product");
-                    if (string.IsNullOrWhiteSpace(name)) name = tc ? "項目" : "item";
+                    mismatch++;
                     risks.Add(tc
-                        ? "項目 " + index + " " + name.Trim() + " 屬於" + (place == "indoor" ? "室內" : "室外") + "設備，不符合" + (setting == "indoor" ? "室內" : "室外") + "需要"
-                        : "Item " + index + " " + name.Trim() + " is " + place + " equipment and does not meet " + setting + " needs");
+                        ? "項目 " + index + " " + name + " 屬於" + (place == "indoor" ? "室內" : "室外") + "設備，不符合" + (setting == "indoor" ? "室內" : "室外") + "需要"
+                        : "Item " + index + " " + name + " is " + place + " equipment and does not meet " + setting + " needs");
+                }
+                else if (place.Length == 0)
+                {
+                    unclear++;
+                    risks.Add(tc
+                        ? "項目 " + index + " " + name + " 的功能或方案沒有說明室內或室外用途"
+                        : "Item " + index + " " + name + " does not show indoor or outdoor use in its functions or plan");
                 }
             }
         }
@@ -518,8 +541,10 @@ public static class AiQuality
             sentence = "工程同時涉及室內（" + indoorEv + "）和室外（" + outdoorEv + "）。請確認每一項物品對應相應部分。";
         else if (tc && setting == "unspecified")
             sentence = "項目目標和物品功能沒有說明是室內還是室外，因此未判斷物品是否符合室內或室外需要。";
-        else if (tc && risks.Count > 0)
+        else if (tc && mismatch > 0)
             sentence = "工程屬" + (setting == "indoor" ? "室內" : "室外") + "，依據目標及物品功能中的「" + evidence + "」判斷。所申請物品並非全部符合" + (setting == "indoor" ? "室內" : "室外") + "需要。";
+        else if (tc && unclear > 0)
+            sentence = "工程屬" + (setting == "indoor" ? "室內" : "室外") + "，依據目標中的「" + evidence + "」判斷。物品功能或方案未說明室內或室外用途，因此未確認是否符合" + (setting == "indoor" ? "室內" : "室外") + "需要。";
         else if (tc)
             sentence = "工程屬" + (setting == "indoor" ? "室內" : "室外") + "，依據目標及物品功能中的「" + evidence + "」判斷。所申請物品符合" + (setting == "indoor" ? "室內" : "室外") + "使用需要。";
         else if (setting == "mixed")
@@ -527,9 +552,12 @@ public static class AiQuality
                 + ") and outdoor (" + outdoorEv + ") work. Confirm each item is for the matching part.";
         else if (setting == "unspecified")
             sentence = "Project setting is unspecified: the objective and item functions do not say whether the work is indoor or outdoor, so item suitability was not judged.";
-        else if (risks.Count > 0)
+        else if (mismatch > 0)
             sentence = "Project setting is " + setting + ", judged from the objective and item functions (" + evidence
                 + "). Requested items do not all suit " + setting + " use.";
+        else if (unclear > 0)
+            sentence = "Project setting is " + setting + ", judged from the objective (" + evidence
+                + "). Item functions or plans do not show indoor or outdoor use, so suitability was not confirmed.";
         else
             sentence = "Project setting is " + setting + ", judged from the objective and item functions (" + evidence
                 + "). Requested items suit " + setting + " use.";
@@ -576,7 +604,7 @@ public static class AiQuality
         {
             var line = raw.Trim();
             if (line.Length == 0) continue;
-            if (Regex.IsMatch(line, @"work setting is|Project setting is|工程屬|工程属|Requested items (suit|do not all suit)|does not meet indoor|does not meet outdoor|不符合室內需要|不符合室外需要", RegexOptions.IgnoreCase))
+            if (Regex.IsMatch(line, @"work setting is|Project setting is|工程屬|工程属|Requested items (suit|do not all suit)|does not meet indoor|does not meet outdoor|不符合室內需要|不符合室外需要|Setting:\s*(Indoor|Outdoor|Mixed|Unspecified)|suitability was not confirmed", RegexOptions.IgnoreCase))
                 continue;
             kept.Add(line);
         }
@@ -586,7 +614,7 @@ public static class AiQuality
     static void EnsureItemSettingLine(Dictionary<string, string> fields, WorkSettingAssessment assessment)
     {
         var summary = StripSettingLines(fields.GetValueOrDefault("summary"));
-        if (!Regex.IsMatch(summary, @"suit .+ use|does not all suit|Items vs objective|不符合.+需要|符合.+使用需要", RegexOptions.IgnoreCase))
+        if (!Regex.IsMatch(summary, @"suit .+ use|does not all suit|Items vs objective|不符合.+需要|符合.+使用需要|suitability was not confirmed", RegexOptions.IgnoreCase))
         {
             summary = summary.Trim();
             if (summary.Length > 0)
@@ -635,6 +663,12 @@ public static class AiQuality
             var npaRaw = map.GetValueOrDefault("unit") ?? map.GetValueOrDefault("price") ?? "";
             var npaPx = HkMoney(npaRaw);
             var plan = map.GetValueOrDefault("plan") ?? "";
+            var objective = Regex.Replace(values.GetValueOrDefault("objective") ?? "", @"\s+", " ").Trim();
+            if (objective.Length == 0) objective = "not stated";
+            else if (objective.Length > 140) objective = objective.Substring(0, 139) + "…";
+            var settingWord = AssessWorkSetting(values).Setting;
+            if (string.IsNullOrWhiteSpace(settingWord)) settingWord = "unspecified";
+            var against = "compared with the project objective (" + settingWord + ": " + objective + ")";
             var hit = FindSimilarPal(product, npaFn, pal);
             if (hit != null)
             {
@@ -644,14 +678,14 @@ public static class AiQuality
                 var palRaw = hit.GetValueOrDefault("price") ?? "";
                 var palPx = HkMoney(palRaw);
                 var palFn = hit.GetValueOrDefault("functions") ?? "";
-                tips.Add("Function and price comparison: NPA “" + product + "” (" + npaPx + "; " + ClipText(npaFn, 80)
-                    + ") vs listed " + listed.Trim() + " (" + palPx + "; " + ClipText(palFn, 80) + "). "
+                tips.Add("Function and price comparison: NPA “" + product + "” (" + npaPx + ") " + against
+                    + ". Closest listed product " + listed.Trim() + " (" + palPx + "). "
                     + PriceWinner(product, npaRaw, listed.Trim(), palRaw) + " "
                     + FunctionWinner(product, npaFn + " " + plan, listed.Trim(), palFn, need));
             }
             else
-                tips.Add("Function and price comparison: NPA “" + product + "” (" + npaPx + "; " + ClipText(npaFn, 80)
-                    + ") — no close listed product was found by function, so a price and function comparison against the Pre-approved List could not be made.");
+                tips.Add("Function and price comparison: NPA “" + product + "” (" + npaPx + ") " + against
+                    + ". No close listed product was found by function, so a price and function comparison against the Pre-approved List could not be made.");
         }
         if (!anyNpa || tips.Count == 0) return;
 
@@ -715,10 +749,10 @@ public static class AiQuality
         var npaScore = NeedOverlap(npaFn, need);
         var palScore = NeedOverlap(palFn, need);
         if (palScore > npaScore)
-            return "Listed " + listedName + " functions better match this project’s need.";
+            return "Listed " + listedName + " functions better match the project objective.";
         if (npaScore > palScore)
-            return "NPA “" + npaName + "” functions better match this project’s need.";
-        return "Functions are similar for this project’s need.";
+            return "NPA “" + npaName + "” functions better match the project objective.";
+        return "Functions are similar for this project objective.";
     }
 
     static int NeedOverlap(string text, string need)
@@ -818,7 +852,7 @@ public static class AiQuality
         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     static readonly Regex IndoorItemCue = new(
-        @"\bindoor\b|plant[- ]?room|mep module|mep cassette|integrated riser|indoor air|interior finish|office fit-?out|hvac|\bahu\b|classroom|lobby|室内装修|室內裝修|机房|機房|室内|室內",
+        @"\bindoor\b|\bromex\b|\bnm-?b\b|\bnm-?c\b|non[- ]metallic sheath|building wire|indoor[- ]rated|plant[- ]?room|mep module|mep cassette|integrated riser|indoor air|interior finish|office fit-?out|hvac|\bahu\b|classroom|lobby|室内装修|室內裝修|机房|機房|室内|室內",
         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     static readonly Regex OutdoorItemCue = new(

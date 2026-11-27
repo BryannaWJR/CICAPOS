@@ -315,6 +315,42 @@ public class AiAssistTests
     }
 
     [Fact]
+    public void ApplyWorkSetting_OutdoorObjective_FlagsRomexAsIndoor()
+    {
+        var values = new Dictionary<string, string>
+        {
+            ["project"] = "Tung Chung New Town Extension – Site 3",
+            ["schemes"] = "ACT",
+            ["objective"] = "Cut struck-by incidents on four tower-crane exclusion zones. Outdoor civil works on an open site with podium slabs.",
+            ["itemsJson"] = "[{\"product\":\"Standard Romex (NM-B) electrical cable\",\"type\":\"NPA\",\"qty\":\"1\",\"unit\":\"42000\",\"plan\":\"Deploy 2 units from week 3 and record weekly\"}]"
+        };
+        var fields = new Dictionary<string, string> { ["summary"] = "Applicant submitted an ACT application.", ["risksJson"] = "[]" };
+        AiQuality.ApplyWorkSetting(fields, values);
+        Assert.Equal("outdoor", fields["setting"]);
+        Assert.Contains("do not all suit outdoor use", fields["summary"]);
+        Assert.Contains("indoor equipment", fields["summary"], StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("Requested items suit outdoor use", fields["summary"]);
+        Assert.DoesNotContain("\"severity\":\"warn\"", fields["risksJson"]);
+    }
+
+    [Fact]
+    public void ApplyWorkSetting_Outdoor_DoesNotClaimSuitWhenItemHasNoSettingCue()
+    {
+        var values = new Dictionary<string, string>
+        {
+            ["project"] = "Tung Chung New Town Extension – Site 3",
+            ["schemes"] = "ACT",
+            ["objective"] = "Cut struck-by incidents on four tower-crane exclusion zones.",
+            ["itemsJson"] = "[{\"product\":\"Generic sensor kit\",\"type\":\"NPA\",\"plan\":\"Deploy 2 units from week 3 and record weekly\"}]"
+        };
+        var fields = new Dictionary<string, string> { ["summary"] = "Applicant submitted an ACT application.", ["risksJson"] = "[]" };
+        AiQuality.ApplyWorkSetting(fields, values);
+        Assert.Equal("outdoor", fields["setting"]);
+        Assert.Contains("suitability was not confirmed", fields["summary"], StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("Requested items suit outdoor use", fields["summary"]);
+    }
+
+    [Fact]
     public void ApplyWorkSetting_IgnoresProjectTitle_WhenObjectiveHasNoSetting()
     {
         var values = new Dictionary<string, string>
@@ -743,6 +779,8 @@ public class AiAssistTests
         Assert.Contains("HK$92000", fields["summary"]);
         Assert.Contains("HK$86000", fields["summary"]);
         Assert.Contains("more cost-effective", fields["summary"], StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("compared with the project objective", fields["summary"], StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("detects missing PPE", fields["summary"]);
         Assert.True(
             fields["summary"].IndexOf("better match", StringComparison.OrdinalIgnoreCase) >= 0
             || fields["summary"].IndexOf("similar for this project", StringComparison.OrdinalIgnoreCase) >= 0);

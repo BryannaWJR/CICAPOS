@@ -192,6 +192,8 @@ static class AiPortalDeploy
         UpdateFlowPage(service, InjectNovaBootstrap(File.ReadAllText(htmlPath)));
         TryUpdateHeader(service);
         TryUpdateHome(service);
+        TryUpdateRegister(service);
+        TryUpdateCss(service);
     }
 
     static void TryUpdateHeader(ServiceClient service)
@@ -268,6 +270,76 @@ static class AiPortalDeploy
         catch (Exception ex)
         {
             Console.WriteLine("Home page update skipped: " + ex.Message);
+        }
+    }
+
+    static void TryUpdateRegister(ServiceClient service)
+    {
+        var path = new[]
+        {
+            Path.GetFullPath("portal/cic-portal-app---site-9m48j/web-pages/register-company/content-pages/Register-Company.en-US.webpage.copy.html"),
+            Path.GetFullPath("../portal/cic-portal-app---site-9m48j/web-pages/register-company/content-pages/Register-Company.en-US.webpage.copy.html")
+        }.FirstOrDefault(File.Exists);
+        if (path == null) return;
+        var html = File.ReadAllText(path);
+        try
+        {
+            var id = Guid.Parse("a5100001-e2e1-4111-8111-6045bd591061");
+            var page = service.Retrieve("powerpagecomponent", id, new ColumnSet("content", "name"));
+            var raw = page.GetAttributeValue<string>("content") ?? "{}";
+            JsonObject node;
+            try { node = JsonNode.Parse(raw)!.AsObject(); }
+            catch { node = new JsonObject(); }
+            node["copy"] = html;
+            service.Update(new Entity("powerpagecomponent", id)
+            {
+                ["content"] = node.ToJsonString(new JsonSerializerOptions { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping })
+            });
+            Console.WriteLine("Updated Register webpage copy (" + html.Length + " chars HTML).");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Register page update skipped: " + ex.Message);
+        }
+    }
+
+    static void TryUpdateCss(ServiceClient service)
+    {
+        var path = new[]
+        {
+            Path.GetFullPath("portal/cic-portal-app---site-9m48j/web-files/citf-portal.css"),
+            Path.GetFullPath("../portal/cic-portal-app---site-9m48j/web-files/citf-portal.css")
+        }.FirstOrDefault(File.Exists);
+        if (path == null) return;
+        var css = File.ReadAllText(path);
+        try
+        {
+            var q = new QueryExpression("annotation")
+            {
+                ColumnSet = new ColumnSet("annotationid", "filename"),
+                TopCount = 5
+            };
+            q.Criteria.AddCondition("objectid", ConditionOperator.Equal, Guid.Parse("a5100001-e2e1-4111-8111-6045bd591090"));
+            q.Criteria.AddCondition("isdocument", ConditionOperator.Equal, true);
+            var notes = service.RetrieveMultiple(q).Entities;
+            var note = notes.FirstOrDefault(n => string.Equals(n.GetAttributeValue<string>("filename"), "citf-portal.css", StringComparison.OrdinalIgnoreCase))
+                ?? notes.FirstOrDefault();
+            if (note == null)
+            {
+                Console.WriteLine("CSS annotation not found.");
+                return;
+            }
+            service.Update(new Entity("annotation", note.Id)
+            {
+                ["documentbody"] = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(css)),
+                ["mimetype"] = "text/css",
+                ["filename"] = "citf-portal.css"
+            });
+            Console.WriteLine("Updated citf-portal.css (" + css.Length + " chars).");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("CSS update skipped: " + ex.Message);
         }
     }
 

@@ -1,6 +1,9 @@
 using System.Text.Json.Nodes;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 
 namespace CICAPOS.Register;
@@ -144,14 +147,116 @@ static class AiAssistSetup
         }
 
         _ = CompanyUserRole;
+        const string JobFields =
+            "cicapos_aiassistjobid,cicapos_name,cicapos_action,cicapos_schemakey,cicapos_doctype,cicapos_documenttext,cicapos_filename,cicapos_filebase64,cicapos_currentvaluesjson,cicapos_contenthash,cicapos_pass,cicapos_source,cicapos_model,cicapos_fieldsjson,cicapos_issuesjson,cicapos_notes";
+        // Wildcard (*) in Webapi/<table>/fields is rejected with HTTP 403 / 90040122.
         UpsertSiteSettingComponent(service, Guid.Parse(SiteId), SiteSettingType,
             "24ce98b5-f3e6-f111-84e9-6045bd5918b8", "Webapi/cicapos_aiassistjob/enabled", "true");
         UpsertSiteSettingComponent(service, Guid.Parse(SiteId), SiteSettingType,
-            "45ce98b5-f3e6-f111-84e9-6045bd5918b8", "Webapi/cicapos_aiassistjob/fields",
-            "cicapos_name,cicapos_action,cicapos_schemakey,cicapos_doctype,cicapos_documenttext,cicapos_filename,cicapos_filebase64,cicapos_currentvaluesjson,cicapos_contenthash,cicapos_pass,cicapos_source,cicapos_model,cicapos_fieldsjson,cicapos_issuesjson,cicapos_notes");
+            "45ce98b5-f3e6-f111-84e9-6045bd5918b8", "Webapi/cicapos_aiassistjob/fields", JobFields);
+        ReplaceWildcardFieldLists(service, Guid.Parse(SiteId), SiteSettingType, "cicapos_aiassistjob", JobFields);
+        // powerpagecomponent.content is rewritten from mspp_sitesetting.mspp_value, so a content-only update leaves "*".
+        SetStoredSiteSetting(service, "Webapi/cicapos_aiassistjob/fields", JobFields);
+        ReplaceWildcardFieldLists(service, Guid.Parse(SiteId), SiteSettingType, "cicapos_AiAssist", JobFields);
         UpsertSiteSettingComponent(service, Guid.Parse(SiteId), SiteSettingType,
             "457d4ee7-e9e6-f111-84e9-6045bd5918b8", "Webapi/enable", "true");
+        EnsureAiSummaryColumn(service);
     }
+
+    static void EnsureAiSummaryColumn(ServiceClient service)
+    {
+        const string entity = "cicapos_fundingapplication";
+        const string logical = "cicapos_aisummary";
+        var exists = false;
+        try
+        {
+            service.Execute(new RetrieveAttributeRequest { EntityLogicalName = entity, LogicalName = logical, RetrieveAsIfPublished = true });
+            exists = true;
+        }
+        catch { exists = false; }
+        if (!exists)
+        {
+            service.Execute(new CreateAttributeRequest
+            {
+                EntityName = entity,
+                Attribute = new MemoAttributeMetadata
+                {
+                    SchemaName = "cicapos_aisummary",
+                    DisplayName = new Label("AI summary", 1033),
+                    Description = new Label("AI submission summary stored for internal review", 1033),
+                    RequiredLevel = new AttributeRequiredLevelManagedProperty(AttributeRequiredLevel.None),
+                    MaxLength = 10000,
+                    ImeMode = ImeMode.Auto
+                }
+            });
+            service.Execute(new PublishXmlRequest { ParameterXml = "<importexportxml><entities><entity>cicapos_fundingapplication</entity></entities></importexportxml>" });
+            Console.WriteLine("Created cicapos_aisummary on funding applications.");
+        }
+        else Console.WriteLine("cicapos_aisummary already exists.");
+        AllowFundingWebApiField(service, logical);
+    }
+
+    static void AllowFundingWebApiField(ServiceClient service, string column)
+    {
+        const string name = "Webapi/cicapos_fundingapplication/fields";
+        var query = new QueryExpression("powerpagecomponent")
+        {
+            ColumnSet = new ColumnSet("name", "content", "powerpagesiteid"),
+            TopCount = 5
+        };
+        query.Criteria.AddCondition("name", ConditionOperator.Equal, name);
+        var row = service.RetrieveMultiple(query).Entities.FirstOrDefault();
+        if (row == null)
+        {
+            Console.WriteLine(name + " is not set — portal Web API is not limited to a field list.");
+            return;
+        }
+        var content = row.GetAttributeValue<string>("content") ?? "";
+        string value;
+        try { value = JsonNode.Parse(content)?["value"]?.ToString() ?? ""; }
+        catch { value = content; }
+        if (value.Trim() == "*")
+        {
+            Console.WriteLine(name + " is still * — left unchanged so other funding columns stay available.");
+            return;
+        }
+        var parts = value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+        if (parts.Any(p => string.Equals(p, column, StringComparison.OrdinalIgnoreCase)))
+        {
+            Console.WriteLine(name + " already allows " + column);
+            return;
+        }
+        parts.Add(column);
+        var site = row.GetAttributeValue<EntityReference>("powerpagesiteid")?.Id ?? Guid.Parse("ea8078b2-2728-4878-9694-7992c3061c1b");
+        UpsertPageComponent(service, row.Id, name, 9, site, SiteSettingContent(name, string.Join(",", parts)));
+        Console.WriteLine("Added " + column + " to " + name);
+    }
+
+    /// <summary>
+    /// Power Pages rejects Webapi/&lt;table&gt;/fields = * (HTTP 403, code 90040122).
+    /// Update every copy of that site setting, not only the known component id.
+    /// </summary>
+    static void ReplaceWildcardFieldLists(ServiceClient service, Guid siteId, int type, string table, string fields)
+    {
+        var name = "Webapi/" + table + "/fields";
+        var query = new QueryExpression("powerpagecomponent")
+        {
+            ColumnSet = new ColumnSet("name", "content"),
+            TopCount = 20
+        };
+        query.Criteria.AddCondition("name", ConditionOperator.Equal, name);
+        foreach (var row in service.RetrieveMultiple(query).Entities)
+        {
+            var content = row.GetAttributeValue<string>("content") ?? "";
+            if (content.Contains(fields, StringComparison.Ordinal) && !content.Contains("\"*\"", StringComparison.Ordinal))
+                continue;
+            UpsertPageComponent(service, row.Id, name, type, siteId, SiteSettingContent(name, fields));
+            Console.WriteLine("Replaced wildcard site setting " + name + " " + row.Id);
+        }
+    }
+
+    static string SiteSettingContent(string name, string value)
+        => new JsonObject { ["value"] = value, ["name"] = name, ["source"] = 0 }.ToJsonString();
 
     static void UpsertPageComponent(ServiceClient service, Guid id, string name, int type, Guid siteId, string content)
     {
@@ -167,9 +272,40 @@ static class AiAssistSetup
         else service.Update(row);
     }
 
+    static void SetStoredSiteSetting(ServiceClient service, string name, string value)
+    {
+        var query = new QueryExpression("mspp_sitesetting")
+        {
+            ColumnSet = new ColumnSet("mspp_value"),
+            TopCount = 5
+        };
+        query.Criteria.AddCondition("mspp_name", ConditionOperator.Equal, name);
+        var rows = service.RetrieveMultiple(query).Entities;
+        if (rows.Count == 0)
+        {
+            Console.WriteLine("mspp_sitesetting missing " + name);
+            return;
+        }
+        foreach (var row in rows)
+        {
+            service.Update(new Entity("mspp_sitesetting", row.Id) { ["mspp_value"] = value });
+            try
+            {
+                service.Update(new Entity("powerpagecomponent", row.Id) { ["content"] = SiteSettingContent(name, value) });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("powerpagecomponent " + name + ": " + ex.Message.Split('\n')[0]);
+            }
+            var stored = service.Retrieve("mspp_sitesetting", row.Id, new ColumnSet("mspp_value"))
+                .GetAttributeValue<string>("mspp_value") ?? "";
+            Console.WriteLine("Stored " + name + "=" + (stored == "*" ? "*" : "explicit (" + stored.Split(',').Length + " fields)"));
+        }
+    }
+
     static void UpsertSiteSettingComponent(ServiceClient service, Guid siteId, int type, string id, string name, string value)
     {
-        var content = new JsonObject { ["value"] = value, ["name"] = name, ["source"] = 0 }.ToJsonString();
+        var content = SiteSettingContent(name, value);
         try
         {
             UpsertPageComponent(service, Guid.Parse(id), name, type, siteId, content);

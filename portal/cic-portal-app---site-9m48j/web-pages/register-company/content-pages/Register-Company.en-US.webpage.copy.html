@@ -39,21 +39,12 @@
   </div>
 </main>
 {% else %}
+<script>location.replace('/flow/#/p/register');</script>
 <main class="p-main">
   <div>
-    <h1>Register your company</h1>
-    <p class="sub">One account per applicant. CIC vets these particulars before the company can use CITF.</p>
+    <h1>Register Your Company</h1>
+    <p class="sub">Opening the company registration form…</p>
   </div>
-  <div class="note info">Sign-in after approval uses the identity provider configured for this site. Okta is not connected yet, so approved contacts sign in with Microsoft Entra ID. A password is not collected here.</div>
-  <div class="card">
-    <h2>1. Business Registration and company</h2>
-    <p class="sub">Company type, BR number and legal name are required. Attach the Business Registration certificate (PDF or JPEG).</p>
-    <h2>2. Contact person</h2>
-    <p class="sub">This person is the company contact. The email is used to track the registration.</p>
-    <h2>3. Bank account</h2>
-    <p class="sub">Grants are paid to this account. The account holder should be the applicant.</p>
-    {% entityform id:a5100001-e2e1-4111-8111-6045bd591070 %}
-    <p class="sub">Already registered? <a href="/track/">Track my registration</a></p>
-  </div>
+  <p><a class="btn pri" href="/flow/#/p/register">Continue to registration</a></p>
 </main>
 {% endif %}

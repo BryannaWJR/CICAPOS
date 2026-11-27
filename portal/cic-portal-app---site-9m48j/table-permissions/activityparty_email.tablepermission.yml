@@ -1,0 +1,18 @@
+adx_append: true
+adx_appendto: true
+adx_create: true
+adx_delete: false
+adx_entitylogicalname: activityparty
+adx_entityname: activityparty
+adx_entitypermission_webrole:
+- 5eb0973d-1e19-40b0-8a0b-e9b07cd67dfc
+- b4cdd773-d6e1-f111-84ea-6045bd5918b8
+- ccc02cfa-5698-4d2e-a0dd-c213f9847d93
+- cba98d1d-be5f-4bb2-894e-1a05f9d97015
+- a5100001-e2e1-4111-8111-6045bd5912f1
+adx_entitypermissionid: e6a3c0d4-8b52-4f7c-9e66-4d2f0c5b803a
+adx_parententitypermission: c4e1a8b2-6f31-4d5a-9c44-1f0e8a2b6d18
+adx_parentrelationship: email_activity_parties
+adx_read: true
+adx_scope: 756150003
+adx_write: true

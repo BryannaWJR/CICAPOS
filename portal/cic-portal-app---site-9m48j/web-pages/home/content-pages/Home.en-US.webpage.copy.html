@@ -47,7 +47,7 @@
       </div>
     {% else %}
       <p class="sub">No company registration is linked to this sign-in yet.</p>
-      <a class="btn" href="/company-registration/">Register your company</a>
+      <a class="btn" href="/flow/#/p/register">Register your company</a>
     {% endif %}
   </div>
   <h2>Your CIC services</h2>
@@ -69,27 +69,37 @@
   </div>
 </main>
 {% else %}
+<style>
+.p-main .row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin:0 !important; }
+.p-main .row > * { width:auto !important; max-width:none !important; flex:0 0 auto !important; padding-left:0 !important; padding-right:0 !important; }
+.p-main .citf-signin-actions .btn, .p-main .citf-signin-actions a.btn { height:40px; padding:0 18px; width:auto !important; white-space:nowrap; }
+.p-main .card.body { display:flex; flex-direction:column; gap:14px; }
+.p-main .f { display:flex; flex-direction:column; gap:5px; }
+.p-main .f input { height:40px; border:1px solid var(--field,#9aa5b1); border-radius:4px; padding:0 10px; width:100%; }
+.p-main .btn.pri { background:var(--navy,#007971); border-color:var(--navy,#007971); color:#fff; }
+.p-main .btn.ghost { background:#fff; border:1px solid var(--field,#9aa5b1); color:var(--ink-2,#3e4c59); }
+</style>
 <main class="p-main">
   <div>
-    <h1>CIC Company Portal</h1>
+    <h1>CITF Portal</h1>
     <p class="sub">One company account and one sign-in for CITF and other CIC services.</p>
   </div>
   <div class="card body" style="max-width:560px">
     <h2>Sign in</h2>
-    <div class="note info">Sign-in is handled by CIC’s Okta (OpenID Connect). MFA and password reset run in Okta.</div>
+    <div class="note info">Sign in with your company account. New users can register below.</div>
     <div class="f">
       <label for="demo-email">Email</label>
-      <input id="demo-email" name="email" type="email" value="carmen.lau@harbourbuild.example.com" autocomplete="username" />
+      <input id="demo-email" name="email" type="email" value="" autocomplete="username" />
     </div>
     <div class="f">
       <label for="demo-password">Password</label>
-      <input id="demo-password" name="password" type="password" value="Passw0rd!" autocomplete="current-password" />
+      <input id="demo-password" name="password" type="password" value="" autocomplete="current-password" />
     </div>
-    <div class="row">
-      <a class="btn pri" id="btn-okta" href="/flow/?email=carmen.lau%40harbourbuild.example.com">Sign in with Okta</a>
-      <a class="btn ghost" id="btn-iam" href="/flow/?email=carmen.lau%40harbourbuild.example.com">Sign in with iAM Smart (optional)</a>
+    <div class="row citf-signin-actions">
+      <a class="btn pri" id="btn-okta" href="/flow/">Sign in</a>
+      <a class="btn ghost" id="btn-iam" href="/flow/">Sign in with iAM Smart <small>(optional)</small></a>
     </div>
-    <span>New company? <a href="/company-registration/">Register your company</a> · Already registered, waiting for approval? <a href="/track/">Track my registration</a></span>
+    <span>New company? <a href="/flow/#/p/register">Register your company</a> · Already registered, waiting for approval? <a href="/track/">Track my registration</a></span>
   </div>
 </main>
 <script>
@@ -106,7 +116,7 @@
     var email = String((document.getElementById("demo-email") || {}).value || "").trim().toLowerCase()
       || "carmen.lau@harbourbuild.example.com";
     if (d365[email]) {
-      return "/flow/?d365=" + encodeURIComponent(d365[email]) + "#/d/dash";
+      return "/flow/?d365=" + encodeURIComponent(d365[email]) + "#/p/internal";
     }
     return "/flow/?email=" + encodeURIComponent(email);
   }
@@ -150,6 +160,8 @@
     ["Pre-approved List","預先批核清單","預先批核清單"],
     ["Messages","訊息","訊息"],
     ["CIC Company Portal","建造業議會公司入口網站","建造業議會公司入口網站"],
+    ["CITF Portal","CITF 入口網站","CITF 入口網站"],
+    ["Sign in with your company account. New users can register below.","請用公司帳戶登入。新用戶可在下方登記。","請用公司帳戶登入。新用戶可在下方登記。"],
     ["CITF Application Portal & Pre-approved List · Power Pages","CITF 申請入口及預先批核清單 · Power Pages","CITF 申請入口及預先批核清單 · Power Pages"],
     ["One company account and one sign-in for CITF and other CIC services.","一個公司帳戶，即可登入 CITF 及其他建造業議會服務。","一個公司帳戶，即可登入 CITF 及其他建造業議會服務。"],
     ["One company account for CITF funding, disbursements and the Pre-approved List.","一個公司帳戶，即可辦理 CITF 資助、發放及預先批核清單。","一個公司帳戶，即可辦理 CITF 資助、發放及預先批核清單。"],

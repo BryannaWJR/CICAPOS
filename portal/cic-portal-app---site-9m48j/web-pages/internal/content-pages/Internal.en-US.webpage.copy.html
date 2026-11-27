@@ -1,0 +1,557 @@
+<div id="citf-internal">
+<style>
+html, body { background:#F4F5F7 !important; color:#1F2933; }
+#citf-internal{
+  --cic-emerald:#007971; --cic-deep:#085669; --cic-teal:#109B9D; --cic-pale:#CFE9E6;
+  --navy:#007971; --navy-d:#085669; --gold:#CFE9E6;
+  --bg:#F4F5F7; --card:#fff; --line:#DDE1E6; --line-2:#EEF0F2;
+  --ink:#1F2933; --ink-2:#3E4C59; --muted:#52606D; --field:#9AA5B1;
+  --ok:#1E6B3A; --ok-bg:#E3F4E8; --warn:#92400E; --warn-bg:#FFF4E5; --err:#B42318; --err-bg:#FDECEA;
+  --info:#0F5BA8; --info-bg:#E8F0FA;
+  color:var(--ink); font-family:'Segoe UI',system-ui,-apple-system,sans-serif; font-size:14px; line-height:1.45;
+}
+#citf-internal *{box-sizing:border-box}
+#citf-internal a{color:var(--navy)}
+#citf-internal button,#citf-internal input,#citf-internal select,#citf-internal textarea{font:inherit;color:inherit}
+#citf-internal :focus-visible{outline:2px solid var(--cic-deep);outline-offset:2px}
+#citf-internal .p-head{background:var(--cic-deep);color:#fff;border-bottom:4px solid var(--cic-teal)}
+#citf-internal .p-head .in{max-width:1200px;margin:0 auto;min-height:92px;padding:20px 24px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+#citf-internal .logo{display:flex;align-items:center;gap:16px;color:#fff;text-decoration:none}
+#citf-internal .logo b{display:block;font-size:24px;line-height:1.25;font-weight:700}
+#citf-internal .logo small{display:block;color:var(--cic-pale);font-size:14px;line-height:1.5;margin-top:4px}
+#citf-internal .p-nav{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center}
+#citf-internal .p-nav a{color:#fff;text-decoration:none;padding:8px 0;border-bottom:3px solid transparent;font-size:16px;line-height:1.5}
+#citf-internal .p-nav a.on{font-weight:600;border-bottom-color:var(--gold)}
+#citf-internal .p-nav a:hover{color:var(--cic-pale);border-bottom-color:var(--cic-pale)}
+#citf-internal .p-main{max-width:1280px;margin:0 auto;padding:28px 24px 100px;display:flex;flex-direction:column;gap:20px}
+#citf-internal h1{margin:0;font-size:28px;line-height:1.25;font-weight:700;color:var(--cic-deep)}
+#citf-internal h2{margin:0;font-size:20px;line-height:1.25;font-weight:600;color:var(--cic-deep)}
+#citf-internal h3{margin:0;font-size:15px;line-height:1.25;color:var(--ink)}
+#citf-internal .sub{margin:4px 0 0;color:var(--muted);line-height:1.6}
+#citf-internal .hint{font-size:12px;color:var(--muted);font-weight:400}
+#citf-internal .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:16px}
+#citf-internal .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+#citf-internal .row.between{justify-content:space-between}
+#citf-internal .internal-eyebrow{font-size:12px;letter-spacing:.08em;color:var(--muted);margin:0 0 6px;font-weight:600}
+#citf-internal .internal-filters{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:20px}
+#citf-internal .internal-money{white-space:nowrap}
+#citf-internal .internal-empty{padding:32px 16px;text-align:center}
+#citf-internal .internal-empty h3{margin-bottom:6px}
+#citf-internal .f{display:flex;flex-direction:column;gap:5px;min-width:0}
+#citf-internal .f>label{font-size:13px;font-weight:600}
+#citf-internal .f input,#citf-internal .f select,#citf-internal .f textarea{border:1px solid var(--field);border-radius:4px;background:#fff;width:100%;font:inherit}
+#citf-internal .f input,#citf-internal .f select{height:40px;padding:0 10px}
+#citf-internal .f textarea{height:auto;padding:8px 10px;resize:vertical}
+#citf-internal .f .er{font-size:12px;color:var(--err)}
+#citf-internal .btn{height:40px;padding:0 18px;border-radius:4px;border:1px solid var(--navy);background:#fff;color:var(--navy);font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;white-space:nowrap}
+#citf-internal .btn.pri{background:var(--navy);color:#fff}
+#citf-internal .btn.ghost{border-color:var(--field);color:var(--ink-2);background:#fff}
+#citf-internal .btn.sm{height:32px;padding:0 12px;font-size:13px}
+#citf-internal .btn.pri:hover{background:var(--cic-deep);border-color:var(--cic-deep);color:#fff}
+#citf-internal .btn:not(.pri):not(.ghost):hover{background:var(--cic-pale);border-color:var(--cic-emerald);color:var(--cic-deep)}
+#citf-internal .pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:12px;background:#EEF0F2;color:var(--ink-2);white-space:nowrap}
+#citf-internal .pill.ok{background:var(--ok-bg);color:var(--ok)}
+#citf-internal .pill.warn{background:var(--warn-bg);color:var(--warn)}
+#citf-internal .pill.info{background:var(--info-bg);color:var(--info)}
+#citf-internal .pill.err{background:var(--err-bg);color:var(--err)}
+#citf-internal .note{border-radius:6px;padding:12px 16px;font-size:14px}
+#citf-internal .note.info{background:var(--cic-pale);color:var(--cic-deep);border-left:3px solid var(--cic-emerald)}
+#citf-internal .note.warn{background:var(--warn-bg);color:#6B3E00;border:1px solid #F0B866}
+#citf-internal .note.err{background:var(--err-bg);color:var(--err)}
+#citf-internal .scroll{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:6px}
+#citf-internal table.tbl{width:100%;border-collapse:collapse;font-size:14px;margin:0}
+#citf-internal table.tbl th{text-align:left;background:var(--cic-pale);color:var(--cic-deep);padding:10px 12px;font-weight:600;border-bottom:1px solid var(--line)}
+#citf-internal table.tbl td{padding:12px;border-bottom:1px solid var(--line-2);vertical-align:top;background:#fff}
+#citf-internal table.tbl a{color:var(--navy);font-weight:700;text-decoration:none}
+#citf-internal table.tbl a:hover{text-decoration:underline}
+#citf-internal table.tbl td span,#citf-internal table.tbl td small{color:var(--muted);font-weight:400}
+#citf-internal .tabs{display:flex;flex-wrap:wrap;gap:22px;border-bottom:1px solid var(--line)}
+#citf-internal .tabs a{padding:12px 0;text-decoration:none;color:var(--ink-2);border-bottom:3px solid transparent}
+#citf-internal .tabs a.on{color:var(--navy);font-weight:600;border-bottom-color:var(--navy)}
+#citf-internal .kv{display:grid;grid-template-columns:180px 1fr;gap:6px 12px;font-size:13px}
+#citf-internal .kv span:nth-child(odd){color:var(--muted)}
+#citf-internal .internal-detail-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+#citf-internal .internal-content,#citf-internal .internal-side{display:flex;flex-direction:column;gap:20px;min-width:0}
+#citf-internal .internal-ai{border-top:4px solid var(--cic-emerald)}
+#citf-internal .internal-ai p,#citf-internal .internal-ai li{line-height:1.65}
+#citf-internal .internal-ai ul{margin:0;padding-left:22px}
+#citf-internal .internal-summary{font-size:16px;margin:0}
+#citf-internal .internal-ai-footer{border-top:1px solid var(--line);padding-top:12px;font-size:12px;color:var(--muted)}
+#citf-internal .internal-facts{display:flex;flex-direction:column;gap:5px;overflow-wrap:anywhere}
+#citf-internal .internal-facts>span:nth-child(odd){color:var(--muted);font-size:13px;margin-top:9px}
+#citf-internal .internal-item{border:1px solid var(--line);border-radius:6px;padding:16px}
+#citf-internal .internal-item summary{cursor:pointer;font-weight:600;line-height:1.6}
+#citf-internal .internal-item summary span{color:var(--cic-deep);white-space:nowrap}
+#citf-internal .internal-item .kv{margin-top:16px}
+#citf-internal .internal-item h3{margin-top:16px}
+#citf-internal .internal-query{padding:12px 0;border-bottom:1px solid var(--line)}
+#citf-internal .internal-history{padding-left:20px;margin:0}
+#citf-internal .internal-history li{padding:0 0 16px}
+#citf-internal .internal-history small{color:var(--muted)}
+#citf-internal .internal-history p{margin:5px 0 0}
+#citf-internal .signin-card{max-width:560px}
+#citf-internal .scrim{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:80;display:flex;align-items:center;justify-content:center;padding:20px}
+#citf-internal .modal{background:#fff;border-radius:8px;max-width:760px;width:100%;max-height:90vh;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:14px;box-shadow:0 20px 50px rgba(0,0,0,.25);color:var(--ink)}
+#citf-internal .modal .acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+#citf-internal .toast{position:fixed;right:20px;bottom:20px;z-index:90;background:var(--ok);color:#fff;border-radius:6px;padding:12px 18px;max-width:360px}
+#citf-internal .toast.err{background:var(--err)}
+#citf-internal .chat-workspace{display:grid;grid-template-columns:280px minmax(0,1fr);background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;min-height:620px}
+#citf-internal .chat-sidebar{background:#f5f8f8;border-right:1px solid var(--line);padding:16px;min-width:0}
+#citf-internal .chat-sidebar-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+#citf-internal .chat-sidebar-heading h2{font-size:18px}
+#citf-internal .chat-tabs{display:flex;flex-direction:column;gap:8px}
+#citf-internal .chat-tab{display:flex;flex-direction:column;gap:7px;padding:15px;text-align:left;font:inherit;background:transparent;border:1px solid transparent;border-radius:7px;cursor:pointer;min-width:0;color:var(--ink)}
+#citf-internal .chat-tab[aria-selected=true]{background:var(--cic-pale);border-color:var(--cic-emerald)}
+#citf-internal .chat-tab-title{font-weight:600;overflow-wrap:anywhere}
+#citf-internal .chat-preview{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;font-size:13px;color:var(--muted)}
+#citf-internal .chat-tab-status{font-size:12px;color:var(--cic-deep)}
+#citf-internal .chat-panel{min-width:0;display:flex;flex-direction:column}
+#citf-internal .chat-heading{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+#citf-internal .chat-heading>div{flex:1}
+#citf-internal .chat-log{padding:24px;display:flex;flex-direction:column;gap:20px;max-height:520px;min-height:240px;overflow-y:auto;background:#fafbfc}
+#citf-internal .chat-bubble{padding:16px 18px;border-radius:12px;max-width:88%;overflow-wrap:anywhere;background:#fff;border:1px solid var(--line)}
+#citf-internal .chat-outgoing{align-self:flex-end;background:var(--cic-pale);border-color:var(--cic-pale)}
+#citf-internal .chat-incoming{align-self:flex-start}
+#citf-internal .chat-message-meta{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+#citf-internal .chat-bubble p{white-space:pre-wrap;line-height:1.6;margin:10px 0 0}
+#citf-internal .chat-request{margin-top:12px;padding:12px;background:#ffffffb3;border-radius:6px}
+#citf-internal .chat-request ul{margin:8px 0;padding-left:20px}
+#citf-internal .chat-composer{padding:20px 24px;display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);margin-top:auto}
+#citf-internal .chat-composer>label{font-weight:600}
+#citf-internal .chat-composer textarea{width:100%;font:inherit;padding:12px;border:1px solid var(--field);border-radius:6px;resize:vertical}
+#citf-internal .chat-composer summary{cursor:pointer;color:var(--cic-deep)}
+#citf-internal .chat-composer details>.f{margin-top:12px}
+#citf-internal .chat-empty{padding:60px 30px;text-align:center;margin:auto}
+#citf-internal .page-foot{display:flex;justify-content:flex-end}
+@media(max-width:900px){#citf-internal .internal-detail-grid{grid-template-columns:1fr}#citf-internal .internal-side{display:grid;grid-template-columns:1fr 1fr}#citf-internal .internal-side section:last-child{grid-column:1/-1}}
+@media(max-width:850px){#citf-internal .p-head .in{align-items:flex-start;gap:16px}#citf-internal .p-head .p-nav{width:100%}#citf-internal .chat-workspace{grid-template-columns:220px minmax(0,1fr)}}
+@media(max-width:600px){#citf-internal .p-head .in{min-height:80px;padding:16px}#citf-internal .logo b{font-size:22px}#citf-internal .p-main{padding:24px 16px 40px}#citf-internal h1{font-size:24px}#citf-internal .internal-filters,#citf-internal .internal-side{grid-template-columns:1fr}#citf-internal .internal-main .kv{grid-template-columns:1fr}#citf-internal .chat-workspace{grid-template-columns:1fr}}
+</style>
+<div id="app"></div>
+<div id="modalRoot"></div>
+<div id="toastRoot" aria-live="polite"></div>
+</div>
+<script>
+(function () {
+  document.documentElement.classList.add("citf-internal");
+  if (document.body) document.body.classList.add("citf-internal");
+  var KEY = "citf-internal-officer";
+  var ACCOUNTS = [
+    { email: "mandy.chan@cic.example.com", name: "Mandy Chan", password: "Passw0rd!" },
+    { email: "tony.lee@cic.example.com", name: "Tony Lee", password: "Passw0rd!" },
+    { email: "jason.ng@cic.example.com", name: "Jason Ng", password: "Passw0rd!" }
+  ];
+  var UI = { query: "", status: "", loginErr: "", modal: null, toast: null, selected: {}, focusSearch: null };
+  var companies = {};
+  var apps = [];
+
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function pad(n) { return String(n).padStart(2, "0"); }
+  function addDays(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x.toISOString(); }
+  function fmtD(d) { if (!d) return "Not submitted"; var x = new Date(d); return isNaN(x) ? d : pad(x.getDate()) + "/" + pad(x.getMonth() + 1) + "/" + x.getFullYear(); }
+  function fmtDT(d) { if (!d) return "Date not recorded"; var x = new Date(d); return fmtD(x) + " " + pad(x.getHours()) + ":" + pad(x.getMinutes()); }
+  function money(n) { return "HK$" + Math.round(Number(n || 0)).toLocaleString("en-US"); }
+  function dateInput(days) { return addDays(new Date(), days).slice(0, 10); }
+  function company(id) { return companies[id] || { nameEn: "Not provided", companyId: "", br: "", contact: {} }; }
+  function officer() { try { return sessionStorage.getItem(KEY) || ""; } catch (e) { return ""; } }
+  function itemAmt(it) { return (+it.qty || 0) * (+it.unit || 0); }
+  function itemRatio(it) { return it.rental ? 0.5 : it.local ? 0.8 : 0.7; }
+  function itemGrant(it) { return it.approved != null ? it.approved : Math.round(itemAmt(it) * itemRatio(it)); }
+  function appAmt(a) { return a.items.reduce(function (t, it) { return t + itemAmt(it); }, 0); }
+  function grantOf(a) { return Math.round(a.items.reduce(function (t, it) { return t + itemGrant(it); }, 0)); }
+  function pledgeDays(a) { var days = { BIM: 30, ACT: 30, STB: 30, MiC: 45, MiMEP: 45, MPD: 30 }; var n = 0; a.schemes.forEach(function (c) { n = Math.max(n, days[c] || 30); }); if (a.items.some(function (i) { return i.type === "NPA"; })) n = Math.max(n, 45); return n; }
+  function pledgeDate(a) { return a.submittedOn ? addDays(a.submittedOn, pledgeDays(a)) : null; }
+  function pillKind(t) {
+    var m = { "Vetting in progress": "info", "Pending committee": "info", "Under review": "info", "Pending information": "warn", Submitted: "info", Approved: "ok", Rejected: "err" };
+    return m[t] || "";
+  }
+  function pill(t) { return '<span class="pill ' + pillKind(t) + '">' + esc(t) + "</span>"; }
+  function assigned() { var name = officer(); return apps.filter(function (a) { return a.officer === name && a.status !== "Draft" && a.status !== "Pending endorsement"; }); }
+  function owned(id) { return assigned().filter(function (a) { return a.id === id; })[0] || null; }
+  function route() { var q = new URLSearchParams(location.search); return { id: q.get("id") || "", view: q.get("view") || "", email: q.get("email") || "" }; }
+  function link(id, view) { var q = new URLSearchParams(); if (id) q.set("id", id); if (view) q.set("view", view); var s = q.toString(); return s ? "?" + s : location.pathname; }
+
+  function co(id, o) { companies[id] = Object.assign({ id: id, nameEn: "", companyId: "Not provided", br: "Not provided", contact: { name: "Not provided", email: "Not provided" } }, o); }
+  function makeItem(o) { return Object.assign({ type: "PA", paCode: "", product: "", model: "", qty: 1, unit: 0, plan: "", just: "", aiCheck: "", aiNote: "", approved: null, local: false, rental: false }, o); }
+  function makeApp(o) { var a = Object.assign({ id: "", ref: "", companyId: "c1", schemes: ["ACT"], project: "", items: [], docs: [], status: "Draft", history: [], queries: [], officer: "", priority: "Normal", submittedOn: null, objective: "", otherFund: "None declared", ai: null, internalRequestDraft: null }, o); apps.push(a); return a; }
+
+  co("c1", { nameEn: "Harbour Build Engineering Limited", companyId: "CIC-C-002301", br: "61234567", contact: { name: "Carmen Lau", email: "carmen.lau@harbourbuild.example.com" } });
+  var names = ["Golden Crane Construction Ltd", "Lion Rock MEP Engineering Ltd", "Victoria Precast Ltd", "Pearl River Steel Works Ltd", "Tsing Yi Rebar Fabrication Ltd", "Silvermine Builders Ltd", "New Territories Civil Ltd"];
+  names.forEach(function (name, i) { co("cx" + i, { nameEn: name, companyId: "CIC-C-00" + (2100 + i), br: String(60000000 + i * 1111), contact: { name: "Company contact", email: "admin@example.com" } }); });
+
+  var a1 = makeApp({ id: "ap46", ref: "CITF-2027-00046", schemes: ["ACT"], project: "Tung Chung New Town Extension \u2013 Site 3", status: "Vetting in progress", submittedOn: addDays(new Date(), -6), officer: "Mandy Chan", priority: "High", otherFund: "None declared",
+    objective: "Cut struck-by incidents on four tower-crane zones and automate podium rebar tying to save about 30% of fixing labour.",
+    items: [
+      makeItem({ paCode: "PA-ACT-0412", product: "SiteEye AI Safety Camera System (4S)", model: "SE-400", qty: 4, unit: 86000, plan: "Monitor plant-person proximity on 4 tower crane zones." }),
+      makeItem({ type: "NPA", product: "AutoRebar Tying Robot", model: "ART-2", qty: 1, unit: 420000, local: true, plan: "Automate rebar tying on podium slabs (local development declaration attached).", aiCheck: "flag", aiNote: "Quotation shows HK$402,000; form shows HK$420,000", just: "Only one other supplier offers a comparable robot; the lowest bid does not meet the slab-thickness spec." })
+    ],
+    docs: [
+      { type: "NAR1 (Annual Return)", file: "NAR1_2026.pdf", ai: "ok" },
+      { type: "Shareholder BR", file: "BR_Harbour_Holdings.pdf", ai: "ok" },
+      { type: "Quotation", file: "Quotation_SiteEye.pdf", ai: "ok" },
+      { type: "Quotation", file: "Quotation_AutoRebar.pdf", ai: "flag", note: "Amount differs from form" },
+      { type: "Quotation 2", file: "Quotation_AutoRebar_B.pdf", ai: "ok" },
+      { type: "Comparison sheet", file: "Comparison_AutoRebar.pdf", ai: "ok" }
+    ],
+    ai: { summary: "Main contractor (levy-paying, DMP match) applying under ACT for 4 SiteEye cameras (pre-approved, HK$344,000) and 1 AutoRebar tying robot (non-pre-approved, HK$420,000) for PWP 7123CL. Quotation for the robot (HK$402,000) is lower than the amount entered. Related company Harbour Holdings Ltd (80%) has no open CITF applications.", risks: ["Quotation / form mismatch on item 2 (HK$18,000)", "Non-pre-approved item > HK$200,000 \u2013 manager alert 7 days before pledge"] }
+  });
+  a1.history = [{ on: a1.submittedOn, what: "Application submitted via portal" }, { on: a1.submittedOn, what: "Auto-assigned to Mandy Chan (load-balanced)" }];
+
+  makeApp({ id: "ap47", ref: "CITF-2027-00047", schemes: ["BIM"], project: "Kai Tak Sports Park Phase 2", status: "Pending committee", submittedOn: addDays(new Date(), -21), officer: "Mandy Chan",
+    items: [
+      makeItem({ paCode: "PA-BIM-0105", product: "BIM Authoring Suite (1-year licence)", qty: 10, unit: 24500, plan: "BIM authoring for structural and MEP design coordination." }),
+      makeItem({ paCode: "PA-BIM-0067", product: "BIM Coordinator Certificate Course", qty: 6, unit: 18000, plan: "Train 6 site engineers as BIM coordinators." })
+    ],
+    docs: [{ type: "NAR1 (Annual Return)", file: "NAR1_2026.pdf", ai: "ok" }, { type: "Quotation", file: "Quotation_BIM.pdf", ai: "ok" }],
+    ai: { summary: "BIM adoption and training for Kai Tak Sports Park Phase 2. All items pre-approved; quotations match.", risks: [] }
+  });
+  makeApp({ id: "ap48", ref: "CITF-2027-00048", schemes: ["ACT"], project: "Kai Tak Sports Park Phase 2", status: "Approved", submittedOn: addDays(new Date(), -75), officer: "Tony Lee", priority: "Normal",
+    items: [makeItem({ paCode: "PA-ACT-0377", product: "DroneScan Site Survey Kit", qty: 2, unit: 129000, plan: "Weekly progress surveys.", approved: 180600 })],
+    docs: [{ type: "Quotation", file: "Quotation_Drone.pdf", ai: "ok" }],
+    ai: { summary: "Two pre-approved drone kits.", risks: [] },
+    history: [{ on: addDays(new Date(), -75), what: "Application submitted via portal" }, { on: addDays(new Date(), -40), what: "Approved" }]
+  });
+
+  var others = [["Pending information", "Tony Lee", -12], ["Vetting in progress", "Tony Lee", -3], ["Under review", "Mandy Chan", -15], ["Vetting in progress", "Jason Ng", -1], ["Approved", "Jason Ng", -60], ["Approved", "Tony Lee", -90], ["Rejected", "Jason Ng", -50]];
+  var schemes = ["ACT", "MiC", "BIM", "STB", "MiMEP", "ACT", "BIM"];
+  var units = [180000, 1400000, 98000, 300000, 1250000, 75000, 46000];
+  others.forEach(function (o, i) {
+    makeApp({ id: "ap5" + i, ref: "CITF-2027-000" + (50 + i), companyId: "cx" + i, schemes: [schemes[i]], project: "Project " + (i + 1), status: o[0], officer: o[1], submittedOn: addDays(new Date(), o[2] - 3),
+      items: [makeItem({ product: "Item " + (i + 1), qty: 1, unit: units[i], plan: "Described in the application." })],
+      docs: [{ type: "Quotation", file: "Quotation_" + (i + 1) + ".pdf", ai: "ok" }],
+      ai: { summary: "Auto-generated summary.", risks: [] }
+    });
+  });
+  var rj = makeApp({ id: "ap412", ref: "CITF-2026-00412", schemes: ["ACT"], project: "Tung Chung New Town Extension \u2013 Site 3", status: "Rejected", officer: "Mandy Chan", submittedOn: addDays(new Date(), -120),
+    items: [
+      makeItem({ type: "NPA", product: "Rugged tablet computers", qty: 12, unit: 9800, plan: "Site tablets for general use.", approved: 0 }),
+      makeItem({ type: "NPA", product: "Quadruped site inspection robot", qty: 1, unit: 520000, plan: "Remote site inspection.", approved: 0, just: "One quotation was provided." })
+    ],
+    docs: [{ type: "Quotation", file: "Quotation_tablet.pdf", ai: "flag", note: "General-purpose IT equipment" }],
+    ai: { summary: "ACT application for rugged tablets and a site inspection robot. The items did not meet the CITF eligibility and procurement rules.", risks: ["General-purpose IT equipment is not funded", "Item over HK$200,000 did not include 3 quotations"] }
+  });
+  rj.history = [{ on: addDays(new Date(), -120), what: "Application submitted via portal" }, { on: addDays(new Date(), -80), what: "Rejected \u2013 rejection letter issued" }];
+
+  function shell(body) {
+    return '<header class="p-head"><div class="in"><div class="logo"><div><b>CITF portal</b><small>Internal workspace \u00b7 Funding applications</small></div></div><nav class="p-nav" aria-label="Internal navigation"><a href="' + esc(location.pathname) + '" class="on" data-nav="list">My assigned applications</a></nav></div></header><main class="p-main internal-main">' + body + "</main>";
+  }
+  function signInView() {
+    var q = route();
+    var email = UI.loginEmail || q.email || "";
+    return shell('<div><p class="internal-eyebrow">FUNDING APPLICATIONS</p><h1>Sign in</h1><p class="sub">Sign in with your officer account. Applications assigned to that account open after sign-in.</p></div>' +
+      '<form class="card signin-card" id="signin-form" data-form>' +
+      (UI.loginErr ? '<div class="note err" role="alert">' + esc(UI.loginErr) + "</div>" : "") +
+      '<div class="f"><label for="signin-email">Email</label><input id="signin-email" name="email" type="email" autocomplete="username" value="' + esc(email) + '"></div>' +
+      '<div class="f"><label for="signin-password">Password</label><input id="signin-password" name="password" type="password" autocomplete="current-password" value=""></div>' +
+      '<div class="row"><button class="btn pri" type="submit" data-act="signIn">Sign in</button></div></form>');
+  }
+  function listView() {
+    var all = assigned();
+    var query = (UI.query || "").toLowerCase();
+    var status = UI.status || "";
+    var rows = all.filter(function (a) {
+      if (status && a.status !== status) return false;
+      var blob = [a.ref, company(a.companyId).nameEn, a.project, a.schemes.join(" ")].join(" ").toLowerCase();
+      return blob.indexOf(query) !== -1;
+    });
+    var statuses = [];
+    all.forEach(function (a) { if (statuses.indexOf(a.status) < 0) statuses.push(a.status); });
+    statuses.sort();
+    var body = rows.map(function (a) {
+      var href = link(a.id);
+      return "<tr><td><a href=\"" + esc(href) + "\"><b>" + esc(a.ref) + "</b></a><br><span>" + esc(company(a.companyId).nameEn) + "</span></td><td>" + esc(a.schemes.join(", ")) + "<br><small>" + esc(a.project || "Not provided") + "</small></td><td class=\"internal-money\">" + money(appAmt(a)) + "</td><td>" + pill(a.status) + "</td><td>" + (a.submittedOn ? fmtD(a.submittedOn) : "Not submitted") + "</td><td><a class=\"btn sm\" href=\"" + esc(href) + "\" aria-label=\"View application " + esc(a.ref) + "\">View details</a></td></tr>";
+    }).join("");
+    if (!body) body = '<tr><td colspan="6"><div class="internal-empty"><h3>' + (all.length ? "No matching applications" : "No applications assigned yet") + "</h3><p>" + (all.length ? "Try a different search or clear the status filter." : "Applications assigned to this officer will appear here.") + "</p></div></td></tr>";
+    return shell('<div class="row between"><div><p class="internal-eyebrow">FUNDING APPLICATIONS</p><h1>My assigned applications</h1><p class="sub">Welcome, ' + esc(officer()) + '. Open an application to review its details and AI summary.</p></div><span class="pill info">' + all.length + " assigned to you</span></div>" +
+      '<div class="card"><div class="internal-filters"><div class="f"><label for="internal-search">Search your applications</label><input id="internal-search" value="' + esc(UI.query || "") + '" placeholder="Application reference, applicant or project" type="search"></div><div class="f"><label for="internal-status">Status</label><select id="internal-status"><option value="">All statuses</option>' + statuses.map(function (s) { return "<option" + (s === status ? " selected" : "") + ">" + esc(s) + "</option>"; }).join("") + "</select></div></div>" +
+      '<div class="row between"><span class="hint" role="status">Showing ' + rows.length + " of " + all.length + " assigned applications</span>" + (query || status ? '<button class="btn sm ghost" type="button" data-act="clear">Clear filters</button>' : "") + "</div>" +
+      '<div class="scroll"><table class="tbl"><thead><tr><th>Application / applicant</th><th>Scheme / project</th><th>Amount applied</th><th>Status</th><th>Submitted</th><th></th></tr></thead><tbody>' + body + "</tbody></table></div></div>" +
+      '<div class="page-foot"><button class="btn ghost sm" type="button" data-act="signOut">Sign out</button></div>');
+  }
+  function summary(a) {
+    var c = company(a.companyId);
+    var meaningful = a.ai && a.ai.summary && a.ai.summary !== "Auto-generated summary.";
+    var text = meaningful ? a.ai.summary : c.nameEn + " has submitted an application under " + a.schemes.join(", ") + " for " + a.items.length + " item" + (a.items.length === 1 ? "" : "s") + " on " + (a.project || "the stated project") + ". The total amount applied is " + money(appAmt(a)) + ". The application is currently " + a.status.toLowerCase() + ".";
+    var checks = (a.ai && a.ai.risks ? a.ai.risks.slice() : []).concat(a.items.filter(function (it) { return it.aiCheck === "flag"; }).map(function (it) { return it.aiNote || "Check the quotation for " + it.product; })).concat(a.docs.filter(function (d) { return d.ai === "flag"; }).map(function (d) { return d.type + ": " + (d.note || "Review required"); }));
+    var uniq = [];
+    checks.forEach(function (x) { if (uniq.indexOf(x) < 0) uniq.push(x); });
+    var stored = !!meaningful;
+    return '<section class="card internal-ai"><div class="row between"><h2>AI-generated summary</h2><span class="pill info">' + (stored ? "Saved at submission" : "Sample AI content") + "</span></div><p class=\"hint\">" + (stored ? "Saved when the applicant submitted. Check it against the documents before making an assessment." : "Illustrative demo summary. Verify it against the application and supporting documents before making an assessment.") + "</p><p class=\"internal-summary\">" + esc(text) + "</p><h3>Points to review</h3>" + (uniq.length ? "<ul>" + uniq.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : "<p>No specific concerns are highlighted. This does not confirm eligibility or completeness.</p>") + '<div class="internal-ai-footer">Prepared for officer review \u00b7 No decision has been made by AI</div></section>';
+  }
+  function navTabs(a, view) {
+    var open = a.queries.filter(function (q) { return !q.ans; }).length;
+    return '<nav class="tabs" aria-label="Application view"><a href="' + esc(link(a.id)) + '"' + (view !== "correspondence" ? ' class="on"' : "") + '>Application details</a><a href="' + esc(link(a.id, "correspondence")) + '"' + (view === "correspondence" ? ' class="on"' : "") + ">Correspondence" + (open ? " (" + open + " awaiting response)" : "") + "</a></nav>";
+  }
+  function requestStatus(q) { return (q && (q.audience === "committee" || q.requestType === "Approval request")) ? "Sent to committee" : q.reviewed ? "Reviewed" : q.ans ? "Response received" : "Awaiting applicant"; }
+  function chatHistory(q) {
+    if (q.messages) return q.messages;
+    var messages = [{ role: "officer", by: q.by || "CIC officer", text: q.q, on: q.on, documents: q.docsRequested || [], due: q.due }];
+    if (q.ans) messages.push({ role: "applicant", by: "Applicant", text: q.ans, on: q.ansOn, files: q.files || [] });
+    return messages;
+  }
+  function chatDraft(q) { return (q.chatDrafts && q.chatDrafts.officer) || { text: "", files: [], documents: "", due: "" }; }
+  function activeChat(a) { var id = UI.selected[a.id]; return a.queries.filter(function (q) { return q.id === id; })[0] || a.queries[0]; }
+  function chatWorkspace(a) {
+    var q = activeChat(a);
+    var draft = q ? chatDraft(q) : null;
+    var tabs = a.queries.map(function (c, i) {
+      var history = chatHistory(c);
+      var last = history[history.length - 1];
+      var on = q && c.id === q.id;
+      return '<button id="chat-tab-' + esc(c.id) + '" type="button" class="chat-tab" data-act="chatSelect" data-id="' + esc(a.id) + '" data-q="' + esc(c.id) + '" aria-selected="' + (on ? "true" : "false") + '"><span class="chat-tab-title">' + esc(c.field || "Conversation " + (i + 1)) + '</span><span class="chat-preview">' + esc((last && last.text) || "Document request") + '</span><span class="chat-tab-status">' + esc(requestStatus(c)) + (chatDraft(c).text ? " \u00b7 Draft" : "") + "</span></button>";
+    }).join("") || '<p class="hint">No conversations yet.</p>';
+    var panel = q ? '<header class="chat-heading"><div><h2>' + esc(q.field) + '</h2><span class="hint">' + esc(company(a.companyId).nameEn) + '</span></div><span class="pill ' + (q.reviewed ? "ok" : q.ans ? "info" : "warn") + '">' + esc(requestStatus(q)) + "</span>" + (q.ans && !q.reviewed ? '<button class="btn sm" type="button" data-act="reviewed" data-id="' + esc(a.id) + '" data-q="' + esc(q.id) + '">Mark reviewed</button>' : "") + "</header>" +
+      '<div class="chat-log" role="log">' + chatHistory(q).map(function (m) {
+        return '<article class="chat-bubble ' + (m.role === "officer" ? "chat-outgoing" : "chat-incoming") + '"><div class="chat-message-meta"><b>' + esc(m.by || "CIC officer") + "</b><time>" + (m.on ? fmtDT(m.on) : "") + "</time></div><p>" + esc(m.text || "") + "</p>" + (m.committee ? '<div class="chat-request"><b>Emailed to committee</b><span>brwei@deloittecn.com.cn</span></div>' : "") + (m.documents && m.documents.length ? '<div class="chat-request"><b>Documents requested</b><ul>' + m.documents.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>" + (m.due ? "<span>Reply by " + fmtD(m.due) + "</span>" : "") + "</div>" : "") + "</article>";
+      }).join("") + "</div>" +
+      '<form class="chat-composer" data-chat="' + esc(q.id) + '" data-app="' + esc(a.id) + '"><label for="chat-message">Message</label><textarea id="chat-message" name="text" rows="3" placeholder="Write to the applicant\u2026">' + esc(draft.text) + '</textarea><details' + (draft.documents ? " open" : "") + '><summary>Request additional documents</summary><div class="f"><label for="chat-docs">Documents required (one per line)</label><textarea id="chat-docs" name="documents" rows="2">' + esc(draft.documents) + '</textarea></div><div class="f"><label for="chat-due">Reply by</label><input id="chat-due" name="due" type="date" value="' + esc(draft.due) + '"></div></details><div class="row between"><span class="hint">Demo chat \u00b7 Attachments are simulated</span><div class="row"><button type="button" class="btn ghost" data-act="chatSave" data-id="' + esc(a.id) + '" data-q="' + esc(q.id) + '">Save as draft</button><button type="button" class="btn pri" data-act="chatSend" data-id="' + esc(a.id) + '" data-q="' + esc(q.id) + '">Send message</button></div></div></form>'
+      : '<div class="chat-empty"><h2>Start a conversation</h2><p>Create a chat for each topic, such as quotations, eligibility or supporting documents.</p></div>';
+    return '<div class="chat-workspace"><aside class="chat-sidebar"><div class="chat-sidebar-heading"><h2>Conversations</h2><button class="btn sm pri" type="button" data-act="newChat" data-id="' + esc(a.id) + '">New chat</button></div><div class="chat-tabs" role="tablist">' + tabs + '</div></aside><section class="chat-panel">' + panel + "</section></div>";
+  }
+  function detailView(a, view) {
+    var c = company(a.companyId);
+    if (view === "correspondence") {
+      return shell('<a href="' + esc(link()) + '">Back to my applications</a><h1>' + esc(a.ref) + '</h1><p class="sub">' + esc(c.nameEn) + "</p>" + navTabs(a, view) + chatWorkspace(a) + '<div class="page-foot"><button class="btn ghost sm" type="button" data-act="signOut">Sign out</button></div>');
+    }
+    var items = a.items.map(function (it, i) {
+      return '<details class="internal-item"' + (i === 0 ? " open" : "") + "><summary>" + (i + 1) + ". " + esc(it.product) + " <span>" + money(itemAmt(it)) + '</span></summary><div class="kv"><span>Item type</span><span>' + (it.type === "PA" ? "Pre-approved" : "Non-pre-approved") + "</span><span>Reference / model</span><span>" + esc(it.paCode || it.model || "Not provided") + "</span><span>Quantity</span><span>" + it.qty + "</span><span>Unit price</span><span>" + money(it.unit) + "</span><span>Estimated grant</span><span>" + money(itemGrant(it)) + "</span>" + (it.approved != null ? "<span>Approved grant</span><span>" + money(it.approved) + "</span>" : "") + "</div><h3>Implementation plan</h3><p>" + esc(it.plan || "Not provided") + "</p>" + (it.just ? "<h3>Quotation justification</h3><p>" + esc(it.just) + "</p>" : "") + (it.aiCheck === "flag" ? '<div class="note warn">' + esc(it.aiNote || "Quotation requires review") + "</div>" : "") + "</details>";
+    }).join("") || "<p>No items recorded.</p>";
+    var docs = a.docs.map(function (d) {
+      var mark = d.ai === "flag" ? '<span class="pill warn">Review needed</span>' : d.ai === "ok" ? '<span class="pill ok">Read</span>' : "Not checked";
+      return "<tr><td>" + esc(d.type) + "</td><td>" + esc(d.file) + "</td><td>" + mark + "<br><small>" + esc(d.note || "") + "</small></td></tr>";
+    }).join("") || '<tr><td colspan="3">No supporting documents recorded in this demo.</td></tr>';
+    var queries = a.queries.map(function (q, i) {
+      return '<div class="internal-query"><b>Query ' + (i + 1) + " \u00b7 " + esc(q.field || "Application") + "</b><p>" + esc(q.q) + "</p><p>" + (q.ans ? "<b>Applicant response:</b> " + esc(q.ans) : '<span class="pill warn">Awaiting applicant response</span>') + "</p>" + (q.due ? "<small>Reply due " + fmtD(q.due) + "</small>" : "") + "</div>";
+    }).join("") || "<p>No queries recorded.</p>";
+    var history = a.history.length ? '<ol class="internal-history">' + a.history.slice().reverse().map(function (h) { return "<li><small>" + fmtDT(h.on) + "</small><p>" + esc(h.what) + "</p></li>"; }).join("") + "</ol>" : "<p>No activity recorded.</p>";
+    return shell('<a href="' + esc(link()) + '">Back to my applications</a><div class="row between"><div><p class="internal-eyebrow">APPLICATION DETAILS</p><h1>' + esc(a.ref) + '</h1><p class="sub">' + esc(c.nameEn) + " \u00b7 " + esc(a.project || "Project not provided") + "</p></div>" + pill(a.status) + "</div>" +
+      navTabs(a, view) + '<div class="internal-detail-grid"><div class="internal-content">' + summary(a) +
+      '<section class="card"><h2>Application overview</h2><div class="kv"><span>Funding schemes</span><span>' + esc(a.schemes.join(", ")) + "</span><span>Project / site</span><span>" + esc(a.project || "Not provided") + "</span><span>Amount applied</span><b>" + money(appAmt(a)) + "</b><span>Estimated grant</span><span>" + money(grantOf(a)) + "</span><span>Other public funding</span><span>" + esc(a.otherFund || "None declared") + "</span></div><h3>Project objective and expected benefits</h3><p>" + esc(a.objective || "Not provided in this demo application.") + "</p></section>" +
+      '<section class="card"><div class="row between"><h2>Items applied for</h2><span class="pill">' + a.items.length + " items</span></div>" + items + "</section>" +
+      '<section class="card"><h2>Supporting documents</h2><div class="scroll"><table class="tbl"><thead><tr><th>Document</th><th>File</th><th>Check / note</th></tr></thead><tbody>' + docs + '</tbody></table></div><p class="hint">Document records are simulated in this prototype.</p></section>' +
+      '<section class="card"><div class="row between"><h2>Queries and applicant responses</h2><a class="btn" href="' + esc(link(a.id, "correspondence")) + '">Open correspondence</a></div>' + queries + "</section></div>" +
+      '<aside class="internal-side"><section class="card"><h2>Case information</h2><div class="internal-facts"><span>Assigned officer</span><b>' + esc(a.officer) + "</b><span>Submitted</span><b>" + (a.submittedOn ? fmtD(a.submittedOn) : "Not submitted") + "</b><span>Target result date</span><b>" + (a.submittedOn ? fmtD(pledgeDate(a)) : "Not available") + "</b><span>Priority</span><b>" + esc(a.priority || "Normal") + "</b></div></section>" +
+      '<section class="card"><h2>Applicant</h2><div class="internal-facts"><span>Company</span><b>' + esc(c.nameEn) + "</b><span>Company ID</span><b>" + esc(c.companyId || "Not provided") + "</b><span>Business registration</span><b>" + esc(c.br || "Not provided") + "</b><span>Contact person</span><b>" + esc((c.contact && c.contact.name) || "Not provided") + "</b><span>Email</span><span>" + esc((c.contact && c.contact.email) || "Not provided") + "</span></div></section>" +
+      '<section class="card"><h2>Activity</h2>' + history + "</section></aside></div>" +
+      '<div class="page-foot"><button class="btn ghost sm" type="button" data-act="signOut">Sign out</button></div>');
+  }
+  function unavailable() {
+    return shell('<a href="' + esc(link()) + '">Back to my applications</a><div class="card"><h1>Application unavailable</h1><p>This application is not assigned to the signed-in officer, or it no longer exists.</p></div>');
+  }
+  function fld(label, name, val, opt) {
+    opt = opt || {};
+    var input;
+    if (opt.type === "select") input = '<select id="f_' + name + '" name="' + name + '">' + (opt.options || []).map(function (o) { return '<option' + (o === val ? " selected" : "") + ">" + esc(o) + "</option>"; }).join("") + "</select>";
+    else if (opt.type === "textarea") input = '<textarea id="f_' + name + '" name="' + name + '" rows="' + (opt.rows || 3) + '">' + esc(val) + "</textarea>";
+    else input = '<input id="f_' + name + '" name="' + name + '" type="' + (opt.type || "text") + '" value="' + esc(val) + '">';
+    return '<div class="f"><label for="f_' + name + '">' + esc(label) + (opt.req ? " *" : "") + "</label>" + input + (opt.hint ? '<span class="hint">' + esc(opt.hint) + "</span>" : "") + "</div>";
+  }
+  function requestForm(a, d) {
+    d = d || {};
+    var approval = (d.requestType || "Question") === "Approval request";
+    return "<h2>New chat \u00b7 " + esc(a.ref) + "</h2><p>To: <b>" + (approval ? "Committee" : esc(company(a.companyId).nameEn)) + "</b>" + (approval ? " \u00b7 brwei@deloittecn.com.cn" : "") + "</p>" +
+      fld("Request type", "requestType", d.requestType || "Question", { type: "select", options: ["Question", "Additional documents", "Question and documents", "Approval request"] }) +
+      fld("Subject", "subject", d.subject || "", { req: 1 }) +
+      fld(approval ? "Message to committee" : "Message to applicant", "message", d.message || "", { type: "textarea", rows: 4, req: 1, hint: approval ? "This message is emailed to the committee and kept as a chat on this case. It is not sent to the applicant." : "Explain what needs clarification and what the applicant should provide." }) +
+      '<div id="internal-doc-request"' + (((d.requestType || "Question") === "Question" || approval) ? " hidden" : "") + ">" + fld("Documents required", "documents", d.documents || "", { type: "textarea", rows: 3, hint: "Enter one document per line, for example: Revised supplier quotation." }) + "</div>" +
+      '<div id="internal-reply-by"' + (approval ? " hidden" : "") + ">" + fld("Reply by", "due", d.due || dateInput(14), { type: "date", req: 1 }) + "</div>" +
+      '<p class="er" id="internal-request-error" role="alert"></p><div class="acts"><button class="btn" type="button" data-act="close">Cancel</button><button class="btn" type="button" data-act="saveDraft" data-id="' + esc(a.id) + '">Save as draft</button><button class="btn pri" type="button" data-act="sendRequest" data-id="' + esc(a.id) + '">Send</button></div>';
+  }
+  function formData(el) {
+    var f = el.closest("form") || el.closest("[data-form]") || el.closest(".modal") || document;
+    var o = {};
+    f.querySelectorAll("input[name],select[name],textarea[name]").forEach(function (i) { o[i.name] = i.value; });
+    return o;
+  }
+  function toast(msg, isErr) {
+    UI.toast = { msg: msg, err: !!isErr };
+    paintToast();
+    clearTimeout(UI._t);
+    UI._t = setTimeout(function () { UI.toast = null; paintToast(); }, 3400);
+  }
+  function paintToast() { document.getElementById("toastRoot").innerHTML = UI.toast ? '<div class="toast' + (UI.toast.err ? " err" : "") + '" role="status">' + esc(UI.toast.msg) + "</div>" : ""; }
+  function paintModal() { document.getElementById("modalRoot").innerHTML = UI.modal ? '<div class="scrim" data-act="close"><div class="modal" role="dialog" aria-modal="true" data-form>' + UI.modal + "</div></div>" : ""; }
+  function closeModal() { UI.modal = null; paintModal(); }
+  function go(search) {
+    var path = location.pathname;
+    history.pushState(null, "", search ? path + search : path);
+    window.scrollTo(0, 0);
+    render();
+  }
+  function render() {
+    var root = document.getElementById("app");
+    if (!officer()) { root.innerHTML = signInView(); paintModal(); return; }
+    var r = route();
+    if (!r.id) root.innerHTML = listView();
+    else {
+      var a = owned(r.id);
+      root.innerHTML = a ? detailView(a, r.view) : unavailable();
+    }
+    paintModal();
+    if (UI.focusSearch != null) {
+      var el = document.getElementById("internal-search");
+      if (el) { el.focus(); try { el.setSelectionRange(UI.focusSearch, UI.focusSearch); } catch (e) {} }
+      UI.focusSearch = null;
+    }
+    var log = document.querySelector("#citf-internal .chat-log");
+    if (log) log.scrollTop = log.scrollHeight;
+  }
+  function signIn(form) {
+    var d = formData(form);
+    var email = String(d.email || "").trim().toLowerCase();
+    var account = ACCOUNTS.filter(function (a) { return a.email === email && a.password === d.password; })[0];
+    if (!account) { UI.loginEmail = email; UI.loginErr = "That email or password is not recognised. Use an officer account."; render(); return; }
+    UI.loginErr = "";
+    UI.query = "";
+    UI.status = "";
+    try { sessionStorage.setItem(KEY, account.name); } catch (e) {}
+    go("");
+  }
+  function collectRequest(el) {
+    var d = formData(el);
+    return { requestType: d.requestType || "Question", subject: String(d.subject || "").trim(), message: String(d.message || "").trim(), documents: String(d.documents || "").trim(), due: d.due || "" };
+  }
+  function sendCommitteeEmail(a, d) {
+    var c = company(a.companyId) || {};
+    var subject = ("CITF approval request · " + (a.ref || "") + " · " + d.subject).slice(0, 200);
+    var text = "An approval request was submitted from CITF internal correspondence.\n\nApplication: " + (a.ref || "") + "\nApplicant: " + (c.nameEn || "") + "\nProject: " + (a.project || "") + "\nOfficer: " + (officer() || "") + "\n\n" + d.subject + "\n\n" + d.message;
+    var token = "";
+    try { var input = document.querySelector("input[name='__RequestVerificationToken']"); token = input && input.value || ""; } catch (e0) { token = ""; }
+    var headers = { Accept: "application/json", "Content-Type": "application/json", "OData-MaxVersion": "4.0", "OData-Version": "4.0", Prefer: "return=representation" };
+    if (token) headers.__RequestVerificationToken = token;
+    function post(url, body) {
+      return fetch(url, { method: "POST", headers: headers, credentials: "same-origin", body: JSON.stringify(body) }).then(function (res) {
+        return res.text().then(function (raw) {
+          var msg = raw;
+          try { var parsed = JSON.parse(raw || "{}"); msg = (parsed.error && (parsed.error.message || (parsed.error.innererror && parsed.error.innererror.message))) || raw; } catch (e1) {}
+          if (!res.ok) throw new Error((msg || "Email was not sent (" + res.status + ")").replace(/\s+/g, " ").slice(0, 360));
+          return { raw: raw, res: res };
+        });
+      });
+    }
+    return post("/_api/emails", { subject: subject, description: text.replace(/\n/g, "<br>"), directioncode: true }).then(function (createdRes) {
+      var created = {};
+      try { created = JSON.parse(createdRes.raw || "{}"); } catch (e2) { created = {}; }
+      var id = created.activityid || ((String(createdRes.res.headers.get("OData-EntityId") || "").match(/[0-9a-f-]{36}/i) || [])[0]);
+      if (!id) throw new Error("The committee email was created but its id was not returned.");
+      var party = { participationtypemask: 2, addressused: "brwei@deloittecn.com.cn" };
+      party["activityid_activitypointer@odata.bind"] = "/activitypointers(" + id + ")";
+      return post("/_api/activityparties", party).then(function () {
+        return post("/_api/emails(" + id + ")/Microsoft.Dynamics.CRM.SendEmail", { IssueSend: true });
+      });
+    });
+  }
+  function openChat(a) {
+    UI.modal = requestForm(a, a.internalRequestDraft || {});
+    paintModal();
+  }
+
+  document.getElementById("citf-internal").addEventListener("click", function (e) {
+    var actEl = e.target.closest("[data-act]");
+    var linkEl = e.target.closest("a[href]");
+    if (linkEl && !actEl) {
+      var url = new URL(linkEl.getAttribute("href"), location.href);
+      if (url.origin === location.origin && url.pathname === location.pathname) { e.preventDefault(); go(url.search); }
+      return;
+    }
+    if (!actEl) return;
+    var act = actEl.dataset.act;
+    if (act === "signIn") return;
+    if (act === "signOut") { try { sessionStorage.removeItem(KEY); } catch (err) {} UI.query = ""; UI.status = ""; closeModal(); go(""); return; }
+    if (act === "clear") { UI.query = ""; UI.status = ""; render(); return; }
+    if (act === "close") { if (actEl.classList.contains("scrim") && e.target.closest(".modal")) return; e.preventDefault(); closeModal(); return; }
+    if (act === "newChat") { var app = owned(actEl.dataset.id); if (app) openChat(app); return; }
+    if (act === "saveDraft" || act === "sendRequest") {
+      var appR = owned(actEl.dataset.id); if (!appR) return;
+      var d = collectRequest(actEl);
+      if (act === "saveDraft") { appR.internalRequestDraft = d; closeModal(); toast("Request saved as a draft. It has not been sent."); go(link(appR.id, "correspondence").replace(location.pathname, "")); return; }
+      var approval = d.requestType === "Approval request";
+      var docs = (d.requestType === "Question" || approval) ? [] : d.documents.split("\n").map(function (x) { return x.trim(); }).filter(Boolean);
+      var today = new Date().toISOString().slice(0, 10);
+      var error = !d.subject ? "Enter a subject." : !d.message ? (approval ? "Write a message to the committee." : "Write a message to the applicant.") : approval ? "" : !/^\d{4}-\d{2}-\d{2}$/.test(d.due) ? "Choose a reply date." : d.due < today ? "Choose today or a future reply date." : d.requestType !== "Question" && !docs.length ? "List the documents the applicant needs to provide." : "";
+      var errBox = document.getElementById("internal-request-error");
+      if (error) { if (errBox) errBox.textContent = error; return; }
+      if (approval) {
+        actEl.disabled = true;
+        sendCommitteeEmail(appR, d).then(function () {
+          var qid = "q" + Math.random().toString(36).slice(2, 8);
+          var sentOn = new Date().toISOString();
+          appR.queries.push({ id: qid, field: d.subject, q: d.message, on: sentOn, by: officer(), requestType: "Approval request", audience: "committee", committeeEmail: "brwei@deloittecn.com.cn", docsRequested: [], ans: "", files: [], messages: [{ role: "officer", by: officer(), text: d.message, on: sentOn, documents: [], due: "", committee: true }] });
+          appR.internalRequestDraft = null;
+          appR.history.push({ on: sentOn, what: "Approval request emailed to committee (brwei@deloittecn.com.cn) by " + officer() + ": " + d.subject });
+          UI.selected[appR.id] = qid;
+          closeModal();
+          toast("Approval request emailed to brwei@deloittecn.com.cn");
+          go(link(appR.id, "correspondence").replace(location.pathname, ""));
+        }).catch(function (err) {
+          actEl.disabled = false;
+          if (errBox) errBox.textContent = String((err && err.message) || err || "The committee email was not sent.");
+        });
+        return;
+      }
+      var qid = "q" + Math.random().toString(36).slice(2, 8);
+      appR.queries.push({ id: qid, field: d.subject, q: d.message, on: new Date().toISOString(), due: d.due, by: officer(), requestType: d.requestType, docsRequested: docs, ans: "", files: [], messages: [{ role: "officer", by: officer(), text: d.message, on: new Date().toISOString(), documents: docs, due: docs.length ? d.due : "" }] });
+      appR.internalRequestDraft = null;
+      if (["Approved", "Rejected", "Withdrawn"].indexOf(appR.status) < 0) appR.status = "Pending information";
+      appR.history.push({ on: new Date().toISOString(), what: "Request sent to applicant by " + officer() + ": " + d.subject });
+      UI.selected[appR.id] = qid;
+      closeModal();
+      toast("Request sent to the applicant portal (demo).");
+      go(link(appR.id, "correspondence").replace(location.pathname, ""));
+      return;
+    }
+    if (act === "chatSelect") { UI.selected[actEl.dataset.id] = actEl.dataset.q; render(); return; }
+    if (act === "chatSave" || act === "chatSend" || act === "reviewed") {
+      var appC = owned(actEl.dataset.id); if (!appC) return;
+      var q = appC.queries.filter(function (item) { return item.id === actEl.dataset.q; })[0]; if (!q) return;
+      if (act === "reviewed") { if (!q.ans) return; q.reviewed = true; appC.history.push({ on: new Date().toISOString(), what: "Applicant response reviewed by " + officer() + ": " + q.field }); render(); toast("Response marked reviewed."); return; }
+      var form = actEl.closest("form");
+      var data = form ? formData(form) : {};
+      q.chatDrafts = q.chatDrafts || {};
+      q.chatDrafts.officer = { text: data.text || "", documents: data.documents || "", due: data.due || "", files: [] };
+      if (act === "chatSave") { toast("Message saved as a draft."); return; }
+      var text = String(data.text || "").trim();
+      var documents = String(data.documents || "").split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
+      if (!text) { toast("Write a message or attach a sample document.", true); return; }
+      if (documents.length && (!data.due || data.due < new Date().toISOString().slice(0, 10))) { toast("Choose today or a future reply deadline for the document request.", true); return; }
+      q.messages = chatHistory(q).slice();
+      q.messages.push({ role: "officer", by: officer(), text: text, on: new Date().toISOString(), documents: documents, due: documents.length ? data.due : "" });
+      q.q = q.q || text;
+      q.field = q.field || "Message";
+      q.ans = "";
+      q.reviewed = false;
+      if (documents.length) { q.docsRequested = documents; q.due = data.due; }
+      if (["Approved", "Rejected", "Withdrawn"].indexOf(appC.status) < 0) appC.status = "Pending information";
+      q.chatDrafts.officer = { text: "", files: [], documents: "", due: "" };
+      appC.history.push({ on: new Date().toISOString(), what: "Officer sent a chat message: " + q.field });
+      render();
+      toast("Message sent in this demo.");
+    }
+  });
+  document.getElementById("citf-internal").addEventListener("submit", function (e) {
+    if (e.target.id === "signin-form") { e.preventDefault(); signIn(e.target); }
+  });
+  document.getElementById("citf-internal").addEventListener("input", function (e) {
+    if (e.target.id === "internal-search") { UI.query = e.target.value; UI.focusSearch = e.target.selectionStart; render(); return; }
+    var f = e.target.closest("form[data-chat]");
+    if (!f) return;
+    var appC = owned(f.dataset.app); var q = appC && appC.queries.filter(function (item) { return item.id === f.dataset.chat; })[0];
+    if (!q) return;
+    var d = formData(f);
+    q.chatDrafts = q.chatDrafts || {};
+    q.chatDrafts.officer = { text: d.text || "", documents: d.documents || "", due: d.due || "", files: [] };
+  });
+  document.getElementById("citf-internal").addEventListener("change", function (e) {
+    if (e.target.id === "internal-status") { UI.status = e.target.value; render(); }
+    if (e.target.name === "requestType") {
+      var send = document.querySelector("[data-act='sendRequest']");
+      var app = send && owned(send.dataset.id);
+      if (!app) return;
+      UI.modal = requestForm(app, collectRequest(e.target));
+      paintModal();
+    }
+  });
+  window.addEventListener("popstate", render);
+  render();
+})();
+</script>

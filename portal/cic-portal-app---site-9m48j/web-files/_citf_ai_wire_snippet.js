@@ -106,31 +106,55 @@
     });
   }
 
-  A.palPrefill = function (el) {
+  function palItemContext(el) {
     const p = S.palApps.find(x => x.id === el.dataset.id);
-    if (!p) { toast('Open the item form first', true); return; }
-    const it = p.items.find(i => i.id === el.dataset.it), i = p.items.indexOf(it), k = palCat(p.scheme).kind;
-    if (!it) { toast('Item not found', true); return; }
-    const demoUrl = typeof palDemoUrl === 'function' ? palDemoUrl() : 'https://site-9m48j.powerappsportals.com/sitemodel-cde.html';
-    const url = ((document.getElementById('palPageUrl') || {}).value || '').trim() || demoUrl;
-    const schemaKey = k === 'course' ? 'pal_course' : 'pal_product';
+    if (!p) { toast('Open the item form first', true); return null; }
+    const it = p.items.find(i => i.id === el.dataset.it);
+    if (!it) { toast('Item not found', true); return null; }
+    return { p: p, it: it, i: p.items.indexOf(it), k: palCat(p.scheme).kind };
+  }
+  A.palUrlPrefill = function (el) {
+    const ctx = palItemContext(el);
+    if (!ctx) return;
+    const url = ((document.getElementById('palPageUrl') || {}).value || '').trim();
+    if (!url) { toast('Paste a product URL, then click Confirm', true); return; }
+    const schemaKey = ctx.k === 'course' ? 'pal_course' : 'pal_product';
     const busy = function (msg) { if (typeof showAiBusy === 'function') showAiBusy(msg); else toast(msg); };
     const done = function () { if (typeof hideAiBusy === 'function') hideAiBusy(); };
     const isDemo = /sitemodel-cde/i.test(url);
     busy('AI checking · reading product webpage…');
-    toast('AI checking product webpage…');
     return CitfAi.assist({
       action: 'prefill',
       schemaKey: schemaKey,
-      docType: k,
+      docType: ctx.k,
       documentText: isDemo && typeof PAL_DEMO_DOC !== 'undefined' ? PAL_DEMO_DOC : undefined,
       currentValues: { pageUrl: url }
     }).then(function (res) {
-      it.mfWeb = url;
-      applyPalAiFields(p, it, i, k, res, 'webpage');
+      ctx.it.mfWeb = url;
+      applyPalAiFields(ctx.p, ctx.it, ctx.i, ctx.k, res, 'webpage');
     }).catch(function (err) {
       toast((err && err.message) || 'Could not read that webpage', true);
     }).finally(done);
+  };
+  A.palPrefill = function (el) {
+    const ctx = palItemContext(el);
+    if (!ctx) return;
+    const schemaKey = ctx.k === 'course' ? 'pal_course' : 'pal_product';
+    const label = ctx.k === 'course' ? 'Choose the course outline (PDF or image)…' : 'Choose the catalogue or data sheet (PDF or image)…';
+    return withPickedFile(label, function (file) {
+      const busy = function (msg) { if (typeof showAiBusy === 'function') showAiBusy(msg); else toast(msg); };
+      const done = function () { if (typeof hideAiBusy === 'function') hideAiBusy(); };
+      busy('AI reading the file…');
+      return CitfAi.assist({
+        action: 'prefill',
+        schemaKey: schemaKey,
+        docType: ctx.k,
+        fileName: file.fileName,
+        fileBase64: file.fileBase64
+      }).then(function (res) {
+        applyPalAiFields(ctx.p, ctx.it, ctx.i, ctx.k, res, 'the uploaded file');
+      }).finally(done);
+    });
   };
 
   A.palItemSave = function (el) {

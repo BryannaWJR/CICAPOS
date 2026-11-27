@@ -6,6 +6,7 @@ adx_entitylogicalname: cicapos_fundingapplication
 adx_entityname: cicapos_fundingapplication
 adx_entitypermission_webrole:
 - 5eb0973d-1e19-40b0-8a0b-e9b07cd67dfc
+- cba98d1d-be5f-4bb2-894e-1a05f9d97015
 adx_entitypermissionid: a5100001-e2e1-4111-8111-6045bd5910f7
 adx_read: true
 adx_scope: 756150000
