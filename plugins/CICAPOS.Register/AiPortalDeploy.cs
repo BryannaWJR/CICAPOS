@@ -189,11 +189,134 @@ static class AiPortalDeploy
     public static void PublishLanguage(ServiceClient service)
     {
         var htmlPath = FindFlowHtml();
-        UpdateFlowPage(service, InjectNovaBootstrap(File.ReadAllText(htmlPath)));
+        var html = InjectNovaBootstrap(File.ReadAllText(htmlPath));
+        html = TryExternalizeAppScript(service, html);
+        UpdateFlowPage(service, html);
         TryUpdateHeader(service);
         TryUpdateHome(service);
         TryUpdateRegister(service);
         TryUpdateCss(service);
+    }
+
+    /// <summary>
+    /// The Flow page is one ~900KB script. A cut-off copy fails to parse, so sign-in
+    /// never reaches the app. Serve that script as /citf-app.js and leave a short page.
+    /// If the upload does not stick, the inline script stays.
+    /// </summary>
+    static string TryExternalizeAppScript(ServiceClient service, string html)
+    {
+        const string mark = "window.__citfMark = 'start';";
+        var start = html.LastIndexOf(mark, StringComparison.Ordinal);
+        if (start < 0) return html;
+        var open = html.LastIndexOf("<script>", start, StringComparison.OrdinalIgnoreCase);
+        var close = html.IndexOf("</script>", start, StringComparison.OrdinalIgnoreCase);
+        if (open < 0 || close < 0 || close < open) return html;
+        var body = html.Substring(open + "<script>".Length, close - (open + "<script>".Length)).Trim();
+        if (body.Length < 10000 || !body.Contains("window.A", StringComparison.Ordinal))
+        {
+            Console.WriteLine("App script extract looked wrong (" + body.Length + " chars) — keep inline.");
+            return html;
+        }
+        if (!TryUploadAppScript(service, body)) return html;
+        var src = "<script src=\"/citf-app.js?v=" + body.Length + "\"></script>";
+        Console.WriteLine("Flow page will load /citf-app.js (" + body.Length + " chars) instead of an inline script.");
+        return html.Substring(0, open) + src + html.Substring(close + "</script>".Length);
+    }
+
+    static bool TryUploadAppScript(ServiceClient service, string js)
+    {
+        try
+        {
+            var q = new QueryExpression("powerpagecomponent")
+            {
+                ColumnSet = new ColumnSet("name", "content", "powerpagecomponenttype", "powerpagesiteid"),
+                TopCount = 1
+            };
+            q.Criteria.AddCondition("name", ConditionOperator.Equal, "citf-portal.css");
+            var css = service.RetrieveMultiple(q).Entities.FirstOrDefault();
+            if (css == null)
+            {
+                Console.WriteLine("citf-portal.css component not found — keep inline script.");
+                return false;
+            }
+            var type = css.GetAttributeValue<OptionSetValue>("powerpagecomponenttype")?.Value ?? 0;
+            var raw = css.GetAttributeValue<string>("content") ?? "{}";
+            Console.WriteLine("css web file type " + type + " content chars " + raw.Length);
+            JsonObject node;
+            try { node = JsonNode.Parse(raw)!.AsObject(); }
+            catch { node = new JsonObject(); }
+            foreach (var key in node.Select(p => p.Key).ToList())
+            {
+                var val = node[key]?.ToString() ?? "";
+                if (val.Length > 500) { node.Remove(key); continue; }
+                if (val.IndexOf("citf-portal.css", StringComparison.OrdinalIgnoreCase) >= 0)
+                    node[key] = val.Replace("citf-portal.css", "citf-app.js", StringComparison.OrdinalIgnoreCase);
+            }
+            node["partialurl"] = "citf-app.js";
+            node["filename"] = "citf-app.js";
+            node["mimetype"] = "application/javascript";
+            var id = Guid.Parse("a5100001-e2e1-4111-8111-6045bd5910f3");
+            Entity? existing = null;
+            try { existing = service.Retrieve("powerpagecomponent", id, new ColumnSet("name")); }
+            catch { existing = null; }
+            var entity = existing ?? new Entity("powerpagecomponent", id);
+            entity["name"] = "citf-app.js";
+            if (type != 0) entity["powerpagecomponenttype"] = new OptionSetValue(type);
+            var site = css.GetAttributeValue<EntityReference>("powerpagesiteid");
+            if (site != null) entity["powerpagesiteid"] = site;
+            entity["content"] = node.ToJsonString(new JsonSerializerOptions { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
+            if (existing == null) service.Create(entity);
+            else service.Update(entity);
+
+            var bytes = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(js));
+            var nq = new QueryExpression("annotation")
+            {
+                ColumnSet = new ColumnSet("annotationid", "filename"),
+                TopCount = 5
+            };
+            nq.Criteria.AddCondition("objectid", ConditionOperator.Equal, id);
+            var note = service.RetrieveMultiple(nq).Entities.FirstOrDefault();
+            Guid noteId;
+            if (note == null)
+            {
+                noteId = service.Create(new Entity("annotation")
+                {
+                    ["objectid"] = new EntityReference("powerpagecomponent", id),
+                    ["subject"] = "citf-app.js",
+                    ["filename"] = "citf-app.js",
+                    ["mimetype"] = "text/javascript",
+                    ["isdocument"] = true,
+                    ["documentbody"] = bytes
+                });
+                Console.WriteLine("Created citf-app.js annotation " + noteId);
+            }
+            else
+            {
+                noteId = note.Id;
+                service.Update(new Entity("annotation", noteId)
+                {
+                    ["documentbody"] = bytes,
+                    ["filename"] = "citf-app.js",
+                    ["mimetype"] = "text/javascript",
+                    ["isdocument"] = true
+                });
+                Console.WriteLine("Updated citf-app.js annotation " + noteId);
+            }
+            var back = service.Retrieve("annotation", noteId, new ColumnSet("documentbody", "filename"));
+            var stored = back.GetAttributeValue<string>("documentbody") ?? "";
+            if (stored.Length < bytes.Length - 8)
+            {
+                Console.WriteLine("citf-app.js read-back was short (" + stored.Length + " vs " + bytes.Length + ") — keep inline script.");
+                return false;
+            }
+            Console.WriteLine("citf-app.js stored (" + js.Length + " chars).");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("citf-app.js upload skipped: " + ex.Message);
+            return false;
+        }
     }
 
     static void TryUpdateHeader(ServiceClient service)

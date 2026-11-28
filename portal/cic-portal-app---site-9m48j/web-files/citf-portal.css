@@ -111,7 +111,8 @@ body,
   align-items: center;
 }
 
-.p-nav a[data-nav] {
+.p-nav a[data-nav],
+.p-nav a[href] {
   color: var(--ink-2);
   text-decoration: none;
   padding: 6px 2px 4px;
@@ -124,15 +125,33 @@ body,
   outline: none;
 }
 
-.p-nav a[data-nav].on {
+.p-nav a[data-nav].on,
+.p-nav a.on {
   font-weight: 700;
   color: var(--cic-emerald);
   border-bottom-color: var(--cic-emerald);
 }
 
-.p-nav a:not([data-nav]) {
-  color: var(--ink-2);
-  text-decoration: none;
+#app .chk,
+#app label.chk,
+.p-main .chk {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  font-weight: 400 !important;
+}
+#app .chk input[type=checkbox],
+#app .chk input[type=radio],
+.p-main .chk input[type=checkbox],
+.p-main .chk input[type=radio] {
+  flex: 0 0 18px !important;
+  width: 18px !important;
+  min-width: 18px !important;
+  max-width: 18px !important;
+  height: 18px !important;
+  margin: 3px 0 0 !important;
 }
 
 .p-nav .who {
@@ -338,7 +357,8 @@ body,
 
 .p-main table.tbl th {
   text-align: left;
-  background: var(--bg);
+  background: var(--cic-pale, #E2F0ED);
+  color: var(--cic-deep, #085669);
   padding: 10px 12px;
   font-weight: 600;
   border-bottom: 1px solid var(--line);
@@ -892,19 +912,72 @@ body.citf-page-ready #citf-page-boot{opacity:0;visibility:hidden;pointer-events:
 .demo { display: none !important; }
 .p-main .row { margin-left: 0 !important; margin-right: 0 !important; --bs-gutter-x: 0; }
 .p-main .row > * { width: auto !important; max-width: none !important; padding-left: 0 !important; padding-right: 0 !important; flex: 0 0 auto; }
+.p-main .row > .btn,
+.p-main .row > a.btn,
+.p-main .row > button.btn {
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
 .p-main .btn,
 .p-main a.btn,
 .p-main button.btn,
 .p-main .pill { width: auto !important; flex: 0 0 auto; }
-.p-main .citf-signin-actions { align-items: center; gap: 12px; }
-.p-main .citf-signin-actions .btn { height: 40px; padding: 0 18px; white-space: nowrap; }
+.p-main .citf-signin-actions,
+body.citf-flow #app .row.citf-signin-actions {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 0 !important;
+}
+.p-main .citf-signin-actions > .btn,
+.p-main .citf-signin-actions > button.btn,
+body.citf-flow #app .row.citf-signin-actions > .btn,
+body.citf-flow #app .row.citf-signin-actions > button.btn {
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 18px !important;
+  width: auto !important;
+  max-width: none !important;
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+  border-radius: 4px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+}
+body.citf-flow #app .row.citf-signin-actions > button.btn.pri {
+  background: var(--navy) !important;
+  border: 1px solid var(--navy) !important;
+  color: #fff !important;
+}
+body.citf-flow #app .row.citf-signin-actions > button.btn.ghost {
+  background: #fff !important;
+  border: 1px solid var(--field) !important;
+  color: var(--ink-2) !important;
+}
 .p-main .card.body { display: flex; flex-direction: column; gap: 14px; }
 body.citf-flow #app .row { margin-left: 0 !important; margin-right: 0 !important; --bs-gutter-x: 0; }
 body.citf-flow #app .row > * { width: auto !important; max-width: none !important; padding-left: 0 !important; padding-right: 0 !important; }
+body.citf-flow #app .row > .btn,
+body.citf-flow #app .row > a.btn,
+body.citf-flow #app .row > button.btn {
+  padding: 10px 18px !important;
+  height: auto !important;
+  min-height: 40px !important;
+  line-height: 1.2 !important;
+  box-sizing: border-box !important;
+}
 body.citf-flow #app .btn,
 body.citf-flow #app a.btn,
 body.citf-flow #app button.btn,
 body.citf-flow #app .pill { width: auto !important; flex: 0 0 auto; }
+body.citf-flow #app .side > .card .btn.sm { width: 100% !important; height: auto !important; white-space: normal !important; }
 body.citf-flow #app .pill { display: inline-block !important; }
 body.citf-flow #app .p-nav a { color: var(--ink-2) !important; }
 body.citf-flow #app .p-nav a.on,
@@ -917,4 +990,8 @@ body.citf-flow #app .btn.citf-new-application {
 body.citf-flow #app .btn.sm, body.citf-flow #app a.btn.sm {
   height: auto !important; min-height: 36px !important; padding: 8px 16px !important; line-height: 1.2 !important;
 }
-body.citf-flow #app .pill { padding: 5px 12px !important; }
+body.citf-flow #app .pill { padding: 3px 10px !important; background: #EEF0F2 !important; color: #3E4C59 !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 600 !important; }
+body.citf-flow #app .pill.ok { background: #E3F4E8 !important; color: #1E6B3A !important; }
+body.citf-flow #app .pill.warn { background: #FFF4E5 !important; color: #92400E !important; }
+body.citf-flow #app .pill.info { background: #E8F0FA !important; color: #0F5BA8 !important; }
+body.citf-flow #app .pill.err { background: #FDECEA !important; color: #B42318 !important; }

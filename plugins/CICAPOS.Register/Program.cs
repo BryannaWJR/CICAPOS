@@ -37,7 +37,11 @@ if (!args.Contains("--lang") || File.Exists(dll))
 }
 
 Console.WriteLine("Connecting...");
-using var service = new ServiceClient($"AuthType=OAuth;Url={Url};SkipDiscovery=true;Authority=https://login.microsoftonline.com/common;AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=http://localhost;LoginPrompt=Never;TokenCacheStorePath=/tmp/cicapossync/dvcache.bin;RequireNewInstance=true");
+var accessToken = Environment.GetEnvironmentVariable("CICAPOS_ACCESS_TOKEN");
+var connection = string.IsNullOrWhiteSpace(accessToken)
+    ? $"AuthType=OAuth;Url={Url};SkipDiscovery=true;Authority=https://login.microsoftonline.com/common;AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=http://localhost;LoginPrompt=Never;TokenCacheStorePath=/tmp/cicapossync/dvcache.bin;RequireNewInstance=true"
+    : $"AuthType=OAuth;Url={Url};SkipDiscovery=true;AccessToken={accessToken};LoginPrompt=Never;RequireNewInstance=true";
+using var service = new ServiceClient(connection);
 if (!service.IsReady)
 {
     Console.Error.WriteLine(service.LastError);
@@ -79,6 +83,29 @@ if (args.Contains("--ai-perm"))
     {
         CICAPOS.Register.AiAssistSetup.EnsurePortalTablePermission(service);
         DumpAiTraces(service);
+        Environment.Exit(0);
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine(Describe(ex));
+        if (!string.IsNullOrWhiteSpace(service.LastError))
+            Console.Error.WriteLine(service.LastError);
+        Environment.Exit(1);
+    }
+}
+if (args.Contains("--committee-mail"))
+{
+    try
+    {
+        var assemblyId = UploadAssembly(service, dll, assemblyName?.Name ?? "CICAPOS.Plugins", token, version);
+        const string typeName = "CICAPOS.Plugins.CommitteeEmailPlugin";
+        var typeId = EnsureType(service, assemblyId, typeName);
+        var pre = EnsureStep(service, typeId, userId, typeName, "email", "Create", 20, 5);
+        var post = EnsureStep(service, typeId, userId, typeName, "email", "Create", 40, 5);
+        AddComponent(service, assemblyId, 91, false);
+        AddComponent(service, pre, 92, false);
+        AddComponent(service, post, 92, false);
+        Console.WriteLine("Committee email plugin registered.");
         Environment.Exit(0);
     }
     catch (Exception ex)

@@ -19,6 +19,12 @@ public static class AiQuality
     public static IReadOnlyList<AiIssue> ValidateFundingApplication(IDictionary<string, string> values)
     {
         var issues = new List<AiIssue>();
+        var objective = values.GetValueOrDefault("objective") ?? "";
+        if (ObjectiveClearlyTooBrief(objective))
+        {
+                issues.Add(Issue("objective", "too_brief",
+                $"Project objective is too brief (minimum {ObjectiveMinWords} words, now {WordCount(objective)}) – describe benefits and implementation (AI quality check)"));
+        }
         var itemsJson = values.GetValueOrDefault("itemsJson") ?? "[]";
         var index = 0;
         foreach (Match item in Regex.Matches(itemsJson, "\\{[^{}]+\\}"))
@@ -28,6 +34,12 @@ public static class AiQuality
             var plan = map.GetValueOrDefault("plan") ?? "";
             if (string.IsNullOrWhiteSpace(plan))
                 issues.Add(Issue($"item:{index}.plan", "plan_missing", $"Item {index}: implementation plan is missing"));
+            else if (PlanClearlyTooBrief(plan))
+                issues.Add(Issue($"item:{index}.plan", "plan_too_brief",
+                    $"Item {index}: implementation plan is too brief – say how this item will be used on this project (where, how, with numbers) (AI quality check)"));
+            else if (PlanLooksWeak(plan))
+                issues.Add(Issue($"item:{index}.plan", "plan_weak",
+                    $"Item {index}: this does not read as an implementation plan – describe how the item will be installed, operated or used on this project (AI quality check)"));
         }
         return issues;
     }
@@ -253,7 +265,11 @@ public static class AiQuality
         }
         foreach (var hardIssue in hard)
         {
-            if (string.Equals(hardIssue.Field, "objective", StringComparison.OrdinalIgnoreCase))
+            var keepObjective = string.Equals(hardIssue.Field, "objective", StringComparison.OrdinalIgnoreCase)
+                && (string.Equals(hardIssue.Code, "too_brief", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(hardIssue.Code, "too_long", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(hardIssue.Code, "weak_content", StringComparison.OrdinalIgnoreCase));
+            if (string.Equals(hardIssue.Field, "objective", StringComparison.OrdinalIgnoreCase) && !keepObjective)
                 continue;
             if (!merged.Any(x => x.Field == hardIssue.Field && x.Code == hardIssue.Code))
                 merged.Add(hardIssue);
@@ -341,15 +357,78 @@ public static class AiQuality
         return false;
     }
 
+    public static bool IsDetailedPalSummary(string? text)
+    {
+        var s = text ?? "";
+        return s.Length > 700
+            && s.IndexOf("Nine PAL information topics", StringComparison.OrdinalIgnoreCase) >= 0
+            && s.IndexOf("Annual review", StringComparison.OrdinalIgnoreCase) >= 0
+            && s.IndexOf("Supporting documents", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    public static bool IsDetailedFundingSummary(string? text)
+    {
+        var s = text ?? "";
+        return s.Length > 700
+            && s.IndexOf("Funding assessment summary", StringComparison.OrdinalIgnoreCase) >= 0
+            && s.IndexOf("Item-by-item assessment", StringComparison.OrdinalIgnoreCase) >= 0
+            && s.IndexOf("Funding case summary", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    public static string FundingAnalysisSummaryPrompt()
+    {
+        return """
+Return ONLY JSON: {"summary":"...","officerSummary":"...","score":integer 0-100,"setting":"indoor|outdoor|mixed|unspecified","risks":[{"severity":"warn|error|tip","text":"..."}]}.
+summary is the short applicant-facing funding summary: 4 to 8 numbered lines, each one ordinary sentence on its own line. Do not use the Funding Application Analysis Template headings (Funding assessment summary, Item-by-item assessment, Funding case summary). Do not recommend approval or rejection. Copy scheme, project, item names, quantities and amount from Data only.
+officerSummary is the full CITF Funding Application Analysis report an officer could paste into Funding Application Analysis Template v2.0. officerSummary MUST contain exactly 11 numbered sections (sections 1 to 11 only). Put a newline before each number. Each section starts with the exact heading below, a colon, then 4 to 8 factual sentences. Never write section 12 Officer review. Never put the 11-section report in summary. An AI draft is not an approval.
+Copy product names, quantities, unit prices, PAL codes, quotations and file types from Data. For each fact say Evidenced, Applicant claim, or Not found. Never put Warn or Tip inside summary; put flags only in risks. Do not invent rates, caps, FX, PAL prices, documents or CIC recommendation codes.
+
+1. Funding assessment summary: whether applicant eligibility, item eligibility, quotations/prices, project use/timing and funding capacity are established from Data, or Not found; what the officer must still resolve. Do not recommend approval or rejection.
+2. Applicant eligibility and related entities: company/BR if present; applicant type; NAR1/ownership if present; connected companies; prior funding or duplicates. Do not infer eligibility from company names or product similarity. If a check is not in Data, write Not assessed.
+3. Application completeness and evidence: for BR, NAR1, shareholder BR, quotation, sole-agent letter, NPA comparison sheet, purchase order, bank record, contract, drawings, BIM model, catalogue and reference letter, say uploaded or not uploaded from Data.filesPlain. Do not treat missing disbursement documents (invoice, delivery, site evidence) as an application gap.
+4. Item-by-item assessment: for each item identity, scheme, qty, unit, PA/NPA route, intended use and requested amount. For PA items, exact PAL match and price/conditions from Data only. For NPA items, technical evidence, declarations and comparisons only if Data.hasNpa is true; otherwise say all items are pre-approved.
+5. Quotations and price assessment: quotation identity, rates and whether the selected offer is supported. If quotations are not in Data, say Not found. Do not assume a fixed quotation count.
+6. Project use, implementation and timing: project/site, how items will be used, CITF objectives/benefits, and application versus commitment dates from Data. Missing dates are Not found.
+7. Item funding assessment: requested cost, eligible versus excluded components if supplied, and that co-funding ratio/cap must come from CIC rules not invented here. Verified assessed amount is Not assessed unless Data supplies it.
+8. Application totals and funding ceiling: total requested amount from Data.amount; verified assessed, utilisation, remaining balance and calculation engine as Not assessed unless Data supplies them.
+9. Risk, rule exceptions and escalation: duplicate/connected-party, vendor, high-value or timing concerns only if evidenced in Data. Do not invent a risk score or approval probability.
+10. Funding case summary: applicant and request; eligibility; PAL/NPA findings; quotation and cost; timing and benefits; missing evidence. Do not propose a CIC action code unless supplied.
+11. Evidence, discrepancies and clarification: missing documents, conflicts and specific questions. Do not include D365 report IDs or officer workflow.
+
+Never copy JSON, square brackets or curly braces into summary or officerSummary.
+""";
+    }
+
+    public static string PalListingSummaryPrompt()
+    {
+        return """
+Return ONLY JSON: {"summary":"...","officerSummary":"...","score":integer 0-100,"risks":[{"severity":"warn|error|tip","text":"..."}]}.
+summary is the short applicant-facing PAL listing summary: 4 to 6 numbered lines, each one ordinary sentence on its own line. Do not use the 11-section template headings (Assessment summary, Nine PAL information topics, Annual review, Case summary, Evidence, discrepancies). Do not recommend approval or rejection. Copy product names, prices and uploaded file types from Data only.
+officerSummary is the full CITF PAL Analysis report an officer could paste into PAL Analysis Template v2.0. officerSummary MUST contain exactly 11 numbered sections. Put a newline before each number. Each section starts with the exact heading below, a colon, then 4 to 8 factual sentences. This is a long analysis document, never 3 short bullets. Never put the 11-section report in summary.
+Copy product names, models, versions, prices, job projects, contacts, file types and declaration ticks from Data. For each fact say Evidenced, Applicant claim, or Not found. Never write item (non-pre-approved). Never put Warn or Tip inside summary; put flags only in risks. Do not recommend approval, rejection or CIC recommendation codes. Do not invent comparators, FX rates, patents, jobs or files. This is a PAL listing, not a funding application.
+
+1. Assessment summary: what admission is requested (vendor, category, mode, product names); evidenced merits versus claims; comparison with approved or market alternatives, or that none were supplied on the form; price position from submitted HK dollar rates; what needs clarification; that no CIC recommendation code was supplied.
+2. Nine PAL information topics: cover all nine in order using only Data — (1) specifications, model, version and version updates; (2) manufacturer, supplier, sole agency and authorisation evidence; (3) first launch date, origin, local development and proof; (4) core functions and intended use; (5) innovation and comparison baseline; (6) CITF objectives, benefit claims and any figures; (7) awards or patents; (8) each job reference with project, client, year and contact quality; (9) current unit rate, unit basis, rental if any and price history.
+3. Category-specific assessment: for ACT, capacity, performance, site use and construction-benefit evidence from spec, functions and merits only. For BIM software, version, functions and licence or term. For BIM training, course identity, outline, duration, delivery and learners only if present. Do not invent missing category fields.
+4. Declarations and compliance: local development tick and proof; statutory compliance tick and signer; IP and pricing tick. A tick is not independently verified legal compliance. Annual statutory confirmation is Not applicable for a new listing unless Data.mode is Annual review.
+5. Supporting documents: for each of authorisation letter, specification, catalogue, patent documents, price list, performance comparison, reference letter, photos, video, test report and local development proof, say uploaded or not uploaded from Data. Do not mention purchase records or rental records.
+6. Approved and market comparisons: if Data.listedComparators is none or empty, state that the applicant did not supply an approved PAL comparator or a market comparator, so identity, functions, innovation and price cannot be compared on this form. Do not invent market prices.
+7. Current and historical price assessment: quote the current HK dollar rate, unit, rental or term, and each history row from Data. If history is empty, say not supplied. Do not apply FX or normalised conversion unless Data includes it.
+8. Annual review: if Data.mode is not Annual review, write Not applicable because this application is a new listing or change request. Do not invent vendor replies or funding-usage statistics.
+9. Change request: if Data.mode is not Change request, write Not applicable. Otherwise describe the requested change from Data only, without inventing an approved baseline.
+10. Case summary: request and item identity; technical merits and evidence; comparison and price position; declarations and outstanding evidence. Do not propose a CIC action code.
+11. Evidence, discrepancies and clarification: list conflicts such as generic job contacts, missing patent numbers, unevidenced merits or missing files, as specific questions. Do not include D365 report IDs or officer workflow.
+
+Never copy JSON, square brackets or curly braces into the summary.
+""";
+    }
+
     public static string BuildSummaryPrompt(IDictionary<string, string> values)
     {
         var listing = values.GetValueOrDefault("listingKind") ?? "";
         if (listing.Equals("pal", StringComparison.OrdinalIgnoreCase))
         {
-            return "Write a CITF Pre-approved List (PAL) listing application summary for CIC PAL officers. "
-                + "Return ONLY JSON: {\"summary\":\"4-8 numbered lines (1. 2. 3.) each one short sentence covering category, vendor, each product (name/model/price), local development, functions and innovation, CITF merits, job references, declarations and files\",\"score\":integer 0-100,\"risks\":[{\"severity\":\"warn|error|tip\",\"text\":\"short flag\"}]}. "
-                + "Put each point on its own line. Do not inline the word Warn in the summary; put flags only in risks. "
-                + "Be factual from the data. Do not give recommendations, advice or next steps. Never copy JSON, square brackets or curly braces into the summary. Do not invent products, patents or prices. This is a vendor listing to the PAL, not a funding application — do not discuss indoor/outdoor site work or grant amounts. "
+            return PalListingSummaryPrompt()
                 + PortalLanguageInstruction(values)
                 + " Data: " + AiJson.ToObjectJson(values);
         }
@@ -360,19 +439,16 @@ public static class AiQuality
         data.Remove("itemsJson");
         data.Remove("palJson");
         var palRule = hasNpa
-            ? "Data.hasNpa is true. For each non-pre-approved item, compare it with the project objective and its indoor or outdoor setting, and with the closest listed product. Use listed product functions only to judge the match; do not quote those function texts. State which unit price is more cost-effective and whose functions better match the project objective. Start that line with 'Function and price comparison:'. Put the same text in risks with severity tip. Do not use warn for a PAL match. "
-            : "Data.hasNpa is false. All items are pre-approved. Do not mention PAL comparison, alternatives, Function and price comparison, or close listed products. ";
-        return "Write a CITF funding application submission summary for CIC officers. "
-            + "Return ONLY JSON: {\"summary\":\"4-8 numbered lines\",\"score\":integer 0-100,\"setting\":\"indoor|outdoor|mixed|unspecified\",\"risks\":[{\"severity\":\"warn|error|tip\",\"text\":\"short flag\"}]}. "
-            + "Each numbered point (1. 2. 3.) MUST be a single ordinary sentence on its own line, with a newline after it. Never put 1. and 2. in the same paragraph. Do not use labels such as Scheme:, Site:, Objective:, Setting:, Items: or Amount:. "
-            + "Do not inline the word Warn in the summary; put flags only in risks. "
-            + "Do not give recommendations, advice or next steps. Be factual from the data. Do not invent documents, PAL codes, quantities, unit prices, durations or months — copy those only from Data and Data.itemsPlain. "
-            + "Never copy JSON, square brackets, curly braces, itemsJson, palJson or field keys such as plan/product/paCode into the summary. Use Data.itemsPlain for item names, quantities and plans in ordinary English. "
+            ? "Data.hasNpa is true. In summary only, for each non-pre-approved item, compare it with the project objective and its indoor or outdoor setting, and with the closest listed product. Use listed product functions only to judge the match; do not quote those function texts. State which unit price is more cost-effective and whose functions better match the project objective. Start that line with 'Function and price comparison:'. Put the same text in risks with severity tip. Do not use warn for a PAL match. In officerSummary use section 4 Non-pre-approved route instead of that line. "
+            : "Data.hasNpa is false. All items are pre-approved. Do not mention PAL comparison, alternatives, Function and price comparison, or close listed products in summary. ";
+        return FundingAnalysisSummaryPrompt()
+            + " Each numbered point in summary (1. 2. 3.) MUST be a single ordinary sentence on its own line. Never put 1. and 2. in the same paragraph. Do not use labels such as Scheme:, Site:, Objective:, Setting:, Items: or Amount: in summary. "
+            + "Do not give recommendations, advice or next steps in summary. Be factual from the data. Do not invent documents, PAL codes, quantities, unit prices, durations or months — copy those only from Data and Data.itemsPlain. "
+            + "Never copy JSON, square brackets, curly braces, itemsJson, palJson or field keys such as plan/product/paCode into summary or officerSummary. Use Data.itemsPlain for item names, quantities and plans in ordinary English. "
             + "Do not mention AI analysis, that analysis is complete or OK, or that a CIC officer still reviews the case. "
-            + "Use severity warn only when the input is not detailed enough. "
             + "Judge indoor vs outdoor from how the work is done: the project objective and item functions/plans. NM-B / Romex electrical cable is indoor-rated building wire, not outdoor civil or tower-crane equipment. "
             + "Never use the project title, contract number, PWP number, or the words Site / New Town / Extension alone as proof of outdoor work. "
-            + "Do not write the indoor/outdoor verdict in the numbered scheme/objective/items lines; it is added separately. Put the judgment in JSON key setting. "
+            + "Do not write the indoor/outdoor verdict in the numbered scheme/objective/items lines of summary; it is added separately. Put the judgment in JSON key setting. "
             + "If an item is indoor-rated but the objective is outdoor (or the reverse), name the item. "
             + "Add a warn risk only when the input is not detailed enough: setting is unspecified (no indoor/outdoor evidence), or the text does not cover the selected scheme/category criteria. "
             + palRule
@@ -836,6 +912,25 @@ public static class AiQuality
         var cjk = Regex.Matches(t, @"[\u4e00-\u9fff]").Count;
         var western = Regex.Matches(Regex.Replace(t, @"[\u4e00-\u9fff]", " "), @"\S+").Count;
         return western >= PlanMinWords || cjk >= PlanMinChineseChars;
+    }
+
+    public static bool ObjectiveClearlyTooBrief(string? objective)
+    {
+        var t = (objective ?? "").Trim();
+        if (t.Length == 0) return false;
+        var cjk = Regex.Matches(t, @"[\u4e00-\u9fff]").Count;
+        if (cjk >= 16) return false;
+        return WordCount(t) < ObjectiveMinWords;
+    }
+
+    public static bool PlanClearlyTooBrief(string? plan)
+        => !string.IsNullOrWhiteSpace(plan) && !PlanHasEnoughDetail(plan);
+
+    public static bool PlanLooksWeak(string? plan)
+    {
+        var t = (plan ?? "").Trim();
+        if (t.Length == 0 || PlanHasEnoughDetail(t)) return false;
+        return !HasPlanActionCue(t);
     }
 
     static bool HasPlanActionCue(string text)

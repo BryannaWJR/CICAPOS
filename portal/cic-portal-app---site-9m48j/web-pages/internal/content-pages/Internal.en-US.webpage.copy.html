@@ -166,7 +166,14 @@ html, body { background:#F4F5F7 !important; color:#1F2933; }
     return m[t] || "";
   }
   function pill(t) { return '<span class="pill ' + pillKind(t) + '">' + esc(t) + "</span>"; }
-  function assigned() { var name = officer(); return apps.filter(function (a) { return a.officer === name && a.status !== "Draft" && a.status !== "Pending endorsement"; }); }
+  function assigned() {
+    var name = officer();
+    return apps.filter(function (a) {
+      if (a.status === "Draft" || a.status === "Pending endorsement") return false;
+      var o = String(a.officer || "").trim();
+      return !o || o === name;
+    });
+  }
   function owned(id) { return assigned().filter(function (a) { return a.id === id; })[0] || null; }
   function route() { var q = new URLSearchParams(location.search); return { id: q.get("id") || "", view: q.get("view") || "", email: q.get("email") || "" }; }
   function link(id, view) { var q = new URLSearchParams(); if (id) q.set("id", id); if (view) q.set("view", view); var s = q.toString(); return s ? "?" + s : location.pathname; }
@@ -233,7 +240,7 @@ html, body { background:#F4F5F7 !important; color:#1F2933; }
   rj.history = [{ on: addDays(new Date(), -120), what: "Application submitted via portal" }, { on: addDays(new Date(), -80), what: "Rejected \u2013 rejection letter issued" }];
 
   function shell(body) {
-    return '<header class="p-head"><div class="in"><div class="logo"><div><b>CITF portal</b><small>Internal workspace \u00b7 Funding applications</small></div></div><nav class="p-nav" aria-label="Internal navigation"><a href="' + esc(location.pathname) + '" class="on" data-nav="list">My assigned applications</a></nav></div></header><main class="p-main internal-main">' + body + "</main>";
+    return '<header class="p-head"><div class="in"><div class="logo"><div><b>CITF portal</b><small>Internal workspace \u00b7 Funding applications</small></div></div><nav class="p-nav" aria-label="Internal navigation"><a href="' + esc(location.pathname) + '" class="on" data-nav="list">Funding applications</a></nav></div></header><main class="p-main internal-main">' + body + "</main>";
   }
   function signInView() {
     var q = route();
@@ -261,10 +268,10 @@ html, body { background:#F4F5F7 !important; color:#1F2933; }
       var href = link(a.id);
       return "<tr><td><a href=\"" + esc(href) + "\"><b>" + esc(a.ref) + "</b></a><br><span>" + esc(company(a.companyId).nameEn) + "</span></td><td>" + esc(a.schemes.join(", ")) + "<br><small>" + esc(a.project || "Not provided") + "</small></td><td class=\"internal-money\">" + money(appAmt(a)) + "</td><td>" + pill(a.status) + "</td><td>" + (a.submittedOn ? fmtD(a.submittedOn) : "Not submitted") + "</td><td><a class=\"btn sm\" href=\"" + esc(href) + "\" aria-label=\"View application " + esc(a.ref) + "\">View details</a></td></tr>";
     }).join("");
-    if (!body) body = '<tr><td colspan="6"><div class="internal-empty"><h3>' + (all.length ? "No matching applications" : "No applications assigned yet") + "</h3><p>" + (all.length ? "Try a different search or clear the status filter." : "Applications assigned to this officer will appear here.") + "</p></div></td></tr>";
-    return shell('<div class="row between"><div><p class="internal-eyebrow">FUNDING APPLICATIONS</p><h1>My assigned applications</h1><p class="sub">Welcome, ' + esc(officer()) + '. Open an application to review its details and AI summary.</p></div><span class="pill info">' + all.length + " assigned to you</span></div>" +
-      '<div class="card"><div class="internal-filters"><div class="f"><label for="internal-search">Search your applications</label><input id="internal-search" value="' + esc(UI.query || "") + '" placeholder="Application reference, applicant or project" type="search"></div><div class="f"><label for="internal-status">Status</label><select id="internal-status"><option value="">All statuses</option>' + statuses.map(function (s) { return "<option" + (s === status ? " selected" : "") + ">" + esc(s) + "</option>"; }).join("") + "</select></div></div>" +
-      '<div class="row between"><span class="hint" role="status">Showing ' + rows.length + " of " + all.length + " assigned applications</span>" + (query || status ? '<button class="btn sm ghost" type="button" data-act="clear">Clear filters</button>' : "") + "</div>" +
+    if (!body) body = '<tr><td colspan="6"><div class="internal-empty"><h3>' + (all.length ? "No matching applications" : "No applications yet") + "</h3><p>" + (all.length ? "Try a different search or clear the status filter." : "Submitted applications will appear here.") + "</p></div></td></tr>";
+    return shell('<div class="row between"><div><p class="internal-eyebrow">FUNDING APPLICATIONS</p><h1>Funding applications</h1><p class="sub">Welcome, ' + esc(officer()) + '. Open an application to review its details and AI summary.</p></div><span class="pill info">' + all.length + " applications</span></div>" +
+      '<div class="card"><div class="internal-filters"><div class="f"><label for="internal-search">Search applications</label><input id="internal-search" value="' + esc(UI.query || "") + '" placeholder="Application reference, applicant or project" type="search"></div><div class="f"><label for="internal-status">Status</label><select id="internal-status"><option value="">All statuses</option>' + statuses.map(function (s) { return "<option" + (s === status ? " selected" : "") + ">" + esc(s) + "</option>"; }).join("") + "</select></div></div>" +
+      '<div class="row between"><span class="hint" role="status">Showing ' + rows.length + " of " + all.length + " applications</span>" + (query || status ? '<button class="btn sm ghost" type="button" data-act="clear">Clear filters</button>' : "") + "</div>" +
       '<div class="scroll"><table class="tbl"><thead><tr><th>Application / applicant</th><th>Scheme / project</th><th>Amount applied</th><th>Status</th><th>Submitted</th><th></th></tr></thead><tbody>' + body + "</tbody></table></div></div>" +
       '<div class="page-foot"><button class="btn ghost sm" type="button" data-act="signOut">Sign out</button></div>');
   }
@@ -349,9 +356,12 @@ html, body { background:#F4F5F7 !important; color:#1F2933; }
   function requestForm(a, d) {
     d = d || {};
     var approval = (d.requestType || "Question") === "Approval request";
+    var subjectField = approval
+      ? '<div class="f"><span class="lb">Subject</span><p style="margin:0">' + esc("Case " + (a.ref || "") + " Approval Request") + "</p></div>"
+      : fld("Subject", "subject", d.subject || "", { req: 1 });
     return "<h2>New chat \u00b7 " + esc(a.ref) + "</h2><p>To: <b>" + (approval ? "Committee" : esc(company(a.companyId).nameEn)) + "</b>" + (approval ? " \u00b7 brwei@deloittecn.com.cn" : "") + "</p>" +
       fld("Request type", "requestType", d.requestType || "Question", { type: "select", options: ["Question", "Additional documents", "Question and documents", "Approval request"] }) +
-      fld("Subject", "subject", d.subject || "", { req: 1 }) +
+      subjectField +
       fld(approval ? "Message to committee" : "Message to applicant", "message", d.message || "", { type: "textarea", rows: 4, req: 1, hint: approval ? "This message is emailed to the committee and kept as a chat on this case. It is not sent to the applicant." : "Explain what needs clarification and what the applicant should provide." }) +
       '<div id="internal-doc-request"' + (((d.requestType || "Question") === "Question" || approval) ? " hidden" : "") + ">" + fld("Documents required", "documents", d.documents || "", { type: "textarea", rows: 3, hint: "Enter one document per line, for example: Revised supplier quotation." }) + "</div>" +
       '<div id="internal-reply-by"' + (approval ? " hidden" : "") + ">" + fld("Reply by", "due", d.due || dateInput(14), { type: "date", req: 1 }) + "</div>" +
@@ -434,11 +444,6 @@ html, body { background:#F4F5F7 !important; color:#1F2933; }
       try { created = JSON.parse(createdRes.raw || "{}"); } catch (e2) { created = {}; }
       var id = created.activityid || ((String(createdRes.res.headers.get("OData-EntityId") || "").match(/[0-9a-f-]{36}/i) || [])[0]);
       if (!id) throw new Error("The committee email was created but its id was not returned.");
-      var party = { participationtypemask: 2, addressused: "brwei@deloittecn.com.cn" };
-      party["activityid_activitypointer@odata.bind"] = "/activitypointers(" + id + ")";
-      return post("/_api/activityparties", party).then(function () {
-        return post("/_api/emails(" + id + ")/Microsoft.Dynamics.CRM.SendEmail", { IssueSend: true });
-      });
     });
   }
   function openChat(a) {

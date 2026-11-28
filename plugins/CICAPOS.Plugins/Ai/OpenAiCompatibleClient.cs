@@ -37,6 +37,7 @@ public sealed class OpenAiCompatibleClient : ILlmClient
         var body = "{"
             + "\"model\":" + Quote(_config.CompatibleModel) + ","
             + "\"temperature\":0,"
+            + "\"max_tokens\":4096,"
             + "\"messages\":["
             + "{\"role\":\"system\",\"content\":" + Quote(systemPrompt) + "},"
             + "{\"role\":\"user\",\"content\":" + Quote(userPrompt) + "}"
@@ -66,7 +67,7 @@ public sealed class OpenAiCompatibleClient : ILlmClient
     static string DefaultSend(HttpRequestMessage request)
     {
         ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
-        using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(45) };
+        using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(90) };
         using var response = client.SendAsync(request).GetAwaiter().GetResult();
         var text = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
         if (!response.IsSuccessStatusCode)

@@ -70,6 +70,19 @@ public class AiAssistTests
     }
 
     [Fact]
+    public void ValidateFundingApplication_FlagsShortObjectiveAndPlan()
+    {
+        var values = new Dictionary<string, string>
+        {
+            ["objective"] = "aww eww we",
+            ["itemsJson"] = "[{\"plan\":\"ds 5 n\",\"product\":\"Concrete Curing IoT Sensors\"}]"
+        };
+        var issues = AiQuality.ValidateFundingApplication(values);
+        Assert.Contains(issues, i => i.Code == "too_brief" && i.Field == "objective");
+        Assert.Contains(issues, i => i.Code == "plan_too_brief" && i.Field == "item:1.plan");
+    }
+
+    [Fact]
     public void MergeFundingIssues_DropsMissingSchemesWhenAlreadySelected()
     {
         var values = new Dictionary<string, string>
@@ -804,6 +817,41 @@ public class AiAssistTests
         Assert.DoesNotContain("{", fields["summary"]);
         Assert.DoesNotContain("[", fields["summary"]);
         Assert.Contains("SiteEye", fields["summary"]);
+        Assert.DoesNotContain("Funding assessment summary", fields["summary"]);
+        Assert.Contains("Funding assessment summary", fields["officerSummary"]);
+        Assert.Contains("Item-by-item assessment", fields["officerSummary"]);
+        Assert.Contains("Funding case summary", fields["officerSummary"]);
+        Assert.Contains("SiteEye", fields["officerSummary"]);
+        var prompt = AiQuality.BuildSummaryPrompt(new Dictionary<string, string> { ["lang"] = "EN", ["itemsJson"] = "[{\"product\":\"SiteEye\",\"type\":\"PA\",\"paCode\":\"PA-ACT-0412\"}]" });
+        Assert.Contains("officerSummary", prompt);
+        Assert.Contains("Funding Application Analysis Template v2.0", prompt);
+    }
+
+    [Fact]
+    public void Summarize_Demo_PalListing_FollowsAnalysisTemplate()
+    {
+        var res = DemoService().Execute(new AiAssistRequest
+        {
+            Action = AiActions.Summarize,
+            SchemaKey = AiSchemaKeys.PalProduct,
+            CurrentValuesJson = "{\"listingKind\":\"pal\",\"category\":\"Advanced Construction Technologies (ACT)\",\"company\":\"SmartSite Robotics HK Limited\",\"mode\":\"New listing\",\"itemsPlain\":\"Item 1: SiteEye AI Safety Camera. model SE-500. functions site monitoring. merits Safety. job references Site Agent. unit price HKD 92000. files Photos; Specification.\",\"declsPlain\":\"statutory yes; local development no; IP and pricing yes\",\"signer\":\"Grace Ho (Sales Manager)\",\"filesPlain\":\"Photos, Specification\",\"listedComparators\":\"none\"}"
+        });
+        Assert.True(res.Pass);
+        var fields = AiJson.ParseObject(res.FieldsJson);
+        Assert.Contains("SiteEye", fields["summary"]);
+        Assert.DoesNotContain("Nine PAL information topics", fields["summary"]);
+        Assert.DoesNotContain("Assessment summary", fields["summary"]);
+        Assert.DoesNotContain("{", fields["summary"]);
+        Assert.Contains("Assessment summary", fields["officerSummary"]);
+        Assert.Contains("Nine PAL information topics", fields["officerSummary"]);
+        Assert.Contains("Supporting documents", fields["officerSummary"]);
+        Assert.Contains("Annual review", fields["officerSummary"]);
+        Assert.Contains("Evidence, discrepancies", fields["officerSummary"]);
+        Assert.Contains("SiteEye", fields["officerSummary"]);
+        var prompt = AiQuality.BuildSummaryPrompt(new Dictionary<string, string> { ["listingKind"] = "pal", ["lang"] = "EN" });
+        Assert.Contains("officerSummary", prompt);
+        Assert.Contains("exactly 11 numbered sections", prompt);
+        Assert.DoesNotContain("4-8 numbered lines (1. 2. 3.) each one short sentence", prompt);
     }
 
     [Fact]

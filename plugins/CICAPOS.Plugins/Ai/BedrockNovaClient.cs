@@ -38,7 +38,7 @@ public sealed class BedrockNovaClient : ILlmClient
         var body = "{"
             + "\"system\":[{\"text\":" + Quote(system) + "}],"
             + "\"messages\":[{\"role\":\"user\",\"content\":[{\"text\":" + Quote(userPrompt) + "}]}],"
-            + "\"inferenceConfig\":{\"maxTokens\":2048,\"temperature\":0}"
+            + "\"inferenceConfig\":{\"maxTokens\":4096,\"temperature\":0}"
             + "}";
         var payload = Encoding.UTF8.GetBytes(body);
 

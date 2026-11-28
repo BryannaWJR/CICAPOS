@@ -259,45 +259,7 @@
   const _formSignAi = A.formSign;
   A.formSign = function (el) {
     if (/iAM Smart/i.test(el.dataset.how || '')) return _formSignAi.call(A, el);
-    const a = app(el.dataset.id), c = myCo();
-    if (!(c && c.mgmt && c.mgmt.name)) { toast('Add the management representative in your CITF profile first', true); return go('#/p/citfprofile'); }
-    if (!a.formExport || !a.formExport.snapshot) { toast('Generate and export the PDF first', true); return; }
-    withPickedFile('Upload signed and chopped file…', function (file) {
-      if (typeof showAiBusy === 'function') showAiBusy('AI checking signature, company chop and form match…');
-      const timed = Promise.race([
-        CitfAi.assist({
-          action: 'validate_upload',
-          schemaKey: 'supporting_doc',
-          docType: 'signed_application_form',
-          fileName: file.fileName,
-          fileBase64: file.fileBase64,
-          currentValues: a.formExport.snapshot
-        }),
-        new Promise(function (_, rej) { setTimeout(function () { rej(new Error('AI reading timed out')); }, 45000); })
-      ]);
-      return timed.then(function (res) {
-        if (typeof hideAiBusy === 'function') hideAiBusy();
-        const issues = (res.issues || []).filter(function (i) { return i && i.severity !== 'warn' && i.message; });
-        if (issues.length) {
-          a.signed = null;
-          save(); render();
-          toast(issues[0].message, true);
-          return;
-        }
-        a.signed = {
-          by: c.mgmt.name,
-          how: 'Signed and chopped (uploaded)',
-          on: now().toISOString(),
-          file: file.fileName,
-          note: res.notes || 'AI confirmed signature, company chop and form match'
-        };
-        save(); render();
-        toast(a.signed.note);
-      }).catch(function (err) {
-        if (typeof hideAiBusy === 'function') hideAiBusy();
-        toast(String((err && err.message) || 'AI check failed').slice(0, 180), true);
-      });
-    });
+    if (typeof A.uxUploadSigned === 'function') return A.uxUploadSigned(el);
   };
 
   A.docUp = function (el) {

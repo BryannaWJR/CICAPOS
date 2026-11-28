@@ -313,21 +313,25 @@ public sealed class AiAssistService
         {
             var json = _llm.CompleteJson(
                 string.Equals(current.GetValueOrDefault("listingKind"), "pal", StringComparison.OrdinalIgnoreCase)
-                    ? "Return JSON only with summary, score and risks for a CITF PAL listing submission."
-                    : "Return JSON only with summary, score and risks for a CITF funding submission.",
+                    ? "Return JSON only with summary, officerSummary, score and risks for a CITF PAL listing submission."
+                    : "Return JSON only with summary, officerSummary, score and risks for a CITF funding submission. summary is short for the applicant; officerSummary is the 11-section Funding Application Analysis Template v2 report.",
                 AiQuality.BuildSummaryPrompt(current));
             var parsed = AiJson.ParseObject(json);
             var risks = ExtractArray(json, "risks");
             var fields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 ["summary"] = parsed.GetValueOrDefault("summary") ?? "",
+                ["officerSummary"] = parsed.GetValueOrDefault("officerSummary") ?? "",
                 ["score"] = parsed.GetValueOrDefault("score") ?? "80",
                 ["setting"] = parsed.GetValueOrDefault("setting") ?? "",
                 ["risksJson"] = string.IsNullOrWhiteSpace(risks) ? "[]" : risks
             };
+            SplitPalSummaries(fields, current);
+            SplitFundingSummaries(fields, current);
             if (string.IsNullOrWhiteSpace(fields["summary"]))
                 fields["summary"] = DemoSummary(current).GetValueOrDefault("summary") ?? "";
-            AiQuality.ApplyWorkSetting(fields, current);
+            if (!string.Equals(current.GetValueOrDefault("listingKind"), "pal", StringComparison.OrdinalIgnoreCase))
+                AiQuality.ApplyWorkSetting(fields, current);
             return Ok(fields, Array.Empty<AiIssue>(), LiveSource(), LiveModelId(), hash, fields["summary"]);
         }
         catch when (_config.AllowDemo)
@@ -439,17 +443,92 @@ public sealed class AiAssistService
         return string.IsNullOrWhiteSpace(url) ? null : url.Trim();
     }
 
+    static void SplitPalSummaries(Dictionary<string, string> fields, IDictionary<string, string> current)
+    {
+        if (!string.Equals(current.GetValueOrDefault("listingKind"), "pal", StringComparison.OrdinalIgnoreCase))
+            return;
+        var demo = DemoSummary(current);
+        var shortDemo = demo.GetValueOrDefault("summary") ?? "";
+        var longDemo = demo.GetValueOrDefault("officerSummary") ?? "";
+        var summary = fields.GetValueOrDefault("summary") ?? "";
+        var officer = fields.GetValueOrDefault("officerSummary") ?? "";
+        if (AiQuality.IsDetailedPalSummary(summary) && !AiQuality.IsDetailedPalSummary(officer))
+        {
+            officer = summary;
+            summary = shortDemo;
+        }
+        if (AiQuality.IsDetailedPalSummary(summary) || string.IsNullOrWhiteSpace(summary))
+            summary = shortDemo;
+        if (!AiQuality.IsDetailedPalSummary(officer))
+            officer = longDemo;
+        fields["summary"] = AiQuality.SanitizeSummaryText(summary);
+        fields["officerSummary"] = AiQuality.SanitizeSummaryText(officer);
+    }
+
+    static void SplitFundingSummaries(Dictionary<string, string> fields, IDictionary<string, string> current)
+    {
+        if (string.Equals(current.GetValueOrDefault("listingKind"), "pal", StringComparison.OrdinalIgnoreCase))
+            return;
+        var demo = DemoSummary(current);
+        var shortDemo = demo.GetValueOrDefault("summary") ?? "";
+        var longDemo = demo.GetValueOrDefault("officerSummary") ?? "";
+        var summary = fields.GetValueOrDefault("summary") ?? "";
+        var officer = fields.GetValueOrDefault("officerSummary") ?? "";
+        if (AiQuality.IsDetailedFundingSummary(summary) && !AiQuality.IsDetailedFundingSummary(officer))
+        {
+            officer = summary;
+            summary = shortDemo;
+        }
+        if (AiQuality.IsDetailedFundingSummary(summary) || string.IsNullOrWhiteSpace(summary))
+            summary = shortDemo;
+        if (!AiQuality.IsDetailedFundingSummary(officer))
+            officer = longDemo;
+        fields["summary"] = AiQuality.SanitizeSummaryText(summary);
+        fields["officerSummary"] = AiQuality.SanitizeSummaryText(officer);
+    }
+
     static Dictionary<string, string> DemoSummary(IDictionary<string, string> current)
     {
         if (string.Equals(current.GetValueOrDefault("listingKind"), "pal", StringComparison.OrdinalIgnoreCase))
         {
             var cat = current.GetValueOrDefault("category") ?? "PAL";
             var co = current.GetValueOrDefault("company") ?? "the vendor";
-            var palItems = AiQuality.FormatItemsPlain(current.GetValueOrDefault("itemsJson") ?? "[]");
-            var palSummary = "1. " + co + " applies to list under " + cat + ".\n2. Items: " + palItems + ".";
+            var mode = current.GetValueOrDefault("mode") ?? "New listing";
+            var palItems = current.GetValueOrDefault("itemsPlain");
+            if (string.IsNullOrWhiteSpace(palItems))
+                palItems = AiQuality.FormatItemsPlain(current.GetValueOrDefault("itemsJson") ?? "[]");
+            var decls = current.GetValueOrDefault("declsPlain") ?? "";
+            var files = current.GetValueOrDefault("filesPlain") ?? "";
+            var comps = current.GetValueOrDefault("listedComparators") ?? "";
+            var signer = current.GetValueOrDefault("signer") ?? "";
+            var applicantSummary =
+                "1. " + co + " requests a " + mode + " under " + cat + ".\n"
+                + "2. Items: " + palItems + ".\n"
+                + "3. Unit prices and uploaded files are taken from the submitted form.\n"
+                + "4. Local development and declarations are as ticked on the form.\n"
+                + "5. This summary does not recommend approval or rejection.";
+            var palSummary =
+                "1. Assessment summary: " + co + " requests a " + mode + " under " + cat + ". Submitted product details, merits and files are taken from the form. No CIC recommendation code was supplied. This summary does not recommend approval or rejection.\n"
+                + "2. Nine PAL information topics: " + palItems + "\n"
+                + "3. Category-specific assessment: Assessment uses only the submitted specification, functions, licence or course fields for " + cat + ". Site conditions, interoperability or learner counts are stated only if they appear on the form.\n"
+                + "4. Declarations and compliance: " + (string.IsNullOrWhiteSpace(decls) ? "Declaration ticks are taken from the form." : decls)
+                + (string.IsNullOrWhiteSpace(signer) ? "" : " Signed by " + signer.Trim() + ".")
+                + " Ticks are not independent legal verification. Annual statutory confirmation is not applicable for a new listing.\n"
+                + "5. Supporting documents: " + (string.IsNullOrWhiteSpace(files) ? "Uploaded types are taken from the item file list." : files) + "\n"
+                + "6. Approved and market comparisons: " + (string.IsNullOrWhiteSpace(comps) || comps.Equals("none", StringComparison.OrdinalIgnoreCase)
+                    ? "The applicant did not supply an approved PAL comparator or a market comparator on this form."
+                    : "Same-category listed comparators: " + comps + ".") + "\n"
+                + "7. Current and historical price assessment: Unit rates and any price history are taken from the submitted items. If history is not supplied, it is treated as not found. No exchange rate was provided.\n"
+                + "8. Annual review: Not applicable because this application is a " + mode + ".\n"
+                + "9. Change request: " + (mode.IndexOf("Change", StringComparison.OrdinalIgnoreCase) >= 0
+                    ? "Describe the requested change using only the submitted application fields."
+                    : "Not applicable because this application is a " + mode + ".") + "\n"
+                + "10. Case summary: Review item identity, merits, files and job-reference quality from the form. No CIC action code is proposed.\n"
+                + "11. Evidence, discrepancies and clarification: Check whether job contacts are specific, whether required files are present, and whether claimed merits and patents are evidenced in documents.";
             return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                ["summary"] = palSummary,
+                ["summary"] = applicantSummary,
+                ["officerSummary"] = palSummary,
                 ["score"] = "86",
                 ["risksJson"] = "[]"
             };
@@ -464,9 +543,25 @@ public sealed class AiAssistService
             + "2. Objective (" + AiQuality.WordCount(objective) + " words) describes the work and expected benefits.\n"
             + "3. Items: " + itemsPlain + "."
             + (string.IsNullOrWhiteSpace(amount) ? "" : "\n4. Amount applied HK$" + amount + ".");
+        var filesPlain = current.GetValueOrDefault("filesPlain") ?? "";
+        var otherFund = current.GetValueOrDefault("otherFund") ?? "";
+        var applicant = current.GetValueOrDefault("company") ?? "the applicant";
+        var officerSummary =
+            "1. Funding assessment summary: " + applicant + " requested " + schemes + " funding for " + project + ". Item eligibility, quotations, timing and funding capacity are taken only from the form. Outstanding inputs are listed in section 11. This draft does not recommend approval or rejection.\n"
+            + "2. Applicant eligibility and related entities: Company identity is " + applicant + ". BR status, NAR1, connected companies and prior funding are Not assessed unless they appear in Data. Eligibility is not inferred from the product name.\n"
+            + "3. Application completeness and evidence: Uploaded types: " + (string.IsNullOrWhiteSpace(filesPlain) ? "not listed on this form" : filesPlain) + ". Missing disbursement documents are not treated as an application gap.\n"
+            + "4. Item-by-item assessment: " + itemsPlain + " Pre-approved versus non-pre-approved treatment follows the submitted item type and PAL code only.\n"
+            + "5. Quotations and price assessment: Quotation identity, rates and selection are taken from uploaded quotation files if present. If quotations are not supplied, they are Not found. No fixed quotation count is assumed.\n"
+            + "6. Project use, implementation and timing: Objective and item plans describe intended use on " + project + ". " + (string.IsNullOrWhiteSpace(objective) ? "Objective text was not supplied." : "Objective length is " + AiQuality.WordCount(objective) + " words.") + " Commitment dates are Not found unless entered.\n"
+            + "7. Item funding assessment: Requested cost is taken from submitted unit prices and quantities. Eligible versus excluded components, co-funding ratio and caps are Not assessed here because they must come from current CIC rules.\n"
+            + "8. Application totals and funding ceiling: Total requested amount is " + (string.IsNullOrWhiteSpace(amount) ? "not entered" : ("HK$" + amount)) + ". Verified assessed amount, utilisation and remaining ceiling are Not assessed. Other public funding: " + (string.IsNullOrWhiteSpace(otherFund) ? "not stated" : otherFund) + ".\n"
+            + "9. Risk, rule exceptions and escalation: No duplicate, connected-party or timing exception is recorded on this form unless listed in Data. No risk score or approval probability is assigned.\n"
+            + "10. Funding case summary: " + applicant + " seeks " + schemes + " funding at " + project + " for " + itemsPlain + " Review quotations, PAL match and missing files before a decision. No CIC action code is proposed.\n"
+            + "11. Evidence, discrepancies and clarification: Confirm that uploaded files match the typed items and prices, and that any non-pre-approved item has comparison evidence if required.";
         var fields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             ["summary"] = summary,
+            ["officerSummary"] = officerSummary,
             ["score"] = "82",
             ["risksJson"] = "[]"
         };

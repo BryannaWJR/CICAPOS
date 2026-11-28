@@ -127,6 +127,44 @@
     });
     return o;
   }
+  function palAnalysisUserPrompt(current) {
+    return "Return ONLY JSON {summary, officerSummary, score, risks:[{severity:'warn|error|tip', text}]}. "
+      + "summary is the short applicant-facing PAL listing summary: 4 to 6 numbered lines, each one ordinary sentence. Do not use the 11-section template headings in summary. Do not recommend approval or rejection. "
+      + "officerSummary is a full CITF PAL Analysis report an officer could paste into PAL Analysis Template v2.0. officerSummary MUST contain exactly 11 numbered sections. Put a newline before each number. Each section starts with the exact heading below, a colon, then 4 to 8 factual sentences. Never put the 11-section report in summary. "
+      + "Copy product names, models, versions, prices, job projects, contacts, file types and declaration ticks from Data. For each fact say Evidenced, Applicant claim, or Not found. Never write item (non-pre-approved). Never put Warn or Tip inside summary; put flags only in risks. Do not recommend approval, rejection or CIC recommendation codes. Do not invent comparators, FX rates, patents, jobs or files. This is a PAL listing, not a funding application. "
+      + "1. Assessment summary: what admission is requested (vendor, category, mode, product names); evidenced merits versus claims; comparison with approved or market alternatives, or that none were supplied on the form; price position from submitted HK dollar rates; what needs clarification; that no CIC recommendation code was supplied. "
+      + "2. Nine PAL information topics: cover all nine in order using only Data — (1) specifications, model, version and version updates; (2) manufacturer, supplier, sole agency and authorisation evidence; (3) first launch date, origin, local development and proof; (4) core functions and intended use; (5) innovation and comparison baseline; (6) CITF objectives, benefit claims and any figures; (7) awards or patents; (8) each job reference with project, client, year and contact quality; (9) current unit rate, unit basis, rental if any and price history. "
+      + "3. Category-specific assessment: for ACT, capacity, performance, site use and construction-benefit evidence from spec, functions and merits only. For BIM software, version, functions and licence or term. For BIM training, course identity, outline, duration, delivery and learners only if present. Do not invent missing category fields. "
+      + "4. Declarations and compliance: local development tick and proof; statutory compliance tick and signer; IP and pricing tick. A tick is not independently verified legal compliance. Annual statutory confirmation is Not applicable for a new listing unless Data.mode is Annual review. "
+      + "5. Supporting documents: for each of authorisation letter, specification, catalogue, patent documents, price list, performance comparison, reference letter, photos, video, test report and local development proof, say uploaded or not uploaded from Data. Do not mention purchase records or rental records. "
+      + "6. Approved and market comparisons: if Data.listedComparators is none or empty, state that the applicant did not supply an approved PAL comparator or a market comparator, so identity, functions, innovation and price cannot be compared on this form. Do not invent market prices. "
+      + "7. Current and historical price assessment: quote the current HK dollar rate, unit, rental or term, and each history row from Data. If history is empty, say not supplied. Do not apply FX or normalised conversion unless Data includes it. "
+      + "8. Annual review: if Data.mode is not Annual review, write Not applicable because this application is a new listing or change request. Do not invent vendor replies or funding-usage statistics. "
+      + "9. Change request: if Data.mode is not Change request, write Not applicable. Otherwise describe the requested change from Data only, without inventing an approved baseline. "
+      + "10. Case summary: request and item identity; technical merits and evidence; comparison and price position; declarations and outstanding evidence. Do not propose a CIC action code. "
+      + "11. Evidence, discrepancies and clarification: list conflicts such as generic job contacts, missing patent numbers, unevidenced merits or missing files, as specific questions. Do not include D365 report IDs or officer workflow. "
+      + "Never copy JSON, square brackets or curly braces into summary or officerSummary. Data: " + JSON.stringify(summarizeData(current));
+  }
+  function fundingAnalysisUserPrompt(current) {
+    return "Return ONLY JSON {summary, officerSummary, score, setting:'indoor|outdoor|mixed|unspecified', risks:[{severity:'warn|error|tip', text}]}. "
+      + "summary is the short applicant-facing funding summary: 4 to 8 numbered lines, each one ordinary sentence. Do not use Funding Application Analysis Template headings in summary. Do not recommend approval or rejection. "
+      + "officerSummary is a full CITF Funding Application Analysis report an officer could paste into Funding Application Analysis Template v2.0. officerSummary MUST contain exactly 11 numbered sections (1 to 11 only). Put a newline before each number. Each section starts with the exact heading below, a colon, then 4 to 8 factual sentences. Never write section 12 Officer review. Never put the 11-section report in summary. "
+      + "Copy scheme, project, item names, quantities, unit prices, PAL codes and uploaded file types from Data. For each fact say Evidenced, Applicant claim, or Not found. Never put Warn or Tip inside summary; put flags only in risks. Do not invent rates, caps, FX, PAL prices, documents or CIC recommendation codes. "
+      + "1. Funding assessment summary: whether applicant eligibility, item eligibility, quotations/prices, project use/timing and funding capacity are established from Data, or Not found; what the officer must still resolve. "
+      + "2. Applicant eligibility and related entities: company/BR if present; applicant type; NAR1/ownership if present; connected companies; prior funding. Do not infer eligibility from names. If a check is not in Data, write Not assessed. "
+      + "3. Application completeness and evidence: for BR, NAR1, shareholder BR, quotation, sole-agent letter, NPA comparison sheet, purchase order, bank record, contract, drawings, BIM model, catalogue and reference letter, say uploaded or not uploaded from Data.filesPlain. Do not treat missing disbursement documents as an application gap. "
+      + "4. Item-by-item assessment: for each item identity, scheme, qty, unit, PA/NPA route, intended use and requested amount. For PA items, PAL match from Data. For NPA items, technical evidence only if Data.hasNpa is true. "
+      + "5. Quotations and price assessment: quotation identity, rates and whether the selected offer is supported. If quotations are not in Data, say Not found. Do not assume a fixed quotation count. "
+      + "6. Project use, implementation and timing: project/site, how items will be used, CITF objectives/benefits, and application versus commitment dates from Data. "
+      + "7. Item funding assessment: requested cost from Data; eligible versus excluded components if supplied; co-funding ratio/cap must come from CIC rules not invented here. "
+      + "8. Application totals and funding ceiling: total requested amount from Data.amount; verified assessed, utilisation and remaining balance as Not assessed unless Data supplies them. "
+      + "9. Risk, rule exceptions and escalation: duplicate, connected-party, vendor, high-value or timing concerns only if evidenced. Do not invent a risk score. "
+      + "10. Funding case summary: applicant and request; eligibility; PAL/NPA findings; quotation and cost; timing; missing evidence. Do not propose a CIC action code. "
+      + "11. Evidence, discrepancies and clarification: missing documents, conflicts and specific questions. Do not include D365 report IDs. "
+      + "Each numbered point in summary MUST be one ordinary sentence on its own line. Do not use labels Scheme:/Site:/Objective:/Setting:/Items:/Amount: in summary. Judge indoor vs outdoor from objective and item functions/plans, not the project title. NM-B / Romex cable is indoor-rated. Put setting in JSON key setting. "
+      + (hasNpaValues(current) ? "Data.hasNpa is true. In summary only, for each NPA item write a line starting with Function and price comparison: vs the closest listed product; put the same text in risks with severity tip. " : "Data.hasNpa is false. All items are pre-approved. Do not mention PAL comparison or Function and price comparison in summary. ")
+      + "Never copy JSON, square brackets or curly braces into summary or officerSummary. Data: " + JSON.stringify(summarizeData(current));
+  }
 
   function firstCue(text, re) {
     var m = String(text || "").match(re);
@@ -623,17 +661,36 @@
       notes = "Demo suggestions";
     } else if (action === ACTIONS.Summarize) {
       if (current.listingKind === "pal") {
+        var palCo = current.company || "Vendor";
+        var palCat = current.category || "PAL";
+        var palItems = current.itemsPlain || "as listed";
         fields = {
-          summary: "1. " + (current.company || "Vendor") + " applies to list under " + (current.category || "PAL") + ".\n2. Items: " + (current.itemsPlain || "as listed") + ".",
+          summary: "1. " + palCo + " applies to list under " + palCat + ".\n2. Items: " + palItems + ".\n3. Unit prices and files are taken from the submitted form.\n4. Local development and declarations are as ticked on the form.\n5. This summary does not recommend approval or rejection.",
+          officerSummary: "1. Assessment summary: " + palCo + " requests listing under " + palCat + ". " + palItems + " No CIC recommendation code was supplied.\n2. Nine PAL information topics: " + palItems + "\n3. Category-specific assessment: Taken from the submitted specification and functions for " + palCat + ".\n4. Declarations and compliance: " + (current.declsPlain || "ticks from the form") + ".\n5. Supporting documents: " + (current.filesPlain || "as listed") + ".\n6. Approved and market comparisons: The applicant did not supply an approved PAL comparator or a market comparator on this form.\n7. Current and historical price assessment: Unit rates are taken from the submitted items.\n8. Annual review: Not applicable because this application is a " + (current.mode || "New listing") + ".\n9. Change request: Not applicable unless mode is Change request.\n10. Case summary: Review item identity, merits and files from the form.\n11. Evidence, discrepancies and clarification: Check job contacts, files and claimed merits.",
           score: "86",
           risksJson: "[]"
         };
       } else {
       var nWords = words(current.objective || "");
+      var fundCo = current.company || "the applicant";
+      var fundScheme = current.schemes || "CITF";
+      var fundProject = current.project || "the nominated site";
+      var fundItems = current.itemsPlain || "as listed";
       fields = {
-        summary: "1. Applicant submitted a " + (current.schemes || "CITF") + " funding application for " + (current.project || "the nominated site") + ".\n"
+        summary: "1. Applicant submitted a " + fundScheme + " funding application for " + fundProject + ".\n"
           + "2. Objective (" + nWords + " words) describes the work and expected benefits.\n"
-          + "3. Items: " + (current.itemsPlain || "as listed") + ".",
+          + "3. Items: " + fundItems + ".",
+        officerSummary: "1. Funding assessment summary: " + fundCo + " requested " + fundScheme + " funding for " + fundProject + ". Item eligibility, quotations, timing and funding capacity are taken only from the form. Outstanding inputs are listed in section 11. This draft does not recommend approval or rejection.\n"
+          + "2. Applicant eligibility and related entities: Company identity is " + fundCo + ". BR status, NAR1, connected companies and prior funding are Not assessed unless they appear in Data.\n"
+          + "3. Application completeness and evidence: Uploaded types: " + (current.filesPlain || "not listed") + ". Missing disbursement documents are not treated as an application gap.\n"
+          + "4. Item-by-item assessment: " + fundItems + "\n"
+          + "5. Quotations and price assessment: Quotation identity and rates are taken from uploaded files if present. If not supplied, they are Not found.\n"
+          + "6. Project use, implementation and timing: Objective and item plans describe intended use on " + fundProject + ".\n"
+          + "7. Item funding assessment: Requested cost is taken from submitted unit prices and quantities. Co-funding ratio and caps are Not assessed here.\n"
+          + "8. Application totals and funding ceiling: Total requested amount is " + (current.amount || "not entered") + ". Verified assessed amount is Not assessed.\n"
+          + "9. Risk, rule exceptions and escalation: No duplicate or timing exception is recorded unless listed in Data. No risk score is assigned.\n"
+          + "10. Funding case summary: Review quotations, PAL match and missing files before a decision. No CIC action code is proposed.\n"
+          + "11. Evidence, discrepancies and clarification: Confirm that uploaded files match the typed items and prices.",
         score: "82",
         risksJson: "[]"
       };
@@ -705,24 +762,26 @@
     return a >= 0 && b > a ? t.substring(a, b + 1) : t;
   }
 
-  function chatCompletions(cfg, systemPrompt, userPrompt) {
+  function chatCompletions(cfg, systemPrompt, userPrompt, maxTokens) {
     var url = cfg.baseUrl.indexOf("/chat/completions") >= 0 ? cfg.baseUrl : cfg.baseUrl + "/chat/completions";
+    var payload = {
+      model: cfg.model,
+      temperature: 0,
+      messages: [
+        { role: "system", content: (function (p) {
+          return p + " Portal language is English. Every issue.message, notes, summary and each risks text MUST be English. JSON keys and issue codes stay English. Extracted field values stay as printed on the document.";
+        })(systemPrompt) },
+        { role: "user", content: userPrompt }
+      ]
+    };
+    if (maxTokens) payload.max_tokens = maxTokens;
     return fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + cfg.apiKey
       },
-      body: JSON.stringify({
-        model: cfg.model,
-        temperature: 0,
-        messages: [
-          { role: "system", content: (function (p) {
-            return p + " Portal language is English. Every issue.message, notes, summary and each risks text MUST be English. JSON keys and issue codes stay English. Extracted field values stay as printed on the document.";
-          })(systemPrompt) },
-          { role: "user", content: userPrompt }
-        ]
-      })
+      body: JSON.stringify(payload)
     }).then(function (r) {
       return r.text().then(function (t) {
         if (!r.ok) throw new Error("D.Nova Chat HTTP " + r.status + ": " + t.slice(0, 240));
@@ -927,11 +986,10 @@
       return chatCompletions(
         cfg,
         palListing
-          ? "Return JSON only with summary, score and risks for a CITF PAL listing submission."
-          : "Return JSON only with summary, score and risks for a CITF funding submission.",
-        palListing
-          ? "Write a CITF Pre-approved List listing summary as 4-8 numbered lines (1. 2. 3.), each one short sentence on its own line. JSON {summary, score, risks:[{severity:'warn|error', text}]}. English only. Cover category, vendor, each product name/model/price, local development, functions/innovation, CITF merits, job references, declarations and files. Be factual. Do not give recommendations, advice or next steps. Never copy JSON, square brackets or curly braces into the summary. This is a vendor listing, not a funding application — do not discuss indoor/outdoor site work or grant amounts. Do not invent products or prices. Data: " + JSON.stringify(summarizeData(current))
-          : "Write a factual English submission summary as 4-8 numbered lines (1. 2. 3.), each one short sentence on its own line. JSON {summary, score, setting:'indoor|outdoor|mixed|unspecified', risks:[{severity:'warn|error|tip', text}]}. Do not put Warn inside summary text. Do not give recommendations, advice or next steps. Never copy JSON, square brackets, curly braces or field keys into the summary. Use Data.itemsPlain for items in ordinary English. Do not mention AI analysis, that analysis is complete or OK, or that a CIC officer still reviews the case. Judge indoor vs outdoor from the project objective, then say whether each requested item fits that indoor or outdoor setting. If an item is indoor but the objective is outdoor (or the reverse), name the item. Warn only if setting is unspecified or the text does not cover selected scheme/category criteria. " + (hasNpaValues(current) ? "Data.hasNpa is true. For each NPA item write a line starting with Function and price comparison: vs the closest listed product; state which unit price is more cost-effective and whose functions better match this project's need; put the same text in risks with severity tip. " : "Data.hasNpa is false. All items are pre-approved. Do not mention PAL comparison, alternatives, or Function and price comparison. ") + "Data: " + JSON.stringify(summarizeData(current))
+          ? "Return JSON only with summary, officerSummary, score and risks. summary is short for the applicant; officerSummary is the 11-section PAL Analysis Template v2 report."
+          : "Return JSON only with summary, officerSummary, score and risks. summary is short for the applicant; officerSummary is the 11-section Funding Application Analysis Template v2 report.",
+        palListing ? palAnalysisUserPrompt(current) : fundingAnalysisUserPrompt(current),
+        4096
       ).then(function (raw) {
         var parsed = {};
         try { parsed = JSON.parse(raw); } catch (e) { parsed = {}; }
@@ -941,6 +999,7 @@
           model: cfg.model,
           fields: {
             summary: parsed.summary || "",
+            officerSummary: parsed.officerSummary || "",
             score: String(parsed.score || 80),
             setting: parsed.setting || "",
             risksJson: JSON.stringify(parsed.risks || [])

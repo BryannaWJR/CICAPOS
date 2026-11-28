@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="/citf-portal.css" />
 <style>.demo{display:none!important}</style>
-{% assign citf_path = request.path | default: page.url | default: page.partialurl | downcase %}
+{% assign citf_path = request.path | default: '' | downcase %}
+{% if citf_path contains '/signin' or citf_path contains '/register' or citf_path contains '/redeem' %}
+<script>location.replace('/flow/#/p/home');</script>
+{% endif %}
 {% if citf_path contains 'internal' %}
 <script>document.documentElement.classList.add("citf-internal");</script>
 <style>
@@ -17,8 +20,9 @@
   function done(){
     var b=document.getElementById('citf-page-boot');
     document.body.classList.add('citf-page-ready');
-    if(b){ b.classList.add('hide'); b.setAttribute('aria-busy','false'); setTimeout(function(){ try{b.remove();}catch(e){} }, 350); }
+    if(b){ b.classList.add('hide'); b.setAttribute('aria-busy','false'); b.style.display='none'; setTimeout(function(){ try{b.remove();}catch(e){} }, 350); }
   }
+  setTimeout(done, 800);
   if(document.readyState==='complete') setTimeout(done, 150);
   else window.addEventListener('load', function(){ setTimeout(done, 150); });
   document.addEventListener('click', function(e){
@@ -51,7 +55,7 @@
     <a class="logo" href="/">
       <span class="logo-text"><b>CITF portal</b><small>Funding applications &amp; Pre-approved List</small></span>
     </a>
-    {% assign path = request.path | default: page.url | default: page.partialurl | downcase %}
+    {% assign path = request.path | default: '' | downcase %}
     {% assign tab = 'home' %}
     {% if path contains 'my-applications' or path contains 'funding-application' or path contains 'disbursement-request' %}
       {% assign tab = 'apps' %}
@@ -71,7 +75,7 @@
         <span class="who">| {{ user.fullname | escape }}</span>
         <a href="{% if homeurl %}/{{ homeurl }}{% endif %}{{ website.sign_out_url_substitution }}">Sign out</a>
       {% else %}
-        <a href="/" {% if tab == 'home' %}class="on" aria-current="page"{% endif %}>Sign in</a>
+        <a href="/flow/#/p/home" data-nav="home" {% if tab == 'home' %}class="on" aria-current="page"{% endif %}>Sign in</a>
         <a href="/flow/#/p/register" data-nav="reg" {% if tab == 'reg' %}class="on" aria-current="page"{% endif %}>Register company</a>
       {% endif %}
     </nav>

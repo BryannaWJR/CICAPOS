@@ -69,67 +69,11 @@
   </div>
 </main>
 {% else %}
-<style>
-.p-main .row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin:0 !important; }
-.p-main .row > * { width:auto !important; max-width:none !important; flex:0 0 auto !important; padding-left:0 !important; padding-right:0 !important; }
-.p-main .citf-signin-actions .btn, .p-main .citf-signin-actions a.btn { height:40px; padding:0 18px; width:auto !important; white-space:nowrap; }
-.p-main .card.body { display:flex; flex-direction:column; gap:14px; }
-.p-main .f { display:flex; flex-direction:column; gap:5px; }
-.p-main .f input { height:40px; border:1px solid var(--field,#9aa5b1); border-radius:4px; padding:0 10px; width:100%; }
-.p-main .btn.pri { background:var(--navy,#007971); border-color:var(--navy,#007971); color:#fff; }
-.p-main .btn.ghost { background:#fff; border:1px solid var(--field,#9aa5b1); color:var(--ink-2,#3e4c59); }
-</style>
+<script>location.replace('/flow/#/p/home');</script>
 <main class="p-main">
-  <div>
-    <h1>CITF Portal</h1>
-    <p class="sub">One company account and one sign-in for CITF and other CIC services.</p>
-  </div>
-  <div class="card body" style="max-width:560px">
-    <h2>Sign in</h2>
-    <div class="note info">Sign in with your company account. New users can register below.</div>
-    <div class="f">
-      <label for="demo-email">Email</label>
-      <input id="demo-email" name="email" type="email" value="" autocomplete="username" />
-    </div>
-    <div class="f">
-      <label for="demo-password">Password</label>
-      <input id="demo-password" name="password" type="password" value="" autocomplete="current-password" />
-    </div>
-    <div class="row citf-signin-actions">
-      <a class="btn pri" id="btn-okta" href="/flow/">Sign in</a>
-      <a class="btn ghost" id="btn-iam" href="/flow/">Sign in with iAM Smart <small>(optional)</small></a>
-    </div>
-    <span>New company? <a href="/flow/#/p/register">Register your company</a> · Already registered, waiting for approval? <a href="/track/">Track my registration</a></span>
-  </div>
+  <p class="sub">Opening sign in…</p>
+  <p><a class="btn pri" href="/flow/#/p/home">Continue to sign in</a></p>
 </main>
-<script>
-(function () {
-  var d365 = {
-    "mandy.chan@cic.example.com": "Mandy Chan (Funding Application Review Officer)",
-    "kelly.lau@cic.example.com": "Kelly Lau (PAL Application Review Officer)",
-    "winnie.ho@cic.example.com": "Winnie Ho (Disbursement Review Officer)",
-    "peter.yip@cic.example.com": "Peter Yip (Approver / Reviewer)",
-    "eric.lam@cic.example.com": "Eric Lam (Finance Department)",
-    "admin@cic.example.com": "Admin (Administrator)"
-  };
-  function dest() {
-    var email = String((document.getElementById("demo-email") || {}).value || "").trim().toLowerCase()
-      || "carmen.lau@harbourbuild.example.com";
-    if (d365[email]) {
-      return "/flow/?d365=" + encodeURIComponent(d365[email]) + "#/p/internal";
-    }
-    return "/flow/?email=" + encodeURIComponent(email);
-  }
-  function go(e) {
-    e.preventDefault();
-    location.href = dest();
-  }
-  var okta = document.getElementById("btn-okta");
-  var iam = document.getElementById("btn-iam");
-  if (okta) okta.addEventListener("click", go);
-  if (iam) iam.addEventListener("click", go);
-})();
-</script>
 {% endif %}
 <script>
 (function () {
